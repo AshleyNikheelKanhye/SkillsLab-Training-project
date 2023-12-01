@@ -1,5 +1,6 @@
 ﻿using DataLibrary.BusinessLogic.BusinessLogicInterface;
 using DataLibrary.Entities;
+using DataLibrary.Entities.EntitiesInterface;
 using DataLibrary.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -31,12 +32,8 @@ namespace TestASPWeb.Controllers
                 return Json(new { result = false });
             }
 
-
-
-           
-
                 //get user from BL to see if user is authenticated or not ? 
-                User user = (User)_userService.Authenticate(loginUserViewModel);
+                IUser user = _userService.Authenticate(loginUserViewModel);
 
                 //If BL returns a null user, it means that this email does not exist , else user exists
                 if (user == null)
@@ -47,7 +44,7 @@ namespace TestASPWeb.Controllers
                 //set up sessions
                 this.Session["CurrentUser"] = user;
                 this.Session["CurrentRole"] = user.Role;
-                this.Session["CurrentUserId"] = user.Id;
+                this.Session["CurrentUserId"] = user.UserID;
 
                 //return json to home index controller
                 return Json(new { result = true, url = Url.Action("Index", "Home") });

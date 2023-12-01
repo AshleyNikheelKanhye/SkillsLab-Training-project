@@ -10,6 +10,8 @@
 //get the department names
 document.addEventListener("DOMContentLoaded", function () {
 
+
+/*
     var serverCall = new ServerCall({
         url: '/User/GetDepartments',
         parameters: {}, 
@@ -17,19 +19,11 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     //Fetch department from the server using the serverCall class
-/*    serverCall.fetchApiCall().then((response) => {
-
-
-
-
-
+   serverCall.fetchApiCall().then((response) => {
 
 
 
     })*/
-
-
-
 
 
 });
@@ -38,10 +32,11 @@ document.addEventListener("DOMContentLoaded", function () {
 function signIn() {
     var email = document.getElementById("email").value;
     var password = document.getElementById("password").value;
+
     var authObj = { Email: email, Password: password };
     var serverCall = new ServerCall({ url: "/User/Authenticate", parameters: authObj, callMethod: "POST" });
 
-    //get and process the json
+    
     serverCall.fetchApiCall().then((response) => {
         if (response.result) {
             toastr.success("Authentication Successful");

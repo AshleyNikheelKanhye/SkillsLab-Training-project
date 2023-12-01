@@ -1,5 +1,6 @@
 ﻿using DataLibrary.Entities;
 using DataLibrary.Entities.EntitiesInterface;
+using DataLibrary.Repository.DataBaseHelper;
 using DataLibrary.Repository.RepoInterfaces;
 using System;
 using System.Collections.Generic;
@@ -44,28 +45,32 @@ namespace DataLibrary.Repo
 
         public IUser Find(string email)
         {
-                User user = null;
+                
                 SqlCommand command = new SqlCommand("SELECT UserID,Email,FirstName,LastName,NIC,PhoneNo,Password,Role FROM [UserTable] WHERE Email = @Email", _dbContext.GetConn());
                 command.Parameters.AddWithValue("@Email", email);
                 SqlDataReader reader = command.ExecuteReader();
 
-                while (reader.Read())
-                {
-                    user = new User()
-                    {
-                        Id = reader.GetInt32(0),
-                        Email = reader.GetString(1),
-                        FirstName = reader.GetString(2),
-                        LastName = reader.GetString(3),
-                        NIC = reader.GetString(4),
-                        PhoneNo = reader.GetInt32(5),
-                        Password = reader.GetString(6),
-                        Role = reader.GetString(7),
-                    };
-                }
-                reader.Close();
-                return user;
+            /*                while (reader.Read())
+                            {
+                                user = new User()
+                                {
+                                    Id = reader.GetInt32(0),
+                                    Email = reader.GetString(1),
+                                    FirstName = reader.GetString(2),
+                                    LastName = reader.GetString(3),
+                                    NIC = reader.GetString(4),
+                                    PhoneNo = reader.GetInt32(5),
+                                    Password = reader.GetString(6),
+                                    Role = reader.GetString(7),
+                                };
+                            }*/
 
+            if (reader.Read())
+            {
+                return  DataBaseHelper.MapUserFromReaders<User>(reader);   
+            }
+                reader.Close();
+                return null;
         }
 
         public IEnumerable<IUser> GetAll()
