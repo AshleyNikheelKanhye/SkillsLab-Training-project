@@ -195,6 +195,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\MyScripts\loginScript.js" />
+    <Content Include="Scripts\MyScripts\registerScript.js" />
     <Content Include="Scripts\ServerCallScripts\ServerCall.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -245,14 +246,6 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\SkillsLab Assignment\BusinessLayer\BusinessLayer.csproj">
-      <Project>{3f109a05-0802-417f-9c79-3fc01b453b85}</Project>
-      <Name>BusinessLayer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\SkillsLab Assignment\Repository\Repository.csproj">
-      <Project>{ab0726f0-7745-4422-9320-1e6352fdf941}</Project>
-      <Name>Repository</Name>
-    </ProjectReference>
     <ProjectReference Include="..\DataLibrary\DataLibrary.csproj">
       <Project>{dc457745-90cf-4530-9e57-507b7c24b272}</Project>
       <Name>DataLibrary</Name>

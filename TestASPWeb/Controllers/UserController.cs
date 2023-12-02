@@ -1,4 +1,5 @@
-﻿using DataLibrary.BusinessLogic.BusinessLogicInterface;
+﻿using DataLibrary.BusinessLogic;
+using DataLibrary.BusinessLogic.BusinessLogicInterface;
 using DataLibrary.Entities;
 using DataLibrary.Entities.EntitiesInterface;
 using DataLibrary.ViewModels;
@@ -13,10 +14,13 @@ namespace TestASPWeb.Controllers
     public class UserController : Controller
     {
         private readonly IUserService _userService;
+        private readonly DepartmentService _departmentService;
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService,DepartmentService departmentService)
         {
             _userService = userService;
+            _departmentService = departmentService;
+            
         }
 
 
@@ -54,7 +58,11 @@ namespace TestASPWeb.Controllers
 
         }
 
-
+        [HttpGet]
+        public JsonResult GetDepartments()
+        {
+            return Json(new { listDepartments = _departmentService.GetAll() },JsonRequestBehavior.AllowGet);
+        }
 
         public ActionResult Index()
         {

@@ -7,27 +7,6 @@
 })*/
 
 
-//get the department names
-document.addEventListener("DOMContentLoaded", function () {
-
-
-/*
-    var serverCall = new ServerCall({
-        url: '/User/GetDepartments',
-        parameters: {}, 
-        callMethod: 'POST' 
-    });
-
-    //Fetch department from the server using the serverCall class
-   serverCall.fetchApiCall().then((response) => {
-
-
-
-    })*/
-
-
-});
-
 
 function signIn() {
     var email = document.getElementById("email").value;
