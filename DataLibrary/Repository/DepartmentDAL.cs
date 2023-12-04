@@ -25,7 +25,6 @@ namespace DataLibrary.Repository
             SqlCommand command = new SqlCommand("SELECT * FROM Department", _dbContext.GetConn());
             SqlDataReader reader = command.ExecuteReader();
 
-
             List<Department> list = new List<Department>();
             int deptID;
             string deptDetails;
@@ -38,18 +37,10 @@ namespace DataLibrary.Repository
                 list.Add(new Department() { DepartmentID=deptID,DepartmentName=deptDetails});
             
             }
-
-
             reader.Close();
             return list;
 
-
-
         }
-
-
-
-
 
 
     }

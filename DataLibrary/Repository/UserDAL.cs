@@ -2,6 +2,7 @@
 using DataLibrary.Entities.EntitiesInterface;
 using DataLibrary.Repository.DataBaseHelper;
 using DataLibrary.Repository.RepoInterfaces;
+using DataLibrary.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -45,7 +46,6 @@ namespace DataLibrary.Repo
 
         public IUser Find(string email)
         {
-                
                 SqlCommand command = new SqlCommand("SELECT UserID,Email,FirstName,LastName,NIC,PhoneNo,Password,Role FROM [UserTable] WHERE Email = @Email", _dbContext.GetConn());
                 command.Parameters.AddWithValue("@Email", email);
                 SqlDataReader reader = command.ExecuteReader();
@@ -73,9 +73,35 @@ namespace DataLibrary.Repo
                 return null;
         }
 
+
+        
+
         public IEnumerable<IUser> GetAll()
         {
             throw new NotImplementedException();
+        }
+
+        public IEnumerable<ListOfManagersModel> GetAllManagers()
+        {
+            List<ListOfManagersModel> list = new List<ListOfManagersModel>();
+
+            SqlCommand command = new SqlCommand("SELECT UserID,FirstName,LastName FROM UserTable WHERE Role = @Role", _dbContext.GetConn());
+            command.Parameters.AddWithValue("@Role", "manager"); // TODO: change that to enum later
+            SqlDataReader reader = command.ExecuteReader();
+
+            int userID;
+            string firstname;
+            string lastname;
+
+            while (reader.Read())
+            {
+                userID = (int)reader["UserID"];
+                firstname = (string)reader["FirstName"];
+                lastname= (string)reader["LastName"];
+                list.Add(new ListOfManagersModel() {  UserID= userID , FirstName = firstname , LastName=lastname});
+            }
+            reader.Close();
+            return list;
         }
 
         public IUser GetById(int userID)

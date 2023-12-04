@@ -52,10 +52,6 @@ namespace TestASPWeb.Controllers
 
                 //return json to home index controller
                 return Json(new { result = true, url = Url.Action("Index", "Home") });
-
-           
-    
-
         }
 
         [HttpGet]
@@ -64,21 +60,17 @@ namespace TestASPWeb.Controllers
             return Json(new { listDepartments = _departmentService.GetAll() },JsonRequestBehavior.AllowGet);
         }
 
+
+        [HttpGet]
+        public JsonResult GetManagers()
+        {
+            return Json(new { listManagers = _userService.GetAllManagers() }, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult Index()
         {
             return View();
         }
-
-
-
-
-
-
-
-
-
-
-
 
     }
 }

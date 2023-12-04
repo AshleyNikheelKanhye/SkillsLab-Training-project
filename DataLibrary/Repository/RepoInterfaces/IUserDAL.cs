@@ -1,5 +1,6 @@
 ﻿using DataLibrary.Entities;
 using DataLibrary.Entities.EntitiesInterface;
+using DataLibrary.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace DataLibrary.Repository.RepoInterfaces
 
 
         IEnumerable<IUser> GetAll();
+        IEnumerable<ListOfManagersModel> GetAllManagers();
         IUser GetById(int userID);
         void Add(IUser user);
         void Update(IUser user);

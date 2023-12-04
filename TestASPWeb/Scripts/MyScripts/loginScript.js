@@ -37,8 +37,4 @@ function createAccount() {
 }
 
 
-function register() {
-
-
-}
 

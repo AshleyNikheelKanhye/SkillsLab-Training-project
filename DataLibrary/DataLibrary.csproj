@@ -87,6 +87,7 @@
     <Compile Include="Repository\RepoInterfaces\IUserDAL.cs" />
     <Compile Include="Repository\UserDAL.cs" />
     <Compile Include="BusinessLogic\UserService.cs" />
+    <Compile Include="ViewModels\ListOfManagersModel.cs" />
     <Compile Include="ViewModels\LoginUserViewModel.cs" />
   </ItemGroup>
   <ItemGroup>

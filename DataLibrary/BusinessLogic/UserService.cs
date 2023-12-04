@@ -16,10 +16,7 @@ namespace DataLibrary.Services
 
         UserDAL _userRepo;
         public UserService(UserDAL userRepo) { 
-            
             this._userRepo = userRepo;
-            
-        
         }
 
         public void Add(IUser user)
@@ -66,6 +63,12 @@ namespace DataLibrary.Services
         public IUser GetById(int userID)
         {
             throw new NotImplementedException();
+        }
+
+
+        public IEnumerable<ListOfManagersModel> GetAllManagers()
+        {
+            return _userRepo.GetAllManagers();
         }
 
         public void Update(IUser user)

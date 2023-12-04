@@ -20,6 +20,8 @@ namespace DataLibrary.BusinessLogic.BusinessLogicInterface
 
         IUser Authenticate(LoginUserViewModel loginUserViewModel);
 
+        IEnumerable<ListOfManagersModel> GetAllManagers();
+
 
 
 
