@@ -1,4 +1,5 @@
-﻿using DataLibrary.Entities.EntitiesInterface;
+﻿using DataLibrary.Entities;
+using DataLibrary.Entities.EntitiesInterface;
 using DataLibrary.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,11 @@ namespace DataLibrary.BusinessLogic.BusinessLogicInterface
         IUser Authenticate(LoginUserViewModel loginUserViewModel);
 
         IEnumerable<ListOfManagersModel> GetAllManagers();
+
+        bool CheckUserExist(CheckUserExistViewModel checkUserExistViewModel);
+
+        bool Register(User user);
+       
 
 
 

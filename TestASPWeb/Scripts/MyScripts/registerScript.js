@@ -1,4 +1,12 @@
-﻿document.addEventListener("DOMContentLoaded", function () {
+﻿document.addEventListener("DOMContentLoaded", () => {
+    let form = document.querySelector('form');
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        return false;
+    });
+})
+
+document.addEventListener("DOMContentLoaded", function () {
 
     GetListOfDepartmentsFromDb();
     GetListOfManagersFromDb();
@@ -45,57 +53,56 @@ function GetListOfManagersFromDb() {
 function validateForm() {
     var formData = readFormData();
 
-
-
     //front end validations 
-    if (!formData['firstName'] && !formData['lastName']) {
+    if (!formData['FirstName'] && !formData['LastName']) {
         alert('please fill in the names');
-        return false;
+        return;
     }
-
-
+    
     //check if already registered backend
-    var inputDetails = {}; ///create new view model and pass to api.
-    var serverCall = new ServerCall({ url: "/User/CheckUser", parameters:inputDetails, callMethod: "GET" });
+    var inputDetails = {Email: formData['Email'] , NIC:formData['NIC'] , PhoneNo: formData['PhoneNo']}; 
+    var serverCall = new ServerCall({ url: "/User/CheckUserExist", parameters: inputDetails, callMethod: "POST" });
+    serverCall.fetchApiCall().then(response => {
+        if (response.result == true) {
+            alert("youre already registered");
+            toastr.error("These credentials have already been used by a user");
+            return;
+        } else {
+            register(formData);
+        }
+    });
+}
+
+function register(formData) {
+  
+    //alert("youve been registered");
+    //console.log(formData);
+    formData['Role'] = "employee";
+    var serverCall = new ServerCall({ url: "/User/Register", parameters: formData, callMethod: "POST" });
     serverCall.fetchApiCall().then(response => {
         if (response.result) {
-
-
-
-
+            toastr.success("Registered Successfully !");
+            window.location = "/Home/Index";
         } else {
-            toastr.error("Unable to check in background");
+            toastr.error("error while registering");
         }
-    })
+    });
 
-    
 
-    register();
-    return true;
-    
+
 }
-
-function register() {
-    var formData = readFormData();
-    alert("youve been registered");
-
-    console.log(formData);
-}
-
 
 function readFormData() {
     var formData = {};
-    formData['firstName'] = document.getElementById("firstName").value;
-    formData['lastName'] = document.getElementById("lastName").value;
-    formData['email'] = document.getElementById("email").value;
+    formData['FirstName'] = document.getElementById("firstName").value;
+    formData['LastName'] = document.getElementById("lastName").value;
+    formData['Email'] = document.getElementById("email").value;
     formData['NIC'] = document.getElementById("NIC").value;
-    formData['phoneno'] = document.getElementById("phoneno").value;
-    formData['password'] = document.getElementById("password").value;
-    formData['department'] = document.getElementById("department").value;
-    formData['manager'] = document.getElementById("managers").value;
-
+    formData['PhoneNo'] = document.getElementById("phoneno").value;
+    formData['Password'] = document.getElementById("password").value;
+    formData['DepartmentID'] = document.getElementById("department").value;
+    formData['ManagerID'] = document.getElementById("managers").value;
     return formData;
-
 }
 
 

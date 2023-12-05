@@ -5,11 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataLibrary.Entities
+namespace DataLibrary.ViewModels
 {
-    public class User: IUser
+    public class RegisterEmployeeViewModel 
     {
-        //public int UserID { get; set; } 
         public string Email { get; set; }
         public string LastName { get; set; }
         public string FirstName { get; set; }
@@ -19,8 +18,6 @@ namespace DataLibrary.Entities
         public int DepartmentID { get; set; }
         public int ManagerID { get; set; }
         public string Role { get; set; }
-
-
 
     }
 }

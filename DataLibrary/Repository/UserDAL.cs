@@ -20,22 +20,48 @@ namespace DataLibrary.Repo
             _dbContext = dbContext;
         }
 
-        public void Add(IUser user)
+        public bool Add(IUser user)
         {
-            string insertQuery = "INSERT INTO [dbo].[UserTable] (FirstName,LastName,Password,Email,NIC,PhoneNo,Role) VALUES " +
-                 "(@FirstName,@LastName,@Password,@Email,@NIC,@MobileNumber,@Role);";
+            string insertQuery = "INSERT INTO [dbo].[UserTable] (FirstName,LastName,Password,Email,NIC,PhoneNo,Role,DepartmentID,ManagerID) VALUES " +
+                 "(@FirstName,@LastName,@Password,@Email,@NIC,@PhoneNo,@Role,@DepartmentID,@ManagerID);";
+            try
+            {
+                SqlCommand cmd = new SqlCommand(insertQuery, _dbContext.GetConn());
 
-            SqlCommand cmd = new SqlCommand(insertQuery, _dbContext.GetConn());
+                cmd.Parameters.AddWithValue("@FirstName", user.FirstName);
+                cmd.Parameters.AddWithValue("@LastName", user.LastName);
+                cmd.Parameters.AddWithValue("@Password", user.Password);
+                cmd.Parameters.AddWithValue("@Email", user.Email);
+                cmd.Parameters.AddWithValue("@NIC", user.NIC);
+                cmd.Parameters.AddWithValue("@PhoneNo", user.PhoneNo);
+                cmd.Parameters.AddWithValue("@Role", user.Role);
+                cmd.Parameters.AddWithValue("@DepartmentID", user.DepartmentID);
+                cmd.Parameters.AddWithValue("@ManagerID", user.ManagerID);
 
-            cmd.Parameters.AddWithValue("@FirstName", user.FirstName);
-            cmd.Parameters.AddWithValue("@LastName", user.LastName);
-            cmd.Parameters.AddWithValue("@Password", user.Password);
-            cmd.Parameters.AddWithValue("@Email", user.Email);
-            cmd.Parameters.AddWithValue("@NIC", user.NIC);
-            cmd.Parameters.AddWithValue("@MobileNumber", user.PhoneNo);
-            cmd.Parameters.AddWithValue("@Role", user.Role);
+                cmd.ExecuteNonQuery();
+                return true;
+            }
+            catch (Exception ex)
+            {
 
-            cmd.ExecuteNonQuery();
+                return false;
+            }
+
+        }
+
+        public bool CheckUserExists(string Email, string NIC, int PhoneNo)
+        {
+            string searchQuery = "SELECT Count(UserID) FROM UserTable where Email = @Email OR NIC = @NIC OR PhoneNo = @PhoneNo ";
+            SqlCommand cmd = new SqlCommand(searchQuery, _dbContext.GetConn());
+            cmd.Parameters.AddWithValue("@Email", Email);
+            cmd.Parameters.AddWithValue("@NIC", NIC);
+            cmd.Parameters.AddWithValue("@PhoneNo", PhoneNo);
+            int rowCount = (int)cmd.ExecuteScalar();
+            if(rowCount > 0)
+            {
+                return true;
+            }
+            else { return false; }
 
         }
 
@@ -73,8 +99,6 @@ namespace DataLibrary.Repo
                 return null;
         }
 
-
-        
 
         public IEnumerable<IUser> GetAll()
         {

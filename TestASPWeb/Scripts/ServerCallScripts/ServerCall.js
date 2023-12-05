@@ -8,7 +8,7 @@
         this.parameters = args.parameters;
         this.callMethod = args.callMethod;
     }
-
+    
     fetchApiCall() {
         return fetch(this.url, {
             method: this.callMethod,
@@ -20,4 +20,6 @@
             .then(response => { return response.json() })
             .catch((error) => console.log(error))
     }
+    
+
 }

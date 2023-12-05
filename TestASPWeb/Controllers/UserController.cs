@@ -48,7 +48,7 @@ namespace TestASPWeb.Controllers
                 //set up sessions
                 this.Session["CurrentUser"] = user;
                 this.Session["CurrentRole"] = user.Role;
-                this.Session["CurrentUserId"] = user.UserID;
+                
 
                 //return json to home index controller
                 return Json(new { result = true, url = Url.Action("Index", "Home") });
@@ -61,11 +61,31 @@ namespace TestASPWeb.Controllers
         }
 
 
+        [HttpPost]
+        public JsonResult CheckUserExist(CheckUserExistViewModel checkUserExistViewModel)
+        {
+            bool isExist = _userService.CheckUserExist(checkUserExistViewModel);
+            if (isExist)
+            {
+                return Json(new { result = true }); 
+            }
+            else { return Json(new { result = false });}
+        }
+
         [HttpGet]
         public JsonResult GetManagers()
         {
             return Json(new { listManagers = _userService.GetAllManagers() }, JsonRequestBehavior.AllowGet);
         }
+
+        [HttpPost]
+        public JsonResult Register(User user)
+        {
+            return Json(new { result = _userService.Register(user) });
+        }
+        
+
+
 
         public ActionResult Index()
         {

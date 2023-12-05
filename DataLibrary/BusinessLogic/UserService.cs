@@ -75,5 +75,14 @@ namespace DataLibrary.Services
         {
             throw new NotImplementedException();
         }
+
+        public bool CheckUserExist(CheckUserExistViewModel checkUserExistViewModel)
+        {
+            return _userRepo.CheckUserExists(checkUserExistViewModel.Email, checkUserExistViewModel.NIC, checkUserExistViewModel.PhoneNo);
+        }
+        public bool Register(User user)
+        {
+            return _userRepo.Add(user); 
+        }
     }
 }
