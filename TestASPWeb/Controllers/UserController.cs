@@ -36,23 +36,36 @@ namespace TestASPWeb.Controllers
                 return Json(new { result = false });
             }
 
-                //get user from BL to see if user is authenticated or not ? 
-                IUser user = _userService.Authenticate(loginUserViewModel);
+            //get user from BL to see if user is authenticated or not ? 
+            IUser user = _userService.Authenticate(loginUserViewModel);
 
-                //If BL returns a null user, it means that this email does not exist , else user exists
-                if (user == null)
-                {
-                    return Json(new { result = false });
-                }
+            //If BL returns a null user, it means that this email does not exist , else user exists
+            if (user == null)
+            {
+                return Json(new { result = false });
+            }
 
-                //set up sessions
-                this.Session["CurrentUser"] = user;
-                this.Session["CurrentRole"] = user.Role;
-                
+            //set up sessions
 
-                //return json to home index controller
-                return Json(new { result = true, url = Url.Action("Index", "Home") });
-        }
+            this.Session["CurrentUser"] = user;
+            this.Session["CurrentRole"] = user.Role;
+            this.Session["CurrentUserID"] = user.UserID;
+            if(user.Role == "employee")
+            {
+                return Json(new { result = true, url = Url.Action("Index", "Employee") });
+            }
+            else if(user.Role == "manager")
+            {
+                return Json(new { result = true, url = Url.Action("Index", "Manager") });
+            }
+            else
+            {
+                return Json(new { result = true, url = Url.Action("Index", "Admin") });
+            }
+
+            
+            
+    }
 
         [HttpGet]
         public JsonResult GetDepartments()
@@ -81,10 +94,18 @@ namespace TestASPWeb.Controllers
         [HttpPost]
         public JsonResult Register(User user)
         {
-            return Json(new { result = _userService.Register(user) });
+
+            user.Role = "employee";//since only employee can register
+            IUser registeredUser = _userService.Register(user);
+
+            //setting sessions
+            this.Session["CurrentUser"] = registeredUser;
+            this.Session["CurrentRole"] = registeredUser.Role;
+            this.Session["CurrentUserID"] = registeredUser.UserID;
+
+            return Json(new { result = registeredUser });
         }
         
-
 
 
         public ActionResult Index()

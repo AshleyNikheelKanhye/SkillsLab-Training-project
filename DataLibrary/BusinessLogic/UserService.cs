@@ -26,28 +26,23 @@ namespace DataLibrary.Services
 
         public IUser Authenticate(LoginUserViewModel loginUserViewModel)
         {
+            IUser user = _userRepo.Find(loginUserViewModel.Email);
+            if (user == null)
+            {
+                return null;
+            }
 
-                IUser user = _userRepo.Find(loginUserViewModel.Email);
-                if (user == null)
-                {
-                    return null;
-                }
+            String givenPwd = loginUserViewModel.Password;
+            String obtainedPwd = user.Password;
 
-
-                String givenPwd = loginUserViewModel.Password;
-                String obtainedPwd = user.Password;
-
-                if (givenPwd.Equals(obtainedPwd))
-                {
-                    return user;
-                }
-                else
-                {
-                    return null;
-                }
-          
-
-
+            if (givenPwd.Equals(obtainedPwd))
+            {
+                return user;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public void Delete(int userID)
@@ -80,9 +75,10 @@ namespace DataLibrary.Services
         {
             return _userRepo.CheckUserExists(checkUserExistViewModel.Email, checkUserExistViewModel.NIC, checkUserExistViewModel.PhoneNo);
         }
-        public bool Register(User user)
+        public IUser Register(User user)
         {
             return _userRepo.Add(user); 
         }
+
     }
 }

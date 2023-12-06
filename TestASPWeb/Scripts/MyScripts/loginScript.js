@@ -28,8 +28,6 @@ function signIn() {
     })
 }
 
-
-
 function createAccount() {
     window.location.href = "/User/Register/";
 }

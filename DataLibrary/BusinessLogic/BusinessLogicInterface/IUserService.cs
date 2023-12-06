@@ -25,8 +25,11 @@ namespace DataLibrary.BusinessLogic.BusinessLogicInterface
 
         bool CheckUserExist(CheckUserExistViewModel checkUserExistViewModel);
 
-        bool Register(User user);
-       
+        IUser Register(User user);
+
+        
+
+
 
 
 

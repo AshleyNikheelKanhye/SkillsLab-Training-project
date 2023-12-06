@@ -77,18 +77,16 @@ function register(formData) {
   
     //alert("youve been registered");
     //console.log(formData);
-    formData['Role'] = "employee";
+    //formData['Role'] = "employee";
     var serverCall = new ServerCall({ url: "/User/Register", parameters: formData, callMethod: "POST" });
     serverCall.fetchApiCall().then(response => {
         if (response.result) {
             toastr.success("Registered Successfully !");
-            window.location = "/Home/Index";
+            window.location = "/Employee/Index";
         } else {
             toastr.error("error while registering");
         }
     });
-
-
 
 }
 

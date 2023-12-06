@@ -9,7 +9,7 @@ namespace DataLibrary.Entities.EntitiesInterface
 {
     public interface IUser 
     {
-        //int UserID { get; set; }
+        int UserID { get; set; }
          string Email { get; set; }
          string LastName { get; set; }
          string FirstName { get; set; }

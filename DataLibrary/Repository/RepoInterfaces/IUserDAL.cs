@@ -16,13 +16,14 @@ namespace DataLibrary.Repository.RepoInterfaces
         IEnumerable<IUser> GetAll();
         IEnumerable<ListOfManagersModel> GetAllManagers();
         IUser GetById(int userID);
-        bool Add(IUser user);
+        IUser Add(IUser user);
         void Update(IUser user);
         void Delete(int userID);
 
         IUser Find(string email);
 
         bool CheckUserExists(string Email, string NIC, int PhoneNo);
+        
 
 
 
