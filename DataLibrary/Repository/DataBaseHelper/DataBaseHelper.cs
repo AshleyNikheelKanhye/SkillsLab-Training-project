@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,9 +21,21 @@ namespace DataLibrary.Repository.DataBaseHelper
                 string columnName = reader.GetName(i);
                 object value = reader.GetValue(i);
 
-                // Use reflection or a dynamic mapping approach to set properties
-                // Here, assuming your model class properties have the same names as database columns
-                typeof(T).GetProperty(columnName)?.SetValue(model, value);
+                PropertyInfo property = typeof(T).GetProperty(columnName);
+
+                if (property != null && value != DBNull.Value)
+                {
+                    // Check if the property is nullable and set its value
+                    if (property.PropertyType.IsGenericType && property.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
+                    {
+                        Type underlyingType = Nullable.GetUnderlyingType(property.PropertyType);
+                        property.SetValue(model, Convert.ChangeType(value, underlyingType), null);
+                    }
+                    else
+                    {
+                        property.SetValue(model, Convert.ChangeType(value, property.PropertyType), null);
+                    }
+                }
             }
 
             return model;

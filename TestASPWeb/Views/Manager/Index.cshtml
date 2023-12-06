@@ -1,7 +1,24 @@
-﻿
-@{
-    ViewBag.Title = "Index";
+﻿@{
+    ViewBag.Title = "Manager Homepage";
 }
 
-<h2>Index</h2>
-<h2> welcome manager</h2>
+
+
+
+
+
+
+<main>
+    <h2>Index</h2>
+    <h2> Welcome Manager</h2>
+    <div id="userDetails"></div>
+
+
+</main>
+
+
+@section scripts{
+    <script type="text/javascript" src="~/Scripts/MyScripts/ManagerHomeScript.js"></script>
+    <script type="text/javascript" src="~/Scripts/ServerCallScripts/ServerCall.js"></script>
+}
+

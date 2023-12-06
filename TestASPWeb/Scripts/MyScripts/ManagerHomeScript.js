@@ -2,7 +2,10 @@
     LoadUserDetails();
 })
 
+
 function LoadUserDetails() {
+
+    localStorage.clear();
     var serverCall = new ServerCall({ url: "/Employee/GetUserDetails", callMethod: "GET" });
     serverCall.fetchApiCall().then(response => {
         if (response.currentUser) {
@@ -12,4 +15,5 @@ function LoadUserDetails() {
             EmployeeDetails.innerHTML = userEmail;
         }
     });
+
 }

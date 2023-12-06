@@ -16,8 +16,8 @@ namespace DataLibrary.Entities.EntitiesInterface
          string NIC { get; set; }
          int PhoneNo { get; set; }
          string Password { get; set; }
-         int DepartmentID { get; set; }
-         int ManagerID { get; set; }
+         int? DepartmentID { get; set; }
+         int? ManagerID { get; set; }
          string Role { get; set; }
 
 
