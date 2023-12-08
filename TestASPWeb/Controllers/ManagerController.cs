@@ -8,7 +8,7 @@ using TestASPWeb.Custom;
 namespace TestASPWeb.Controllers
 {
     [UserSessionAttribute]
-    [CustomAuthorizationAttribute("manager")]//authorization
+    [CustomAuthorizationAttribute("manager")]
     public class ManagerController : Controller
     {
         public ActionResult Index()

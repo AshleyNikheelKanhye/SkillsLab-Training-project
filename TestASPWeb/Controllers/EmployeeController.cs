@@ -19,12 +19,20 @@ namespace TestASPWeb.Controllers
 
 
         [HttpGet]
-        
         public JsonResult GetUserDetails()
         {
             var userDetails = this.Session["CurrentUser"]; //for debuging purposes
             return Json(new { currentUser = this.Session["CurrentUser"] },JsonRequestBehavior.AllowGet);
         }
+
+
+
+        public ActionResult GetHomeView()
+        {
+            return PartialView("~/Views/Employee/_homePartialView.cshtml");
+        }
+
+
     }
 }
 
