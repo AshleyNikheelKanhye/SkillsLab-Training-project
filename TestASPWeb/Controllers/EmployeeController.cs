@@ -31,6 +31,14 @@ namespace TestASPWeb.Controllers
         {
             return PartialView("~/Views/Employee/_homePartialView.cshtml");
         }
+        public ActionResult GetProfileView()
+        {
+            return PartialView("~/Views/Employee/_profilePartialView.cshtml");
+        }
+        public ActionResult GetTrainingView()
+        {
+            return PartialView("~/Views/Employee/_trainingPartialView.cshtml");
+        }
 
 
     }

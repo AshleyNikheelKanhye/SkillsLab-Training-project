@@ -230,6 +230,8 @@
     <Content Include="Views\Common\AccessDenied.cshtml" />
     <Content Include="Views\Common\Index.cshtml" />
     <Content Include="Views\Employee\_homePartialView.cshtml" />
+    <Content Include="Views\Employee\_profilePartialView.cshtml" />
+    <Content Include="Views\Employee\_trainingPartialView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
