@@ -23,45 +23,23 @@
         <div class="navbar">
             <div class="profile">
                 <img src="profile-image.jpg" alt="Profile Image">
-                <p>User Name</p>
+                <p>@currentUser.FirstName   @currentUser.LastName</p>
             </div>
-            <a href="#" onclick="showContent('Home')" class="active" id="homeLink">Home</a>
-            <a href="#" onclick="showContent('Profile')">Profile</a>
-            <a href="#" onclick="showContent('ViewTrainings')">View Trainings</a>
-            <a href="#" onclick="logout()">Logout</a>
+
+
+            <a class="active" id="homeLink">Home</a>
+            <a id="profileLink" >Profile</a>
+            <a id="viewTrainingLink">View Trainings</a>
+            <a id="logoutLink">Logout</a>
         </div>
+
+
         <div class="main-content" id="mainContent">
             <!-- Content will be dynamically displayed here -->
         </div>
     </div>
 
-    <script>
-        // Initialize the view to Home
-        showContent('Home');
 
-        function showContent(contentType) {
-            const mainContent = document.getElementById('mainContent');
-            const navLinks = document.querySelectorAll('.navbar a');
-
-            // Reset the 'active' class on all links
-            navLinks.forEach(link => link.classList.remove('active'));
-
-            // Set the 'active' class on the selected link
-            const selectedLink = document.querySelector(`.navbar a[href="#"][onclick^="showContent('${contentType}')]`);
-            if (selectedLink) {
-                selectedLink.classList.add('active');
-            }
-
-
-        }
-
-        function logout() {
-            // Add your logout logic here
-            alert('Logout button clicked!');
-        }
-
-  
-    </script>
 
 </body>
 </html>
