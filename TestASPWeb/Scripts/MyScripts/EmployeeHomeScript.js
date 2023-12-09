@@ -20,16 +20,79 @@
 
     }
 
-    async function LoadViews(viewURL) {
+    function getAJAXCall(URL) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                type: "GET",
+                url: URL,
+                data: null,
+                dataType: "json",
 
+                success: function (data) {
+                    resolve(data);
+                },
+                error: function (data) {
+                    reject(data);
+                }
+            })
+        });
+    }
+
+
+
+    function populateTable() {
+        var URL = "/Training/getAll";
+
+        getAJAXCall(URL).then((response) => {
+            if (response) {
+                console.log(response);
+                //var jsonString = JSON.stringify(response);
+                //alert(jsonString);
+                //toastr.success("could load table");
+                var tableBody = $("#trainingTable tbody");
+                tableBody.empty();
+
+                $.each(response, function (index, training) {
+                    var row = '<tr>' +
+                        '<td>' + training.TrainingID + '</td>' +
+                        '<td>' + training.TrainingName + '</td>' +
+                        '<td>' + training.Capacity + '</td>' +
+                        '<td>' + formatDateTime(training.ClosingDate) + '</td>' +
+                        '<td>' + training.TrainingStatus + '</td>' +
+                        '<td>' + formatDateTime(training.TrainingStartDate) + '</td>' +
+                        '</tr>';
+
+                    tableBody.append(row);
+                });
+            }
+        }).catch((error) => {
+            console.error(error);
+            toastr.error("error cannot load data");
+        });
+    }
+
+    function formatDateTime(date) {
+        if (date) {
+            var parsedDate = new Date(parseInt(date.substr(6)));
+            return parsedDate.toLocaleDateString() + ' ' + parsedDate.toLocaleTimeString();
+        } else {
+            return '';
+        }
+    }
+
+
+    async function LoadViews(viewURL) {
         try {
             const result = await makeAJAXCall(viewURL);
             $('#mainContent').html(result);
+            
         } catch (error) {
             // Handle errors here
             console.error(error);
         }
     }
+
+
 
 
 
@@ -65,6 +128,9 @@
         $(this).addClass("active");
         var url = '/Employee/GetTrainingView';
         LoadViews(url);
+        populateTable();
+  
+        
     });
 
     $('#logoutLink').click(function (e) {
@@ -83,10 +149,6 @@
         alert('test btn has been clicked');
     });
 */
-
-
-
-
 
 
     //flow of javascript from start
