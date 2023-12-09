@@ -2,6 +2,7 @@
 using DataLibrary.Entities;
 using DataLibrary.Entities.EntitiesInterface;
 using DataLibrary.Repo;
+using DataLibrary.Repository.RepoInterfaces;
 using DataLibrary.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -14,8 +15,8 @@ namespace DataLibrary.Services
     public class UserService : IUserService
     {
 
-        UserDAL _userRepo;
-        public UserService(UserDAL userRepo) { 
+        IUserDAL _userRepo;
+        public UserService(IUserDAL userRepo) { 
             this._userRepo = userRepo;
         }
 

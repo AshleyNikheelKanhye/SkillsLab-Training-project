@@ -6,26 +6,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DataLibrary.Repository.DataBaseHelper;
+using DataLibrary.Repository.RepoInterfaces;
+using DataLibrary.Entities.EntitiesInterface;
 
 namespace DataLibrary.Repository
 {
-    public class DepartmentDAL
+    public class DepartmentDAL : IDepartmentDAL
     {
-
-
         DBContext _dbContext;
         public DepartmentDAL(DBContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-
-        public IEnumerable<Department> getDepartments()
+        public IEnumerable<IDepartment> getDepartments()
         {
             SqlCommand command = new SqlCommand("SELECT * FROM Department", _dbContext.GetConn());
             SqlDataReader reader = command.ExecuteReader();
 
-            List<Department> list = new List<Department>();
+            List<IDepartment> list = new List<IDepartment>();
             int deptID;
             string deptDetails;
 
@@ -41,7 +40,5 @@ namespace DataLibrary.Repository
             return list;
 
         }
-
-
     }
 }

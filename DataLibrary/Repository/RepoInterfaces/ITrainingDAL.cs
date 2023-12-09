@@ -5,11 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataLibrary.Entities
+namespace DataLibrary.Repository.RepoInterfaces
 {
-    public  class Department : IDepartment
+    public interface ITrainingDAL
     {
-        public int DepartmentID { get; set; }
-        public string DepartmentName { get; set; }
+         IEnumerable<ITraining> GetAll();
+
+
+
     }
 }

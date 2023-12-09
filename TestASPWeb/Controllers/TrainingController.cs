@@ -6,19 +6,12 @@ using System.Web.Mvc;
 
 namespace TestASPWeb.Controllers
 {
-    public class CommonController : Controller
+    public class TrainingController : Controller
     {
-        // to handle access denied
+        
         public ActionResult Index()
         {
             return View();
         }
-
-        public ActionResult AccessDenied()
-        {
-            return View();
-        }
-
-
     }
 }

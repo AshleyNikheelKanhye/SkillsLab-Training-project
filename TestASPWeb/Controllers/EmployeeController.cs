@@ -40,7 +40,6 @@ namespace TestASPWeb.Controllers
             return PartialView("~/Views/Employee/_trainingPartialView.cshtml");
         }
 
-
     }
 }
 

@@ -55,8 +55,6 @@ namespace DataLibrary.Repo
         }
 
 
-
-
         public bool CheckUserExists(string Email, string NIC, int PhoneNo)
         {
             string searchQuery = "SELECT Count(UserID) FROM UserTable where Email = @Email OR NIC = @NIC OR PhoneNo = @PhoneNo ";
@@ -101,13 +99,12 @@ namespace DataLibrary.Repo
 
             if (reader.Read())
             {
-                return  DataBaseHelper.MapUserFromReaders<User>(reader);   
+                return  DataBaseHelper.ReturnSingleRowFromDB<User>(reader);   
             }
             reader.Close();
             return null;
                 
         }
-
 
         public IEnumerable<IUser> GetAll()
         {

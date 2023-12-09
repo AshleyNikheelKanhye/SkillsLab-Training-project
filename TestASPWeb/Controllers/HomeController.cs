@@ -17,15 +17,17 @@ namespace TestASPWeb.Controllers
     public class HomeController : Controller
     {
 
-        //for testing purposes
-        private IUserService _userService;
+        //for testing purposes---------------------------------------- delete later
+        
+        private ITrainingService _trainingService;
 
-        public HomeController(IUserService userService)
+        public HomeController(ITrainingService trainingService)
         {
-            _userService = userService;
+            this._trainingService = trainingService;
+            //var testingList = _trainingService.GetAll();
         }
 
-
+        //for testing purposes-------------------------------------------------------
 
 
 
