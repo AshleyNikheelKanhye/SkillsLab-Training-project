@@ -1,18 +1,37 @@
 ﻿$(document).ready(function () {
     // Function to load the partial view content
-    function LoadViews(viewURL) {
-        $.ajax({
-            url: viewURL, // Adjust the URL based on your route
-            type: 'GET',
-            success: function (data) {
-                // Update the mainContent div with the received HTML content
-                $('#mainContent').html(data);
-            },
-            error: function () {
-                alert('Error loading content.');
-            }
+
+    function makeAJAXCall(viewURL) {
+        
+        return new Promise((resolve, reject) => {
+
+            $.ajax({
+                url: viewURL, // Adjust the URL based on your route
+                type: 'GET',
+                success: function (data) {
+                    resolve(data);
+                },
+                error: function (error) {
+                    reject(error);
+                    alert('Error loading content.');
+                }
+            })
         });
+
     }
+
+    async function LoadViews(viewURL) {
+
+        try {
+            const result = await makeAJAXCall(viewURL);
+            $('#mainContent').html(result);
+        } catch (error) {
+            // Handle errors here
+            console.error(error);
+        }
+    }
+
+
 
     function removeAllActiveClasses() {
         const navLinks = document.querySelectorAll('.navbar a');
@@ -54,6 +73,20 @@
         $(this).addClass("active");
         logout();
     });
+
+
+
+
+    //since button has been loaded later
+/*    $(document).on("click", "button#testbtn", function (e) {
+        e.preventDefault();
+        alert('test btn has been clicked');
+    });
+*/
+
+
+
+
 
 
     //flow of javascript from start
