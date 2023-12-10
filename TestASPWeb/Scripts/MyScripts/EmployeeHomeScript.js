@@ -1,12 +1,8 @@
 ﻿$(document).ready(function () {
-    // Function to load the partial view content
-
     function makeAJAXCall(viewURL) {
-        
         return new Promise((resolve, reject) => {
-
             $.ajax({
-                url: viewURL, // Adjust the URL based on your route
+                url: viewURL,
                 type: 'GET',
                 success: function (data) {
                     resolve(data);
@@ -17,7 +13,6 @@
                 }
             })
         });
-
     }
 
     function getAJAXCall(URL) {
@@ -40,7 +35,7 @@
 
 
 
-    function populateTable() {
+    async function populateTable() {
         var URL = "/Training/getAll";
 
         getAJAXCall(URL).then((response) => {
@@ -76,25 +71,22 @@
             var parsedDate = new Date(parseInt(date.substr(6)));
             return parsedDate.toLocaleDateString() + ' ' + parsedDate.toLocaleTimeString();
         } else {
-            return '';
+            return 'No date';
         }
     }
 
 
     async function LoadViews(viewURL) {
-        try {
-            const result = await makeAJAXCall(viewURL);
-            $('#mainContent').html(result);
-            
-        } catch (error) {
-            // Handle errors here
+
+        makeAJAXCall(viewURL).then((response) => {
+            if (response) {
+                $('#mainContent').html(response);
+            }
+        }).catch((error) => {
             console.error(error);
-        }
+            toastr.error("error cannot load data");
+        });
     }
-
-
-
-
 
     function removeAllActiveClasses() {
         const navLinks = document.querySelectorAll('.navbar a');
@@ -105,32 +97,42 @@
         alert('Logout button clicked!');
     }
 
-    // Add click event handlers to your navigation links
-    $('#homeLink').click(function (e) {
+    //  click event handlers to navigation links
+    $('#homeLink').click(async function (e) {
         e.preventDefault();
+        //$('#mainContent').fadeOut();
+        $('#mainContent').css("display", "none");
         removeAllActiveClasses();
         $(this).addClass("active");
         var url = '/Employee/GetHomeView';
-        LoadViews(url);
+        await LoadViews(url);
+        $('#mainContent').fadeIn(1000);
     });
 
-    $('#profileLink').click(function (e) {
+    $('#profileLink').click(async function (e) {
         e.preventDefault();
         removeAllActiveClasses();
+        //$('#mainContent').fadeOut();
+        $('#mainContent').css("display", "none");
         $(this).addClass("active");
         var url = '/Employee/GetProfileView';
-        LoadViews(url);
+        await LoadViews(url);
+        $('#mainContent').fadeIn(1000);
     });
 
-    $('#viewTrainingLink').click(function (e) {
+    $('#viewTrainingLink').click( async function (e) {
         e.preventDefault();
         removeAllActiveClasses();
+        //$('#mainContent').fadeOut();
+        $('#mainContent').css("display", "none");
         $(this).addClass("active");
         var url = '/Employee/GetTrainingView';
-        LoadViews(url);
-        populateTable();
-  
-        
+
+
+        await LoadViews(url);
+        await populateTable();
+        $('#mainContent').fadeIn(1000);
+
     });
 
     $('#logoutLink').click(function (e) {
@@ -141,14 +143,12 @@
     });
 
 
-
-
     //since button has been loaded later
-/*    $(document).on("click", "button#testbtn", function (e) {
-        e.preventDefault();
-        alert('test btn has been clicked');
-    });
-*/
+    /*    $(document).on("click", "button#testbtn", function (e) {
+            e.preventDefault();
+            alert('test btn has been clicked');
+        });
+    */
 
 
     //flow of javascript from start
@@ -157,10 +157,6 @@
     LoadViews(url);
     $('#homeLink').addClass("active");
 });
-
-
-
-
 
 
 

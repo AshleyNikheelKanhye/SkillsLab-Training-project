@@ -19,8 +19,6 @@ namespace TestASPWeb.Controllers
             this._trainingService = trainingService;
         }
 
-
-        
         public ActionResult Index()
         {
             return View();
@@ -31,10 +29,7 @@ namespace TestASPWeb.Controllers
         {
             IEnumerable<ITraining> trainingList = _trainingService.GetAll();
             return Json(trainingList,JsonRequestBehavior.AllowGet);
-
         }
-
-
 
     }
 }

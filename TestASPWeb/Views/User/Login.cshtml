@@ -13,85 +13,15 @@
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
-
-    <!-- <link rel="stylesheet" href="~/Content/css/login-registration.css" /> -->
-
-
+    <link rel="stylesheet" href="~/Content/MyContent/Login.css" />
     <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
-
-
-
-
     <script type="text/javascript" src="~/Scripts/ServerCallScripts/ServerCall.js"></script>
     <script type="text/javascript" src="~/Scripts/MyScripts/loginScript.js"></script>
 
-
-    <!--Css styling move that to another file -->
-
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f0f8ff; /* Light Blue background color */
-            margin: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
-
-        .login-container {
-            background-color: #ffffff; /* White container background color */
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            width: 300px;
-            text-align: center;
-        }
-
-            .login-container h2 {
-                color: #0074cc; /* Dark Blue heading color */
-            }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: #333; /* Dark Gray label color */
-        }
-
-        input {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd; /* Light Gray border color */
-            border-radius: 4px;
-        }
-
-        button {
-            background-color: #0074cc; /* Dark Blue button color */
-            color: #fff; /* White text color */
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-            button:hover {
-                background-color: #005999; /* Darker Blue on hover */
-            }
-    </style>
-
-
-
-
-
 </head>
 <body>
-
     <div class="login-container">
         <h2>Login</h2>
         <form id="loginForm">
@@ -103,15 +33,13 @@
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" required>
             </div>
-            <button type="button" onclick="signIn()">Login</button>
+            <button type="submit" onclick="signIn()">Login</button>
         </form>
         <div id="register">
-            <a href="#" id="registerBtn" onclick="createAccount()">Register as Employee</a>
+            <a id="registerBtn" onclick="createAccount()">Register as Employee</a>
         </div>
     </div>
 
 </body>
-
-
 
 </html>

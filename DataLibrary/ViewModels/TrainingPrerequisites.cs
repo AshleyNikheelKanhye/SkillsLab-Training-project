@@ -6,13 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataLibrary.Repository.RepoInterfaces
+namespace DataLibrary.ViewModels
 {
-    public interface ITrainingDAL
+    public class TrainingPrerequisites
     {
-         IEnumerable<ITraining> GetAll();
-        IEnumerable<Prerequisite> GetListOfPrerequisites(int trainingID);
-
+    //I had an idea , but then I found a simpler way i think
 
 
     }

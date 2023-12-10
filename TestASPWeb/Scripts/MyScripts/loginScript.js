@@ -5,11 +5,20 @@
         return false;
     });
 })
-
 function signIn() {
     var email = document.getElementById("email").value;
     var password = document.getElementById("password").value;
 
+    //validate Email
+    if (!isValidEmail(email)) {
+        toastr.error("Invalid email address");
+        return;
+    }
+    // Validate password
+    if (!isValidPassword(password)) {
+        toastr.error("Please Enter Password");
+        return;
+    }
     var authObj = { Email: email, Password: password };
     var serverCall = new ServerCall({ url: "/User/Authenticate", parameters: authObj, callMethod: "POST" });
 
@@ -28,9 +37,13 @@ function signIn() {
     })
 }
 
+function isValidEmail(email) {
+    var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return email.trim() !== "" && emailRegex.test(email);
+}
+function isValidPassword(password) {
+    return password.trim() !== "";
+}
 function createAccount() {
     window.location.href = "/User/Register/";
 }
-
-
-

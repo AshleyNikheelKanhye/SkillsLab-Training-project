@@ -18,9 +18,6 @@ namespace DataLibrary.BusinessLogic
             this._trainingRepo = trainingRepo;
         }
 
-
-
-
         public IEnumerable<ITraining> GetAll()
         {
             var listOfAllTraining= _trainingRepo.GetAll();

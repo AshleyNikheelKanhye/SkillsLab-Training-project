@@ -2,6 +2,7 @@
 using DataLibrary.Entities.EntitiesInterface;
 using DataLibrary.Repository.DataBaseHelper;
 using DataLibrary.Repository.RepoInterfaces;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 
@@ -27,5 +28,11 @@ namespace DataLibrary.Repo
             return returnList;
 
         }
+
+        public IEnumerable<Prerequisite> GetListOfPrerequisites(int trainingID)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

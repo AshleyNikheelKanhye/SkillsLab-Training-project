@@ -183,6 +183,8 @@
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="Content\MyContent\EmployeeHome.css" />
+    <Content Include="Content\MyContent\Login.css" />
+    <Content Include="Content\MyContent\Register.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -236,6 +238,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Images\" />
     <Folder Include="Views\Training\" />
   </ItemGroup>
   <ItemGroup>

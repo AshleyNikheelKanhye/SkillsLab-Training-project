@@ -47,11 +47,8 @@ namespace DataLibrary.Repo
             }
             catch (Exception ex)
             {
-
                 return null;
-
             }
-
         }
 
 
@@ -82,20 +79,6 @@ namespace DataLibrary.Repo
                 command.Parameters.AddWithValue("@Email", email);
                 SqlDataReader reader = command.ExecuteReader();
 
-            /*                while (reader.Read())
-                            {
-                                user = new User()
-                                {
-                                    Id = reader.GetInt32(0),
-                                    Email = reader.GetString(1),
-                                    FirstName = reader.GetString(2),
-                                    LastName = reader.GetString(3),
-                                    NIC = reader.GetString(4),
-                                    PhoneNo = reader.GetInt32(5),
-                                    Password = reader.GetString(6),
-                                    Role = reader.GetString(7),
-                                };
-                            }*/
 
             if (reader.Read())
             {
