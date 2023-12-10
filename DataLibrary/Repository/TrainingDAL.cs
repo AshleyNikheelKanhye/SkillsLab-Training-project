@@ -17,7 +17,6 @@ namespace DataLibrary.Repo
             _dbContext = dbContext;
         }
 
-
         public IEnumerable<ITraining> GetAll()
         {
             string query = "SELECT * FROM Training";

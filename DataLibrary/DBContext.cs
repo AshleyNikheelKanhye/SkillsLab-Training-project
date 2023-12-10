@@ -10,12 +10,10 @@ namespace DataLibrary
     public class DBContext :IDisposable
     {
         private SqlConnection connection;
-
         public DBContext(string connectionString)
         {
             connection = new SqlConnection(connectionString);
             connection.Open();
-
         }
 
         public SqlConnection GetConn()

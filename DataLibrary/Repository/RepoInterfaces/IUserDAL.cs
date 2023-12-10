@@ -11,8 +11,6 @@ namespace DataLibrary.Repository.RepoInterfaces
 {
     public interface IUserDAL
     {
-
-
         IEnumerable<IUser> GetAll();
         IEnumerable<ListOfManagersModel> GetAllManagers();
         IUser GetById(int userID);
@@ -23,9 +21,6 @@ namespace DataLibrary.Repository.RepoInterfaces
         IUser Find(string email);
 
         bool CheckUserExists(string Email, string NIC, int PhoneNo);
-        
-
-
 
     }
 }

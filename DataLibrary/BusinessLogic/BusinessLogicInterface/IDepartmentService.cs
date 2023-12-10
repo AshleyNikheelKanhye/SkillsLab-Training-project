@@ -10,11 +10,6 @@ namespace DataLibrary.BusinessLogic.BusinessLogicInterface
 {
     public interface IDepartmentService
     {
-
          IEnumerable<IDepartment> GetAll();
-
-
-
-
     }
 }

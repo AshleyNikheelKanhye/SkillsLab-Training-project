@@ -18,27 +18,25 @@ namespace DataLibrary.Repository
         {
             _dbContext = dbContext;
         }
-
         public IEnumerable<IDepartment> getDepartments()
         {
-            SqlCommand command = new SqlCommand("SELECT * FROM Department", _dbContext.GetConn());
-            SqlDataReader reader = command.ExecuteReader();
-
-            List<IDepartment> list = new List<IDepartment>();
-            int deptID;
-            string deptDetails;
-
-            while (reader.Read()) 
+            try
             {
-                 deptID = (int)reader["DepartmentID"];
-                deptDetails = (string)reader["DepartmentName"];
+                SqlCommand command = new SqlCommand("SELECT * FROM Department", _dbContext.GetConn());
+                SqlDataReader reader = command.ExecuteReader();
+                List<IDepartment> list = new List<IDepartment>();
+                int deptID;
+                string deptDetails;
+                while (reader.Read()) 
+                {
+                    deptID = (int)reader["DepartmentID"];
+                    deptDetails = (string)reader["DepartmentName"];
+                    list.Add(new Department() { DepartmentID=deptID,DepartmentName=deptDetails});
+                }
+                reader.Close();
+                return list;
 
-                list.Add(new Department() { DepartmentID=deptID,DepartmentName=deptDetails});
-            
-            }
-            reader.Close();
-            return list;
-
+            }catch (Exception ex) { return null; }
         }
     }
 }

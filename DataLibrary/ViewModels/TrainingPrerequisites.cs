@@ -10,7 +10,7 @@ namespace DataLibrary.ViewModels
 {
     public class TrainingPrerequisites
     {
-    //I had an idea , but then I found a simpler way i think
+        //I had an idea , but then I found a simpler way i think , not sure
 
 
     }

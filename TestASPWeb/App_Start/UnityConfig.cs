@@ -57,24 +57,15 @@ namespace TestASPWeb
             container.RegisterType<IUser,User>(new PerRequestLifetimeManager());
             container.RegisterType<IUserService,UserService>(new PerRequestLifetimeManager());
 
-
-
             //Training
             container.RegisterType<ITrainingDAL, TrainingDAL>(new PerRequestLifetimeManager());
             container.RegisterType<ITraining, Training>(new PerRequestLifetimeManager());
             container.RegisterType<ITrainingService, TrainingService>(new PerRequestLifetimeManager());
 
-
-
-
             //Department
             container.RegisterType<IDepartmentDAL, DepartmentDAL>(new PerRequestLifetimeManager());
             container.RegisterType<IDepartment, Department>(new PerRequestLifetimeManager());
             container.RegisterType<IDepartmentService, DepartmentService>(new PerRequestLifetimeManager());
-
-
-
-
 
         }
     }

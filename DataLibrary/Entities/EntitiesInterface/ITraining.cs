@@ -14,7 +14,5 @@ namespace DataLibrary.Entities.EntitiesInterface
          DateTime? ClosingDate { get; set; }
          string TrainingStatus { get; set; }
          DateTime? TrainingStartDate { get; set; }
-
-
     }
 }

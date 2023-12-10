@@ -11,6 +11,5 @@ namespace DataLibrary.ViewModels
         public string Email { get; set; }
         public string NIC { get; set; }
         public int PhoneNo { get; set; }
-
     }
 }

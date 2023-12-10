@@ -10,6 +10,5 @@ namespace DataLibrary.Entities.EntitiesInterface
     {
          int DepartmentID { get; set; }
          string DepartmentName { get; set; }
-
     }
 }

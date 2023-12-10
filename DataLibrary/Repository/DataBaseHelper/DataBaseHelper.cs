@@ -11,7 +11,6 @@ namespace DataLibrary.Repository.DataBaseHelper
 {
     public static class DataBaseHelper
     {
-
         public static T ReturnSingleRowFromDB<T>(SqlDataReader reader) where T : new()
         {
             T model = new T();
@@ -40,7 +39,6 @@ namespace DataLibrary.Repository.DataBaseHelper
 
             return model;
         }
-
 
         public static List<T> ReturnAllRowsFromDB<T>(SqlDataReader reader) where T : new()
         {
@@ -75,21 +73,5 @@ namespace DataLibrary.Repository.DataBaseHelper
             }
             return models;
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }

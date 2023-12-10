@@ -11,13 +11,11 @@ namespace DataLibrary.BusinessLogic
 {
     public class TrainingService : ITrainingService
     {
-
         ITrainingDAL _trainingRepo;
         public TrainingService(ITrainingDAL trainingRepo)
         {
             this._trainingRepo = trainingRepo;
         }
-
         public IEnumerable<ITraining> GetAll()
         {
             var listOfAllTraining= _trainingRepo.GetAll();

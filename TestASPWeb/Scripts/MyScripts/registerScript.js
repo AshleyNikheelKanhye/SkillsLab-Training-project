@@ -15,12 +15,18 @@ function GetListOfDepartmentsFromDb() {
     serverCall.fetchApiCall().then(response => {
         //alert(JSON.stringify(response));
         const departmentDropdown = document.getElementById('department');
-        response.listDepartments.forEach(department => {
-            const option = document.createElement('option');
-            option.value = department.DepartmentID;
-            option.textContent = department.DepartmentName;
-            departmentDropdown.appendChild(option);
-        });
+        if (response.listDepartments) {
+            response.listDepartments.forEach(department => {
+                const option = document.createElement('option');
+                option.value = department.DepartmentID;
+                option.textContent = department.DepartmentName;
+                departmentDropdown.appendChild(option);
+            });
+        }
+        if (response.error) {
+            toastr.error('could not load Department list');
+        }
+        
     })
         .catch(error => {
             console.error('Error fetching departments:', error);
@@ -34,13 +40,19 @@ function GetListOfManagersFromDb() {
     serverCall.fetchApiCall().then(response => {
         //alert(JSON.stringify(response));
         const managersDropdown = document.getElementById('managers');
-        response.listManagers.forEach(manager => {
-            const option = document.createElement('option');
-            option.value = manager.UserID;
-            var fullName = manager.FirstName +' '+ manager.LastName
-            option.textContent = fullName;
-            managersDropdown.appendChild(option);
-        });
+        if (response.listManagers) {
+            response.listManagers.forEach(manager => {
+                const option = document.createElement('option');
+                option.value = manager.UserID;
+                var fullName = manager.FirstName +' '+ manager.LastName
+                option.textContent = fullName;
+                managersDropdown.appendChild(option);
+            });
+        }
+        if (response.error){
+            toastr.error('could not load Managers list');
+        }
+
     })
         .catch(error => {
             console.error('Error fetching departments:', error);
@@ -112,7 +124,7 @@ function register(formData) {
             toastr.success("Registered Successfully !");
             window.location = "/Employee/Index";
         } else {
-            toastr.error("error while registering");
+            toastr.error("Error while registering");
         }
     });
 }

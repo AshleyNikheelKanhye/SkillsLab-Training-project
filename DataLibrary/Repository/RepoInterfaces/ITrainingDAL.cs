@@ -10,10 +10,7 @@ namespace DataLibrary.Repository.RepoInterfaces
 {
     public interface ITrainingDAL
     {
-         IEnumerable<ITraining> GetAll();
+        IEnumerable<ITraining> GetAll();
         IEnumerable<Prerequisite> GetListOfPrerequisites(int trainingID);
-
-
-
     }
 }

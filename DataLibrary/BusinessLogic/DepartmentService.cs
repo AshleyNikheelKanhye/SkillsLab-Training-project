@@ -14,8 +14,6 @@ namespace DataLibrary.BusinessLogic
 {
     public class DepartmentService : IDepartmentService
     {
-
-
         IDepartmentDAL _departmentDAL;
         public DepartmentService(IDepartmentDAL departmentDAl)
         {
@@ -25,9 +23,5 @@ namespace DataLibrary.BusinessLogic
         {
             return _departmentDAL.getDepartments();
         }
-
-
-
-
     }
 }

@@ -93,8 +93,8 @@
         navLinks.forEach(link => link.classList.remove('active'));
     }
     function logout() {
-        // Add your logout logic here
-        alert('Logout button clicked!');
+        
+        window.location.href = "/User/Logout";
     }
 
     //  click event handlers to navigation links

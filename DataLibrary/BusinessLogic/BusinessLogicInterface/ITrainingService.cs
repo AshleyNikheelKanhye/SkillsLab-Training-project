@@ -10,12 +10,6 @@ namespace DataLibrary.BusinessLogic.BusinessLogicInterface
 {
     public interface ITrainingService
     {
-        
-
-
         IEnumerable<ITraining> GetAll();
-
-
-
     }
 }
