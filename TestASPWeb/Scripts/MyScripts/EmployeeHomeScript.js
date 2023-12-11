@@ -22,7 +22,6 @@
                 url: URL,
                 data: null,
                 dataType: "json",
-
                 success: function (data) {
                     resolve(data);
                 },
@@ -33,20 +32,13 @@
         });
     }
 
-
-
     async function populateTable() {
         var URL = "/Training/getAll";
-
         getAJAXCall(URL).then((response) => {
             if (response) {
                 console.log(response);
-                //var jsonString = JSON.stringify(response);
-                //alert(jsonString);
-                //toastr.success("could load table");
                 var tableBody = $("#trainingTable tbody");
                 tableBody.empty();
-
                 $.each(response, function (index, training) {
                     var row = '<tr>' +
                         '<td>' + training.TrainingID + '</td>' +
@@ -56,9 +48,20 @@
                         '<td>' + training.TrainingStatus + '</td>' +
                         '<td>' + formatDateTime(training.TrainingStartDate) + '</td>' +
                         '</tr>';
-
                     tableBody.append(row);
                 });
+            }
+        }).catch((error) => {
+            console.error(error);
+            toastr.error("error cannot load data");
+        });
+    }
+
+    async function LoadViews(viewURL) {
+        makeAJAXCall(viewURL).then((response) => {
+            if (response) {
+                console.log("loaded view");
+                $('#mainContent').html(response);
             }
         }).catch((error) => {
             console.error(error);
@@ -74,33 +77,19 @@
             return 'No date';
         }
     }
-
-
-    async function LoadViews(viewURL) {
-
-        makeAJAXCall(viewURL).then((response) => {
-            if (response) {
-                $('#mainContent').html(response);
-            }
-        }).catch((error) => {
-            console.error(error);
-            toastr.error("error cannot load data");
-        });
-    }
-
     function removeAllActiveClasses() {
         const navLinks = document.querySelectorAll('.navbar a');
         navLinks.forEach(link => link.classList.remove('active'));
     }
+
     function logout() {
-        
         window.location.href = "/User/Logout";
     }
+
 
     //  click event handlers to navigation links
     $('#homeLink').click(async function (e) {
         e.preventDefault();
-        //$('#mainContent').fadeOut();
         $('#mainContent').css("display", "none");
         removeAllActiveClasses();
         $(this).addClass("active");
@@ -112,7 +101,6 @@
     $('#profileLink').click(async function (e) {
         e.preventDefault();
         removeAllActiveClasses();
-        //$('#mainContent').fadeOut();
         $('#mainContent').css("display", "none");
         $(this).addClass("active");
         var url = '/Employee/GetProfileView';
@@ -123,15 +111,15 @@
     $('#viewTrainingLink').click( async function (e) {
         e.preventDefault();
         removeAllActiveClasses();
-        //$('#mainContent').fadeOut();
         $('#mainContent').css("display", "none");
         $(this).addClass("active");
         var url = '/Employee/GetTrainingView';
 
-
-        await LoadViews(url);
-        await populateTable();
-        $('#mainContent').fadeIn(1000);
+        const x = await LoadViews(url);
+        const y = await populateTable();
+        Promise.all([x, y]).then(() => {
+            $('#mainContent').fadeIn(1000);
+        });
 
     });
 
@@ -149,7 +137,6 @@
             alert('test btn has been clicked');
         });
     */
-
 
     //flow of javascript from start
     removeAllActiveClasses();

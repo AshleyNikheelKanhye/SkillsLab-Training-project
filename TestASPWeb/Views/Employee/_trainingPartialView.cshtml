@@ -1,7 +1,49 @@
-﻿
+﻿<style>
+    
+    #trainingTable {
+        background-color: #ffffff; /* White color for the table background */
+        padding: 10px;
+        border-radius: 8px;
+        margin: 20px;
+    }
+
+    #trainingTable table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    #trainingTable th, #trainingTable td {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #b2dfdb; /* Thin border color */
+        border-radius: 5px; /* Rounded corners */
+    }
+
+    #trainingTable th {
+        background-color: #e0f2f1; /* Light blue color for header */
+        color: #000000; /* Black text color */
+    }
+
+    #trainingTable tbody tr {
+        background-color: #ffffff; /* White color for rows */
+    }
+
+        #trainingTable tbody tr:nth-child(even) {
+            background-color: #ccffff; /* light blue color for even rows */
+        }
+
+        #trainingTable tbody tr:nth-child(odd) {
+            background-color: #ffffff; /* White color for odd rows */
+        }
+
+
+</style>
+
+<script>
+    $("span#info").text('showing available trainings');
+</script>
+
 <div id="trainingTable">
-
-
     <table id="trainingTable" border="1">
         <thead>
             <tr>
@@ -11,15 +53,12 @@
                 <th>Closing Date</th>
                 <th>Training Status</th>
                 <th>Training Start Date</th>
-                
+
             </tr>
         </thead>
         <tbody>
             <!-- Table body will be populated dynamically -->
         </tbody>
     </table>
-
-    
-
-
+    <span id="info"></span>
 </div>

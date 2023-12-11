@@ -47,6 +47,7 @@ namespace TestASPWeb
         /// </remarks>
         public static void RegisterTypes(IUnityContainer container)
         {
+            //database
             container.RegisterType<DBContext>(
                     new PerRequestLifetimeManager(),
                     new InjectionConstructor(ConfigurationManager.ConnectionStrings["default"].ConnectionString)
