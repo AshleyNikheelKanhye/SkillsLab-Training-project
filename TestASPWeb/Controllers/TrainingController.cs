@@ -36,7 +36,6 @@ namespace TestASPWeb.Controllers
         {
             var list = _trainingService.GetPrerequisites(trainingID);
             return Json(new { result = list },JsonRequestBehavior.AllowGet);
-
         }
 
     }

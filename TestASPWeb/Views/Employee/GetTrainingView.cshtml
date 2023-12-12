@@ -7,6 +7,22 @@
 
 <style>
 
+
+    #popUp {
+        padding-block: 10px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #ffffff;
+        padding: 20px;
+        border: 1px solid #ccc;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        /* Add any other styles for the popup */
+    }
+
+
+
     #viewingPrerequisites {
         background-color: #ffffff;
         padding: 10px;
@@ -51,7 +67,7 @@
             }
 </style>
 
-<script type="text/javascript" src="~/Scripts/ServerCallScripts/ServerCall.js"></script>
+
 <script>
     $(document).ready(function () {
 
@@ -108,10 +124,9 @@
         }
 
         //since button has been loaded later
-        $(document).on("click", "button#viewPrerequisites", function (e) {
-            e.preventDefault();
-            var popup = document.getElementById('viewingPrerequisites');
+        $("#trainingTable tbody").on("click", "#viewPrerequisites", function () {
             var URL = "/Training/GetPrerequisites";
+            var row = $(this).closest("tr");
             var trainingID = $(this).val();
             var trainingobj = { trainingID: trainingID }
             var serverCall = new ServerCall({ url: URL, parameters: trainingobj, callMethod: "POST" });
@@ -120,22 +135,31 @@
                     //populate popup
                     response.result.forEach(function (p) {
                         var paragraph = document.createElement('p');
-                        paragraph.textContent = 'Prerequisites Needed : ' + p.Details; 
-                        popup.append(paragraph);
-                        $('div#trainingTable').hide();
-                        $('div#viewingPrerequisites').show();
-                    })
+                        paragraph.textContent = 'Prerequisites Needed : ' + p.Details;
+                        $('div#popupText').append(paragraph);
+                    });
+
+                    //Access value within the clicked row
+                    var clickedTrainingName = row.find("td:eq(1)").text();
+                    $('div#trainingName').text("Training prerequisites for : " + clickedTrainingName);
+                    $('div#trainingTable').fadeOut();
+                    $('div#popup').fadeIn(1000);
                 }
                 else {
-                    toastr.error("error loading this");
+                    toastr.error("error loading table");
                 }
             });
         });
 
+        $(document).on("click", "button#closebtn", function (e) {
+            $('div#trainingName').text('');
+            $('div#popupText').text('');
+            $('div#popup').fadeOut();
+            $('div#trainingTable').fadeIn();
+        })
 
 
         //General flow
-        
         populateTable();
     });
 
@@ -143,30 +167,31 @@
 
 
 
-<!--Body -->
-<div id="trainingTable">
-    <table id="trainingTable" border="1">
-        <thead>
-            <tr>
-                <th>Training ID</th>
-                <th>Training Name</th>
-                <th>Capacity</th>
-                <th>Closing Date</th>
-                <th>Training Status</th>
-                <th>Training Start Date</th>
-                <th>Prerequisites</th>
+<!-- rendered Body -->
+<div id="second-container">
+    <div id="trainingTable">
+        <table id="trainingTable" border="1">
+            <thead>
+                <tr>
+                    <th>Training ID</th>  <!--If you are changing this structure remember to change the function where dealing with <td> when viewing prerequisites-->
+                    <th>Training Name</th>
+                    <th>Capacity</th>
+                    <th>Closing Date</th>
+                    <th>Training Status</th>
+                    <th>Training Start Date</th>
+                    <th>Prerequisites</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Table body will be populated dynamically -->
+            </tbody>
+        </table>
+        <span id="info"></span>
+    </div>
 
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Table body will be populated dynamically -->
-        </tbody>
-    </table>
-    <span id="info"></span>
+    <div id="popup" style="display: none;">
+        <div id="trainingName"></div>
+        <div id="popupText"></div>
+        <div><button id="closebtn">Close</button></div>
+    </div>
 </div>
-
-<div id="viewingPrerequisites" style="display: none;">
-
-</div>
-
-
