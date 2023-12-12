@@ -23,11 +23,13 @@ namespace TestASPWeb
                       "~/Scripts/bootstrap.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
+                      "~/Content/TrainingLayout.css",
+                      "~/Content/TrainingDetail.css",
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
 
 
-            //adding my own bundles testing
+            
             
         }
     }

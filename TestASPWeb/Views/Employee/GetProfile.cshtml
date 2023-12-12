@@ -1,0 +1,9 @@
+﻿
+@{
+    ViewBag.Title = "Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    DataLibrary.Entities.User currentUser = Session["CurrentUser"] as DataLibrary.Entities.User;
+}
+
+<h2>Profile</h2>
+Here is your profile @currentUser.FirstName

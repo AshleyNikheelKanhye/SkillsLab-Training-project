@@ -45,7 +45,7 @@ namespace TestASPWeb.Controllers
             this.Session["CurrentRole"] = user.Role;
             this.Session["CurrentUserID"] = user.UserID;
 
-            if(user.Role == "employee") return Json(new { result = true, url = Url.Action("Index", "Employee") });
+            if(user.Role == "employee") return Json(new { result = true, url = Url.Action("EmployeeView", "Employee") });
             else if(user.Role == "manager") return Json(new { result = true, url = Url.Action("Index", "Manager") });
             else return Json(new { result = true, url = Url.Action("Index", "Admin") });
         }

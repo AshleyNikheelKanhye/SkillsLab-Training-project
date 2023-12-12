@@ -21,7 +21,6 @@ namespace TestASPWeb.Controllers
         [HttpGet]
         public JsonResult GetUserDetails()
         {
-            var userDetails = this.Session["CurrentUser"]; //for debuging purposes
             return Json(new { currentUser = this.Session["CurrentUser"] },JsonRequestBehavior.AllowGet);
         }
 
@@ -35,10 +34,29 @@ namespace TestASPWeb.Controllers
         {
             return PartialView("~/Views/Employee/_profilePartialView.cshtml");
         }
+
+
+
+
+        public ActionResult EmployeeView()
+        {
+            return View();
+        }
+
+        public ActionResult GetProfile()
+        {
+            return View();
+        }
         public ActionResult GetTrainingView()
         {
-            return PartialView("~/Views/Employee/_trainingPartialView.cshtml");
+            return View();
         }
+
+
+
+
+
+
 
     }
 }

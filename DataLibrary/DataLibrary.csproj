@@ -84,6 +84,7 @@
     <Compile Include="DBContext.cs" />
     <Compile Include="Entities\Department.cs" />
     <Compile Include="Entities\EntitiesInterface\IDepartment.cs" />
+    <Compile Include="Entities\EntitiesInterface\IPrerequisite.cs" />
     <Compile Include="Entities\EntitiesInterface\ITraining.cs" />
     <Compile Include="Entities\EntitiesInterface\IUser.cs" />
     <Compile Include="Entities\Prerequisite.cs" />
@@ -92,7 +93,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\DataBaseHelper\DataBaseHelper.cs" />
     <Compile Include="Repository\DepartmentDAL.cs" />
+    <Compile Include="Repository\PrerequisiteDAL.cs" />
     <Compile Include="Repository\RepoInterfaces\IDepartmentDAL.cs" />
+    <Compile Include="Repository\RepoInterfaces\IPrerequisiteDAL.cs" />
     <Compile Include="Repository\RepoInterfaces\ITrainingDAL.cs" />
     <Compile Include="Repository\RepoInterfaces\IUserDAL.cs" />
     <Compile Include="Repository\TrainingDAL.cs" />

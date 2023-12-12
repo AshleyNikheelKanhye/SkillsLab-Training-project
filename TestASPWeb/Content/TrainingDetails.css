@@ -1,0 +1,40 @@
+﻿.training-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 20px;
+    background-color: #f0f8ff;
+}
+
+.training-detail {
+    /* Common styles for training detail items */
+    background-color: #add8e6;
+    border: 1px solid #000;
+    padding: 20px;
+    border-radius: 10px;
+    width: calc(20% - 20px);
+    margin-bottom: 20px;
+    box-sizing: border-box;
+    transition: transform 0.3s ease;
+}
+
+    .training-detail:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+
+p {
+    font-weight: 400
+}
+/* Media query for smaller screens */
+@media screen and (max-width: 768px) {
+    .training-list {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .training-detail {
+        width: 100%;
+    }
+}

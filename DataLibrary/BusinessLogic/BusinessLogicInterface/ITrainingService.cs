@@ -11,5 +11,6 @@ namespace DataLibrary.BusinessLogic.BusinessLogicInterface
     public interface ITrainingService
     {
         IEnumerable<ITraining> GetAll();
+        IEnumerable<IPrerequisite> GetPrerequisites(int trainingID);
     }
 }

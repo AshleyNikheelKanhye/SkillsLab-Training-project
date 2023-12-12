@@ -1,0 +1,88 @@
+﻿body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f5f9;
+    color: #333;
+}
+
+header {
+    background-color: #3e92cc;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+}
+
+nav {
+    background-color: #89bdd3;
+    padding: 22px;
+    color: #fff;
+}
+
+    nav nav-container {
+        display: flex;
+        justify-content: space-between;
+        padding: 5px;
+        border-radius: 22px;
+        box-shadow: 2px 2px 20px rgba(0,0,0,0.3);
+    }
+
+    nav a {
+        text-decoration: none;
+        color: #333;
+        padding: 10px 20px;
+        border-radius: 22px
+    }
+
+        nav a:hover {
+            transition: 0.25s;
+            background: rgb(56,130,209);
+            color: #fff;
+        }
+
+section {
+    padding: 20px;
+    margin: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #3e92cc;
+    color: #fff;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+.error-message-container p {
+    color: red;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    background-color: #e6f7ff; /* Light blue background */
+    padding: 8px;
+    border-radius: 4px;
+}
+
+    .user-info span {
+        margin-right: 15px; /* Space between elements */
+    }
+
+.user-name {
+    font-weight: bold;
+}
+
+.user-role {
+    color: #666;
+    margin-right: 20px;
+}
+
+.login-time {
+    font-style: italic;
+}

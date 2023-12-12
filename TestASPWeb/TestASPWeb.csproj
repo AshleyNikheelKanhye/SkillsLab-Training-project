@@ -185,6 +185,8 @@
     <Content Include="Content\MyContent\EmployeeHome.css" />
     <Content Include="Content\MyContent\Login.css" />
     <Content Include="Content\MyContent\Register.css" />
+    <Content Include="Content\TrainingDetails.css" />
+    <Content Include="Content\TrainingLayout.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -235,6 +237,9 @@
     <Content Include="Views\Employee\_homePartialView.cshtml" />
     <Content Include="Views\Employee\_profilePartialView.cshtml" />
     <Content Include="Views\Employee\_trainingPartialView.cshtml" />
+    <Content Include="Views\Employee\EmployeeView.cshtml" />
+    <Content Include="Views\Employee\GetProfile.cshtml" />
+    <Content Include="Views\Employee\GetTrainingView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

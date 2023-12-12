@@ -1,0 +1,172 @@
+﻿
+@{
+    ViewBag.Title = "TrainingView";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    DataLibrary.Entities.User currentUser = Session["CurrentUser"] as DataLibrary.Entities.User;
+}
+
+<style>
+
+    #viewingPrerequisites {
+        background-color: #ffffff;
+        padding: 10px;
+        border-radius: 8px;
+        margin: 20px;
+    }
+
+    #trainingTable {
+        background-color: #ffffff;
+        padding: 10px;
+        border-radius: 8px;
+        margin: 20px;
+    }
+
+        #trainingTable table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        #trainingTable th, #trainingTable td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #b2dfdb;
+            border-radius: 5px;
+        }
+
+        #trainingTable th {
+            background-color: #e0f2f1;
+            color: #000000;
+        }
+
+        #trainingTable tbody tr {
+            background-color: #ffffff;
+        }
+
+            #trainingTable tbody tr:nth-child(even) {
+                background-color: #ccffff;
+            }
+
+            #trainingTable tbody tr:nth-child(odd) {
+                background-color: #ffffff;
+            }
+</style>
+
+<script type="text/javascript" src="~/Scripts/ServerCallScripts/ServerCall.js"></script>
+<script>
+    $(document).ready(function () {
+
+        function formatDateTime(date) {
+            if (date) {
+                var parsedDate = new Date(parseInt(date.substr(6)));
+                return parsedDate.toLocaleDateString() + ' ' + parsedDate.toLocaleTimeString();
+            } else {
+                return 'No date';
+            }
+        }
+
+        function getAJAXCall(URL) {
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    type: "GET",
+                    url: URL,
+                    data: null,
+                    dataType: "json",
+                    success: function (data) {
+                        resolve(data);
+                    },
+                    error: function (data) {
+                        reject(data);
+                    }
+                })
+            });
+        }
+
+         function populateTable() {
+            var URL = "/Training/getAll";
+            getAJAXCall(URL).then((response) => {
+                if (response) {
+                    console.log(response);
+                    var tableBody = $("#trainingTable tbody");
+                    tableBody.empty();
+                    $.each(response, function (index, training) {
+                        var row = '<tr>' +
+                            '<td>' + training.TrainingID + '</td>' +
+                            '<td>' + training.TrainingName + '</td>' +
+                            '<td>' + training.Capacity + '</td>' +
+                            '<td>' + formatDateTime(training.ClosingDate) + '</td>' +
+                            '<td>' + training.TrainingStatus + '</td>' +
+                            '<td>' + formatDateTime(training.TrainingStartDate) + '</td>' +
+                            '<td> <button id ="viewPrerequisites" value = "' + training.TrainingID + '" > View Prerequisites </button> </td>' +
+                            '</tr>';
+                        tableBody.append(row);
+                    });
+                }
+            }).catch((error) => {
+                console.error(error);
+                toastr.error("error cannot load data");
+            });
+        }
+
+        //since button has been loaded later
+        $(document).on("click", "button#viewPrerequisites", function (e) {
+            e.preventDefault();
+            var popup = document.getElementById('viewingPrerequisites');
+            var URL = "/Training/GetPrerequisites";
+            var trainingID = $(this).val();
+            var trainingobj = { trainingID: trainingID }
+            var serverCall = new ServerCall({ url: URL, parameters: trainingobj, callMethod: "POST" });
+            serverCall.fetchApiCall().then((response) => {
+                if (response) {
+                    //populate popup
+                    response.result.forEach(function (p) {
+                        var paragraph = document.createElement('p');
+                        paragraph.textContent = 'Prerequisites Needed : ' + p.Details; 
+                        popup.append(paragraph);
+                        $('div#trainingTable').hide();
+                        $('div#viewingPrerequisites').show();
+                    })
+                }
+                else {
+                    toastr.error("error loading this");
+                }
+            });
+        });
+
+
+
+        //General flow
+        
+        populateTable();
+    });
+
+</script>
+
+
+
+<!--Body -->
+<div id="trainingTable">
+    <table id="trainingTable" border="1">
+        <thead>
+            <tr>
+                <th>Training ID</th>
+                <th>Training Name</th>
+                <th>Capacity</th>
+                <th>Closing Date</th>
+                <th>Training Status</th>
+                <th>Training Start Date</th>
+                <th>Prerequisites</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Table body will be populated dynamically -->
+        </tbody>
+    </table>
+    <span id="info"></span>
+</div>
+
+<div id="viewingPrerequisites" style="display: none;">
+
+</div>
+
+

@@ -24,11 +24,19 @@ namespace TestASPWeb.Controllers
             return View();
         }
 
-
+        [HttpGet]
         public JsonResult getAll()
         {
             IEnumerable<ITraining> trainingList = _trainingService.GetAll();
             return Json(trainingList,JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult GetPrerequisites(int trainingID)
+        {
+            var list = _trainingService.GetPrerequisites(trainingID);
+            return Json(new { result = list },JsonRequestBehavior.AllowGet);
+
         }
 
     }

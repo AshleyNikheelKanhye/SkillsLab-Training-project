@@ -2,7 +2,7 @@
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f0f8ff; /* Light Blue background color */
+    background-color: #f0f8ff; 
 }
 
 .dashboard-container {
@@ -11,8 +11,8 @@
 }
 
 .navbar {
-    background-color: #0074cc; /* Dark Blue navbar color */
-    color: #fff; /* White text color */
+    background-color: #0074cc; 
+    color: #fff;
     width: 200px;
     min-height: 100%;
     padding: 20px;
@@ -37,19 +37,19 @@
     padding: 10px 0;
     color: #fff;
     text-decoration: none;
-    transition: background-color 0.3s ease; /* Smooth transition for darkening effect */
+    transition: background-color 0.3s ease; 
 }
 
     .navbar a:hover,
     .navbar a.active {
-        background-color: #005999; /* Darker Blue on hover or when active */
+        background-color: #005999; 
     }
 
 .main-content {
     flex: 1;
     padding: 20px;
     box-sizing: border-box;
-    margin-left: 200px; /* Adjusted based on navbar width */
+    margin-left: 200px; 
 }
 
 /* Responsive styles */

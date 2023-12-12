@@ -68,6 +68,13 @@ namespace TestASPWeb
             container.RegisterType<IDepartment, Department>(new PerRequestLifetimeManager());
             container.RegisterType<IDepartmentService, DepartmentService>(new PerRequestLifetimeManager());
 
+
+            //Prerequisite
+          
+            container.RegisterType<IPrerequisite, Prerequisite>(new PerRequestLifetimeManager());
+            container.RegisterType<IPrerequisiteDAL, PrerequisiteDAL>(new PerRequestLifetimeManager());
+
+
         }
     }
 }
