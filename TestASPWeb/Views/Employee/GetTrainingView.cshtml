@@ -97,6 +97,7 @@
             });
         }
 
+        //function to populate Table
          function populateTable() {
             var URL = "/Training/getAll";
             getAJAXCall(URL).then((response) => {
@@ -121,9 +122,9 @@
                 console.error(error);
                 toastr.error("error cannot load data");
             });
-        }
+         }
 
-        //since button has been loaded later
+        //function to be triggered when clicking on view prerequisites button 
         $("#trainingTable tbody").on("click", "#viewPrerequisites", function () {
             var URL = "/Training/GetPrerequisites";
             var row = $(this).closest("tr");
@@ -151,6 +152,7 @@
             });
         });
 
+        //close popup view prerequisites
         $(document).on("click", "button#closebtn", function (e) {
             $('div#trainingName').text('');
             $('div#popupText').text('');

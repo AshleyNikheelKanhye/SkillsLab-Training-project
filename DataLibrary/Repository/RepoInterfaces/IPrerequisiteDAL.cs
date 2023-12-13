@@ -11,5 +11,6 @@ namespace DataLibrary.Repository.RepoInterfaces
     public interface IPrerequisiteDAL
     {
         IEnumerable<IPrerequisite> GetPrerequisites(int trainingID);
+        IEnumerable<IPrerequisite> GetEmployeeQualifications(int userID);
     }
 }

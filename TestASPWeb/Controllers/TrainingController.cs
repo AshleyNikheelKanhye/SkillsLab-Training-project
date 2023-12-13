@@ -12,11 +12,13 @@ namespace TestASPWeb.Controllers
     public class TrainingController : Controller
     {
         private readonly ITrainingService _trainingService;
+        private readonly IPrerequisiteService _prerequisiteService;
 
 
-        public TrainingController(ITrainingService trainingService)
+        public TrainingController(ITrainingService trainingService, IPrerequisiteService prerequisiteService)
         {
             this._trainingService = trainingService;
+            this._prerequisiteService = prerequisiteService;
         }
 
         public ActionResult Index()
@@ -34,7 +36,7 @@ namespace TestASPWeb.Controllers
         [HttpPost]
         public JsonResult GetPrerequisites(int trainingID)
         {
-            var list = _trainingService.GetPrerequisites(trainingID);
+            var list = _prerequisiteService.GetPrerequisites(trainingID);
             return Json(new { result = list },JsonRequestBehavior.AllowGet);
         }
 

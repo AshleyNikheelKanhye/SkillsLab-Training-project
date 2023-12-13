@@ -1,0 +1,49 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simple Login Form Example</title>
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Rubik:400,700'>
+    <link rel="stylesheet" href="~/Content/css/login.css">
+    <link rel="stylesheet" href="~/Content/css/LoginStylus.css">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    @*https://codeseven.github.io/toastr/*@
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+    <link rel="stylesheet" href="~/Scripts/dojoSRC/dijit/themes/claro/claro.css" />
+    <link rel="stylesheet" href="~/Scripts/dojoSRC/dijit/themes/claro/Dialog.css" />
+    <script>
+        var dojoConfig = {
+            async: true,
+            waitSeconds: 0,
+            packages: [
+                { name: 'dojo', location: '@Url.Content("~/Scripts/dojoSRC/dojo")' },
+                { name: 'dijit', location: '@Url.Content("~/Scripts/dojoSRC/dijit")' },
+                { name: 'themes', location: '@Url.Content("~/Scripts/dojoSRC/dijit-themes")' },
+                
+                { name: 'tsCustom', location: '@Url.Content("~/dist/Widget")'},
+                
+            ],
+        }
+    </script>
+
+    <script src="~/Scripts/dojoSRC/dojo/dojo.js"></script>
+
+    <script>var exports = {};</script>
+    <script>
+        //require(["dijit/registry", "dojo/parser", "tsCustom/LoginWidget", "dojo/domReady!"], function (registry, parser) {
+        //    parser.parse();
+        //})
+        require(["dijit/registry", "dojo/parser", "jsCustom/LoginWidget", "dojo/domReady!"], function (registry, parser) {
+            parser.parse();
+        })
+    </script>
+</head>
+<body>
+    <div data-dojo-type="tsCustom/LoginWidget" data-dojo-props="testUserName : 'test name'"></div>
+</body>
+</html>

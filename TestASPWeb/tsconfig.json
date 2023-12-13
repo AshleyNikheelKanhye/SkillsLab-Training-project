@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src",
+    "module": "AMD",
+    "strict": false
+  },
+  "exclude": [
+    "node_modules",
+    "wwwroot"
+  ]
+}

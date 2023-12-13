@@ -77,9 +77,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessLogic\BusinessLogicInterface\IDepartmentService.cs" />
+    <Compile Include="BusinessLogic\BusinessLogicInterface\IPrerequisiteService.cs" />
     <Compile Include="BusinessLogic\BusinessLogicInterface\ITrainingService.cs" />
     <Compile Include="BusinessLogic\BusinessLogicInterface\IUserService.cs" />
     <Compile Include="BusinessLogic\DepartmentService.cs" />
+    <Compile Include="BusinessLogic\PrerequisiteService.cs" />
     <Compile Include="BusinessLogic\TrainingService.cs" />
     <Compile Include="DBContext.cs" />
     <Compile Include="Entities\Department.cs" />

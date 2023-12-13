@@ -1,0 +1,128 @@
+﻿
+@{
+    ViewBag.Title = "QualificationsView";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    DataLibrary.Entities.User currentUser = Session["CurrentUser"] as DataLibrary.Entities.User;
+}
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f8ff; /* Light blue background */
+        margin: 0;
+        padding: 0;
+    }
+
+    #table-container {
+        margin: 20px;
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        background-color: #ffffff; /* White background */
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Light shadow for the table */
+    }
+
+    th, td {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 12px;
+    }
+
+    th {
+        background-color: #87CEEB; /* Light blue header */
+        color: #ffffff; /* White text for header */
+    }
+
+    tr:nth-child(even) {
+        background-color: #f2f2f2; /* Light gray background for even rows */
+    }
+
+    tr:hover {
+        background-color: #e0f7fa; /* Light blue background on hover */
+    }
+</style>
+
+
+<script>
+    $(document).ready(function () {
+
+        function getQualifications() {
+            var URL = "/Employee/GetEmployeeQualifications";
+            var userID = @currentUser.UserID; 
+            var userIDObj = { userID: userID };
+            var table = $("#myQualificationTable tbody");
+            table.empty();
+            var serverCall = new ServerCall({ url: URL, parameters: userIDObj, callMethod: "POST" });
+            serverCall.fetchApiCall().then((response) => {
+                var results = response.result;
+                if (results && results.length > 0) {
+
+                    $.each(results, function (index, qualification) {
+                        var row = '<tr>' +
+                            '<td>' + qualification.PrerequisiteID + '</td>' +
+                            '<td>' + qualification.Details + '</td>' +
+                            +'</tr>';
+                        table.append(row);
+                    });
+                    $('div#viewQualifications').fadeIn(1000);
+                }
+                else {
+                    //show no prerequisite available in div
+                    $('div#noQualifications').fadeIn(1000);
+                }
+            });
+
+        }
+
+        //flow
+        getQualifications();
+
+    });
+</script>
+
+
+
+<!--Rendered body-->
+<div id="second-container">
+    <div id="noQualifications" style="display: none;">
+        Oops, seems You do not have any qualifications
+        <button id="btnAddQualification">Add New Qualification</button>
+    </div>
+
+
+
+
+    <div id="AddQualification" style="display: none;">
+        Select your qualification and then upload the file.
+
+
+        <!--Add select list and option to upload file here -->
+
+
+    </div>
+
+    <div id="viewQualifications" style="display: none;">
+
+        <!--employee can view his qualifications-->
+        <table id="myQualificationTable">
+            <thead>
+                <tr>
+                    <th>Qualification ID</th>
+                    <th>Qualification Name</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+
+    </div>
+
+
+
+
+</div>
+
+

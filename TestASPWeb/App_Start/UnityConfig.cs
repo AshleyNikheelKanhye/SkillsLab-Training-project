@@ -70,9 +70,10 @@ namespace TestASPWeb
 
 
             //Prerequisite
-          
             container.RegisterType<IPrerequisite, Prerequisite>(new PerRequestLifetimeManager());
             container.RegisterType<IPrerequisiteDAL, PrerequisiteDAL>(new PerRequestLifetimeManager());
+            container.RegisterType<IPrerequisiteService, PrerequisiteService>(new PerRequestLifetimeManager());
+
 
 
         }

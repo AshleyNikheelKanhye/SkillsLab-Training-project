@@ -17,10 +17,8 @@ namespace DataLibrary.Repository.RepoInterfaces
         IUser Add(IUser user);
         void Update(IUser user);
         void Delete(int userID);
-
         IUser Find(string email);
-
         bool CheckUserExists(string Email, string NIC, int PhoneNo);
-
+        
     }
 }
