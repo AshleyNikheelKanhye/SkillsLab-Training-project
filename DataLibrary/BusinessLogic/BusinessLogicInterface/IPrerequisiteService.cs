@@ -14,6 +14,7 @@ namespace DataLibrary.BusinessLogic.BusinessLogicInterface
     {
         IEnumerable<IPrerequisite> GetPrerequisites(int trainingID);
         IEnumerable<EmployeeQualificationDetailsViewModel> GetEmployeeQualifications(int userID);
+        EmployeeQualification DownloadQualification(int userID, int prerequisiteID);
         bool UploadQualifications(HttpPostedFileBase file, int prerequisiteID,int userID,string fileName);
 
     }

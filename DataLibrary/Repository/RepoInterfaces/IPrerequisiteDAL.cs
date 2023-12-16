@@ -16,6 +16,7 @@ namespace DataLibrary.Repository.RepoInterfaces
         IEnumerable<EmployeeQualificationDetailsViewModel> GetEmployeeQualifications(int userID);
 
         bool UploadQualification(HttpPostedFileBase file, int prerequisiteID, int userID, string fileName);
+        EmployeeQualification GetQualification(int userID, int prerequisiteID);
 
     }
 }

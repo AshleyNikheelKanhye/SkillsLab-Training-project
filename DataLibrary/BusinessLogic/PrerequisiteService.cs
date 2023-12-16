@@ -54,5 +54,10 @@ namespace DataLibrary.BusinessLogic
             return _prerequisiteRepo.UploadQualification(file, prerequisiteID, userID, fileName);
         }
 
+        public EmployeeQualification DownloadQualification(int userID, int prerequisiteID)
+        {
+            return _prerequisiteRepo.GetQualification(userID, prerequisiteID);
+        }
+
     }
 }

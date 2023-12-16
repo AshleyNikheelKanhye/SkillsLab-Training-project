@@ -64,7 +64,7 @@
                             '<td>' + qualification.PrerequisiteID + '</td>' +
                             '<td>' + qualification.Details + '</td>' +
                             '<td>' + qualification.FileName + '</td>' +
-                            '<td> <button id="downloadBtn" value="'+ qualification.PrerequisiteID +'">Download</button></td>'
+                            '<td> <a href="/Employee/DownloadQualification?userID='+userID+'&prerequisiteID='+qualification.PrerequisiteID+'" target="_blank">Download File </a></td>'
                             +'</tr>';
                         table.append(row);
                     });
@@ -118,10 +118,14 @@
 
         //since button is rendered after
         
-        $(document).on("click", "button#downloadBtn", function () {
+/*        $(document).on("click", "button#downloadBtn", function () {
             var selectedPrerequisiteID = $(this).val();
             //alert("I want to download file for id : " + selectedPrerequisiteID);
-        });
+
+
+
+
+        });*/
 
 
 

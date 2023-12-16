@@ -103,5 +103,44 @@ namespace DataLibrary.Repo
             }
         }
 
+
+        public EmployeeQualification GetQualification(int userID, int prerequisiteID)
+        {
+            try
+            {
+                string selectQuery = "SELECT * FROM EmployeePrerequisites WHERE UserID = @UserID AND PrerequisiteID=@PrerequisiteID";
+                SqlCommand command = new SqlCommand(selectQuery, _dbContext.GetConn());
+                command.Parameters.AddWithValue("@UserID", userID);
+                command.Parameters.AddWithValue("@PrerequisiteID", prerequisiteID);
+                SqlDataReader reader = command.ExecuteReader();
+
+                int UserID;
+                int PrerequisiteID;
+                string FileName;
+                byte[] FileContent;
+
+                if(reader.Read())
+                {
+                    UserID = (int)reader["UserID"];
+                    PrerequisiteID = (int)reader["PrerequisiteID"];
+                    FileName = (string)reader["FileName"];
+                    FileContent = (byte[])reader["FileContent"];
+                    EmployeeQualification employeeQualification = new EmployeeQualification()
+                    {
+                        UserID = UserID,
+                        PrerequisiteID = PrerequisiteID,
+                        FileName = FileName,
+                        FileContent = FileContent
+                    };
+                    reader.Close();
+                    return employeeQualification;
+                }
+                reader.Close();
+                return null;
+            }
+            catch(Exception ex) { return null; }
+        }
+
+
     }
 }

@@ -41,6 +41,19 @@ namespace TestASPWeb.Controllers
             return Json(new { result = list }, JsonRequestBehavior.AllowGet);    
         }
 
+        public ActionResult DownloadQualification(int userID, int prerequisiteID)
+        {
+            EmployeeQualification qualification = _prerequisiteService.DownloadQualification(userID,prerequisiteID);
+            if(qualification != null)
+            {
+                return File(qualification.FileContent, "application/pdf", qualification.FileName);
+            }
+            else
+            {
+                return Content("file not found");
+            }
+            
+        }
 
 
         public ActionResult GetHomeView()
