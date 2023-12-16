@@ -3,11 +3,13 @@ using DataLibrary.Entities;
 using DataLibrary.Entities.EntitiesInterface;
 using DataLibrary.Repo;
 using DataLibrary.Repository.RepoInterfaces;
+using DataLibrary.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace DataLibrary.BusinessLogic
 {
@@ -23,7 +25,7 @@ namespace DataLibrary.BusinessLogic
 
 
 
-        public IEnumerable<IPrerequisite> GetEmployeeQualifications(int userID)
+        public IEnumerable<EmployeeQualificationDetailsViewModel> GetEmployeeQualifications(int userID)   //remember to change <> to EmployeePrerequisite same for BL and controller and interfaces
         {
             try
             {
@@ -34,7 +36,7 @@ namespace DataLibrary.BusinessLogic
                 throw ex;
             }
         }
-
+        
         public IEnumerable<IPrerequisite> GetPrerequisites(int trainingID)
         {
             try
@@ -46,5 +48,11 @@ namespace DataLibrary.BusinessLogic
                 throw ex;
             }
         }
+
+        public bool UploadQualifications(HttpPostedFileBase file, int prerequisiteID, int userID,string fileName)
+        {
+            return _prerequisiteRepo.UploadQualification(file, prerequisiteID, userID, fileName);
+        }
+
     }
 }

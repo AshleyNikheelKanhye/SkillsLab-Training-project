@@ -1,4 +1,5 @@
 ﻿using DataLibrary.BusinessLogic.BusinessLogicInterface;
+using DataLibrary.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,6 +50,37 @@ namespace TestASPWeb.Controllers
         public ActionResult GetProfileView()
         {
             return PartialView("~/Views/Employee/_profilePartialView.cshtml");
+        }
+
+        [HttpPost]
+        public ActionResult UploadQualifications(HttpPostedFileBase file ,int prerequisiteID)
+        {
+            try
+            {
+                if(file != null && file.ContentLength > 0)
+                {
+                    //add constraints to check if extension is pdf : https://www.compilemode.com/2017/02/uploading-downloading-pdf-files-from-database-in-asp-net-mvc.html
+                    int userID = (int)this.Session["CurrentUserID"];
+                    string fileName = file.FileName;
+                    
+                    bool uploadResult = _prerequisiteService.UploadQualifications(file, prerequisiteID,userID,fileName);
+                    if (uploadResult)
+                    {
+                        return Json(new { result = "got file in backend" }, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        return Json(new {result="could not upload this file"},JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else
+                {
+                    return Json(new { result = " got the file but it is null" }, JsonRequestBehavior.AllowGet);
+                }
+            }catch(Exception ex)
+            {
+                return Json(new {result ="error could not get pdf in backend"}, JsonRequestBehavior.AllowGet);
+            }
         }
 
 

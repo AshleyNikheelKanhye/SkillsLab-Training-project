@@ -85,6 +85,7 @@
     <Compile Include="BusinessLogic\TrainingService.cs" />
     <Compile Include="DBContext.cs" />
     <Compile Include="Entities\Department.cs" />
+    <Compile Include="Entities\EmployeeQualification.cs" />
     <Compile Include="Entities\EntitiesInterface\IDepartment.cs" />
     <Compile Include="Entities\EntitiesInterface\IPrerequisite.cs" />
     <Compile Include="Entities\EntitiesInterface\ITraining.cs" />
@@ -104,6 +105,7 @@
     <Compile Include="Repository\UserDAL.cs" />
     <Compile Include="BusinessLogic\UserService.cs" />
     <Compile Include="ViewModels\CheckUserExistViewModel.cs" />
+    <Compile Include="ViewModels\EmployeeQualificationDetailsViewModel.cs" />
     <Compile Include="ViewModels\ListOfManagersModel.cs" />
     <Compile Include="ViewModels\LoginUserViewModel.cs" />
     <Compile Include="ViewModels\RegisterEmployeeViewModel.cs" />

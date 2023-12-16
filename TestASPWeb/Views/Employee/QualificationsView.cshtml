@@ -63,6 +63,8 @@
                         var row = '<tr>' +
                             '<td>' + qualification.PrerequisiteID + '</td>' +
                             '<td>' + qualification.Details + '</td>' +
+                            '<td>' + qualification.FileName + '</td>' +
+                            '<td> <button id="downloadBtn" value="'+ qualification.PrerequisiteID +'">Download</button></td>'
                             +'</tr>';
                         table.append(row);
                     });
@@ -73,19 +75,67 @@
                     $('div#noQualifications').fadeIn(1000);
                 }
             });
-
         }
+
+        $('button#btnAddQualification').click(function () {
+            $('div#noQualifications').fadeOut();
+            $('div#viewQualifications').fadeOut();
+            $('div#AddQualification').fadeIn(1000);
+        });
+
+
+        $('button#uploadbtn').click(function () {
+            var fileInput = document.getElementById('fileInput');
+            var file = fileInput.files[0];
+            var prerequisiteID = 3;  //for testing purposes change that later.
+
+            if (file) {
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('prerequisiteID', prerequisiteID);
+                console.log('uploading file please wait');
+
+                $.ajax({
+                    url: '/Employee/UploadQualifications',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        console.log(response);
+                        alert('maybe succesful check console');
+                    },
+                    error: function (error) {
+                        console.log(error);
+                        alert('an error occured check console');
+                    }
+                });
+            }
+            else {
+                alert('please upload your goddamn pdf file');
+            }
+        });
+
+        //since button is rendered after
+        
+        $(document).on("click", "button#downloadBtn", function () {
+            var selectedPrerequisiteID = $(this).val();
+            //alert("I want to download file for id : " + selectedPrerequisiteID);
+        });
+
+
 
         //flow
         getQualifications();
-
     });
+
 </script>
 
 
 
 <!--Rendered body-->
 <div id="second-container">
+    <!--No qualifications-->
     <div id="noQualifications" style="display: none;">
         Oops, seems You do not have any qualifications
         <button id="btnAddQualification">Add New Qualification</button>
@@ -93,36 +143,37 @@
 
 
 
-
+    <!--Add qualifications-->
     <div id="AddQualification" style="display: none;">
         Select your qualification and then upload the file.
-
-
         <!--Add select list and option to upload file here -->
+        <!--Testing dummy upload-->
+        <form id="uploadForm" enctype="multipart/form-data">
+            <input type="file" id="fileInput" name="fileInput" accept=".pdf">
+            <button type="button" id="uploadbtn">Upload</button>
+        </form>
+
 
 
     </div>
 
-    <div id="viewQualifications" style="display: none;">
 
-        <!--employee can view his qualifications-->
+    <!--view qualifications-->
+    <div id="viewQualifications" style="display: none;">
         <table id="myQualificationTable">
             <thead>
                 <tr>
                     <th>Qualification ID</th>
                     <th>Qualification Name</th>
+                    <th>File Name Uploaded</th>
+                    <th>Download</th>
                 </tr>
             </thead>
             <tbody>
-
             </tbody>
         </table>
-
+        <button id="btnAddQualification">Add New Qualification</button>
     </div>
-
-
-
-
 </div>
 
 
