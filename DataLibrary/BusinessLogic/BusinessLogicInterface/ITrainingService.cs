@@ -1,5 +1,6 @@
 ﻿using DataLibrary.Entities.EntitiesInterface;
 using DataLibrary.Repository.RepoInterfaces;
+using DataLibrary.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +13,6 @@ namespace DataLibrary.BusinessLogic.BusinessLogicInterface
     {
         IEnumerable<ITraining> GetAll();
         IEnumerable<IPrerequisite> GetPrerequisites(int trainingID);
+        IEnumerable<TrainingPrerequisiteDepartmentViewModel> GetAllPrerequisitesAndDepartments();
     }
 }

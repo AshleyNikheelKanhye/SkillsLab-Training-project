@@ -25,3 +25,5 @@ C:\Users\P12ADC6\source\repos\TestASPWeb\DataLibrary\obj\Debug\DataLibrary.cspro
 C:\Users\P12ADC6\source\repos\TestASPWeb\DataLibrary\obj\Debug\DataLibrary.csproj.CopyComplete
 C:\Users\P12ADC6\source\repos\TestASPWeb\DataLibrary\obj\Debug\DataLibrary.dll
 C:\Users\P12ADC6\source\repos\TestASPWeb\DataLibrary\obj\Debug\DataLibrary.pdb
+C:\Users\P12ADC6\source\repos\TestASPWeb\DataLibrary\bin\Debug\Newtonsoft.Json.dll
+C:\Users\P12ADC6\source\repos\TestASPWeb\DataLibrary\bin\Debug\Newtonsoft.Json.xml

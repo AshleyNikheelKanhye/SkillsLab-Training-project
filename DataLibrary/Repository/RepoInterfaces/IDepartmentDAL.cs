@@ -11,5 +11,6 @@ namespace DataLibrary.Repository.RepoInterfaces
     public interface IDepartmentDAL
     {
         IEnumerable<IDepartment> getDepartments();
+        IEnumerable<IDepartment> GetDepartmentsForTraining(int trainingID);
     }
 }

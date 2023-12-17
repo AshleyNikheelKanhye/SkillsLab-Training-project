@@ -9,7 +9,7 @@ using DataLibrary.Repository.DataBaseHelper;
 using DataLibrary.Repository.RepoInterfaces;
 using DataLibrary.Entities.EntitiesInterface;
 
-namespace DataLibrary.Repository
+namespace DataLibrary.Repo
 {
     public class DepartmentDAL : IDepartmentDAL
     {
@@ -38,5 +38,29 @@ namespace DataLibrary.Repository
 
             }catch (Exception ex) { return null; }
         }
+
+        public IEnumerable<IDepartment> GetDepartmentsForTraining(int trainingID)
+        {
+            try
+            {
+                List<Department> list = new List<Department>(); 
+                string selectQuery = "SELECT D.DepartmentID,D.DepartmentName " +
+                    "FROM DepartmentTraining DT INNER JOIN Department D ON DT.DepartmentID = D.DepartmentID " +
+                    "WHERE DT.TrainingID = @TrainingID";
+
+                SqlCommand command = new SqlCommand(selectQuery, _dbContext.GetConn());
+                command.Parameters.AddWithValue("TrainingID", trainingID);
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    list = DataBaseHelper.ReturnAllRowsFromDB<Department>(reader);
+                }
+                reader.Close();
+                return list;
+            }
+            catch (Exception ex) { return null; }
+        }
+
+
     }
 }

@@ -1,6 +1,7 @@
 ﻿using DataLibrary.BusinessLogic.BusinessLogicInterface;
 using DataLibrary.Entities;
 using DataLibrary.Entities.EntitiesInterface;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,6 +40,15 @@ namespace TestASPWeb.Controllers
             var list = _prerequisiteService.GetPrerequisites(trainingID);
             return Json(new { result = list },JsonRequestBehavior.AllowGet);
         }
+
+        [HttpGet]
+        public JsonResult GetAllTrainingWithPrerequisitesAndDepartments()
+        {
+            var list = _trainingService.GetAllPrerequisitesAndDepartments();
+            return Json(list,JsonRequestBehavior.AllowGet);
+        }
+
+
 
     }
 }

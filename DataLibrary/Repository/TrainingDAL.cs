@@ -19,12 +19,21 @@ namespace DataLibrary.Repo
 
         public IEnumerable<ITraining> GetAll()
         {
-            string query = "SELECT * FROM Training";
-            SqlCommand command = new SqlCommand(query,_dbContext.GetConn());
-            SqlDataReader reader = command.ExecuteReader();
+            try
+            {
+                List<Training> returnList = new List<Training>(); 
+                string query = "SELECT * FROM Training";
+                SqlCommand command = new SqlCommand(query,_dbContext.GetConn());
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    returnList = DataBaseHelper.ReturnAllRowsFromDB<Training>(reader);
 
-            List<Training> returnList = DataBaseHelper.ReturnAllRowsFromDB<Training>(reader);
-            return returnList;
+                }
+                reader.Close();
+                return returnList;
+
+            }catch (Exception ex) { return null; }
 
         }
 
