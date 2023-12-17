@@ -72,6 +72,29 @@ namespace DataLibrary.Repo
             catch (Exception ex) { return null; }
         }
 
+        public IEnumerable<IPrerequisite> GetPrerequisitesNotInEmployee(int userID)
+        {
+            try
+            {
+                IEnumerable<IPrerequisite> list = new List<IPrerequisite>();
+                string selectQuery = "SELECT p.PrerequisiteID, p.Details " +
+                                    "FROM (Prerequisite p LEFT JOIN EmployeePrerequisites ep ON p.PrerequisiteID = ep.PrerequisiteID AND ep.UserID = @UserID ) " +
+                                    "WHERE ep.PrerequisiteID IS NULL ";
+
+                SqlCommand command = new SqlCommand( selectQuery, _dbContext.GetConn());
+                command.Parameters.AddWithValue("@UserID", userID);
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    list = DataBaseHelper.ReturnAllRowsFromDB<Prerequisite>(reader);
+                }
+                reader.Close();
+                return list;
+            }
+            catch (Exception ex) { return null; }
+        }
+
+
 
         public bool UploadQualification(HttpPostedFileBase file, int prerequisiteID, int userID, string fileName)
         {
@@ -140,6 +163,8 @@ namespace DataLibrary.Repo
             }
             catch(Exception ex) { return null; }
         }
+
+        
 
 
     }

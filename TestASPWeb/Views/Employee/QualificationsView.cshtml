@@ -71,23 +71,53 @@
                     $('div#viewQualifications').fadeIn(1000);
                 }
                 else {
-                    //show no prerequisite available in div
                     $('div#noQualifications').fadeIn(1000);
                 }
+            });
+        }
+
+        function loadAddQualifications() {
+            //populate table
+            const userID = @currentUser.UserID;
+            var URL = "/Prerequisite/GetPrerequisitesNotInEmployee?userID=" + userID;
+            var serverCall = new ServerCall({ url: URL, callMethod: "GET" });
+            const qualificationsDropdown = document.getElementById('listOfQualifications');
+            serverCall.fetchApiCall().then(response => {
+                if (response.listQualifications) { // TODO : cater for when that user has all the qualifications , display accordingly
+                    response.listQualifications.forEach(qualification => {
+                        const option = document.createElement('option');
+                        option.value = qualification.PrerequisiteID;
+                        option.textContent = qualification.Details;
+                        qualificationsDropdown.appendChild(option);
+                    });
+                    $('div#AddQualification').fadeIn(1000);
+                }
+                if (response.error) {
+                    toastr.error("could not load list of Qualifications");
+                }
+            })
+            .catch(error => {
+                console.error("error fetching qualifications ", error);
+                toastr.error('could not load list of qualifications');
             });
         }
 
         $('button#btnAddQualification').click(function () {
             $('div#noQualifications').fadeOut();
             $('div#viewQualifications').fadeOut();
-            $('div#AddQualification').fadeIn(1000);
+            loadAddQualifications();
         });
+
+
+
 
 
         $('button#uploadbtn').click(function () {
             var fileInput = document.getElementById('fileInput');
             var file = fileInput.files[0];
-            var prerequisiteID = 3;  //for testing purposes change that later.
+            var prerequisiteID = document.getElementById("listOfQualifications").value;
+            if (prerequisiteID == "") { toastr.error("Please select a qualification"); return; }
+
 
             if (file) {
                 const formData = new FormData();
@@ -103,7 +133,7 @@
                     contentType: false,
                     success: function (response) {
                         console.log(response);
-                        alert('maybe succesful check console');
+                        toastr.success("file uploaded "); // TODO :need to change directory after uploading prerequisite
                     },
                     error: function (error) {
                         console.log(error);
@@ -115,18 +145,6 @@
                 alert('please upload your goddamn pdf file');
             }
         });
-
-        //since button is rendered after
-        
-/*        $(document).on("click", "button#downloadBtn", function () {
-            var selectedPrerequisiteID = $(this).val();
-            //alert("I want to download file for id : " + selectedPrerequisiteID);
-
-
-
-
-        });*/
-
 
 
         //flow
@@ -151,14 +169,16 @@
     <div id="AddQualification" style="display: none;">
         Select your qualification and then upload the file.
         <!--Add select list and option to upload file here -->
-        <!--Testing dummy upload-->
+        <div class="dropdown">
+            <select id="listOfQualifications">
+                <option value="" disabled selected>Select an option</option>
+            </select>
+        </div>
+
         <form id="uploadForm" enctype="multipart/form-data">
             <input type="file" id="fileInput" name="fileInput" accept=".pdf">
             <button type="button" id="uploadbtn">Upload</button>
         </form>
-
-
-
     </div>
 
 

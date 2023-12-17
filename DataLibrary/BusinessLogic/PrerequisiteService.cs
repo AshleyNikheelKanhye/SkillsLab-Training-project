@@ -23,9 +23,7 @@ namespace DataLibrary.BusinessLogic
             this._prerequisiteRepo = prerequisiteRepo;
         }
 
-
-
-        public IEnumerable<EmployeeQualificationDetailsViewModel> GetEmployeeQualifications(int userID)   //remember to change <> to EmployeePrerequisite same for BL and controller and interfaces
+        public IEnumerable<EmployeeQualificationDetailsViewModel> GetEmployeeQualifications(int userID)   
         {
             try
             {
@@ -48,6 +46,14 @@ namespace DataLibrary.BusinessLogic
                 throw ex;
             }
         }
+
+        public IEnumerable<IPrerequisite> GetPrerequisitesNotInEmployee(int userID)
+        {
+            return _prerequisiteRepo.GetPrerequisitesNotInEmployee(userID);
+        }
+
+
+
 
         public bool UploadQualifications(HttpPostedFileBase file, int prerequisiteID, int userID,string fileName)
         {

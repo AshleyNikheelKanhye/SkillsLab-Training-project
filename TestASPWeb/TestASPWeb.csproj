@@ -155,6 +155,7 @@
     <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManagerController.cs" />
+    <Compile Include="Controllers\PrerequisiteController.cs" />
     <Compile Include="Controllers\TrainingController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Custom\CustomAuthorizationAttribute.cs" />
@@ -12161,6 +12162,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Images\" />
+    <Folder Include="Views\Prerequisite\" />
     <Folder Include="Views\Training\" />
   </ItemGroup>
   <ItemGroup>
