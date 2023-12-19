@@ -113,15 +113,11 @@
         });
 
 
-
-
-
         $('button#uploadbtn').click(function () {
             var fileInput = document.getElementById('fileInput');
             var file = fileInput.files[0];
             var prerequisiteID = document.getElementById("listOfQualifications").value;
             if (prerequisiteID == "") { toastr.error("Please select a qualification"); return; }
-
 
             if (file) {
                 const formData = new FormData();

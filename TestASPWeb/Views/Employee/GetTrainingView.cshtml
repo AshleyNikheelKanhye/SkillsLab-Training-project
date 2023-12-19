@@ -7,6 +7,45 @@
 
 <style>
 
+    .navbar {
+        background-color: #3498db; /* Blue color for the navbar-like div */
+        padding: 10px;
+        border-bottom: 2px solid #2980b9; /* Darker blue color for the border */
+        text-align: center;
+        color: white;
+        display: flex;
+        justify-content: center; /* Center the labels horizontally */
+    }
+
+    .content {
+        display: none; /* Hide all content divs by default */
+        padding: 20px;
+    }
+
+    .myTrainings:checked ~ #myTrainingsContent,
+    .trainingsAvailable:checked ~ #trainingsAvailableContent,
+    .allTrainings:checked ~ #allTrainingsContent {
+        display: block; /* Show the corresponding content div when the radio button is checked */
+    }
+
+    label {
+        background-color: #2980b9; /* Dark blue color for unselected labels */
+        padding: 10px;
+        border-radius: 4px;
+        display: inline-block; /* Display labels as inline-block elements */
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        margin: 0 10px; /* Adjust this value to change the spacing between labels */
+    }
+
+    input[type="radio"] {
+        display: none; /* Hide the actual radio buttons */
+    }
+
+        input[type="radio"]:checked + label {
+            background-color: #2c3e50; /* Slightly darker blue for selected labels */
+        }
+
 
     #popUp {
         padding-block: 10px;
@@ -63,11 +102,42 @@
             #trainingTable tbody tr:nth-child(odd) {
                 background-color: #ffffff;
             }
+
+    
+
+        
 </style>
 
 
 <script>
     $(document).ready(function () {
+
+        //navbar functions
+        /*        $('input[name="navbarRadio"]').change(function () {
+                    $('.content').hide(); // Hide all content divs
+                    $('#' + $(this).attr('id') + 'Content').show(); // Show the corresponding content div
+                });
+        */
+        $('#myTrainings').change(function () {
+            $('.content').hide();
+            $('div#myTrainingsContent').show();
+        });
+
+
+        $('#trainingsAvailable').change(function () {
+            $('.content').hide();
+            $('div#trainingsAvailableContent').show();
+        });
+
+
+        $('#allTrainings').change(function () {
+            $('.content').hide();
+            populateTable().then(() => {
+                $('div#allTrainingsContent').show();
+            });
+        });
+
+
 
         function formatDateTime(date) {
             if (date) {
@@ -96,29 +166,33 @@
         }
 
         //function to populate Table
-         function populateTable() {
-            var URL = "/Training/getAll";
-            getAJAXCall(URL).then((response) => {
-                if (response) {
-                    console.log(response);
-                    var tableBody = $("#trainingTable tbody");
-                    tableBody.empty();
-                    $.each(response, function (index, training) {
-                        var row = '<tr>' +
-                            '<td>' + training.TrainingID + '</td>' +
-                            '<td>' + training.TrainingName + '</td>' +
-                            '<td>' + training.Capacity + '</td>' +
-                            '<td>' + formatDateTime(training.ClosingDate) + '</td>' +
-                            '<td>' + training.TrainingStatus + '</td>' +
-                            '<td>' + formatDateTime(training.TrainingStartDate) + '</td>' +
-                            '<td> <button id ="viewPrerequisites" value = "' + training.TrainingID + '" > View Prerequisites </button> </td>' +
-                            '</tr>';
-                        tableBody.append(row);
-                    });
-                }
-            }).catch((error) => {
-                console.error(error);
-                toastr.error("error cannot load data");
+        function populateTable() {
+            return new Promise((resolve, reject) => {
+                var URL = "/Training/getAll";
+                getAJAXCall(URL).then((response) => {
+                    if (response) {
+                        console.log(response);
+                        var tableBody = $("#trainingTable tbody");
+                        tableBody.empty();
+                        $.each(response, function (index, training) {
+                            var row = '<tr>' +
+                                '<td>' + training.TrainingID + '</td>' +
+                                '<td>' + training.TrainingName + '</td>' +
+                                '<td>' + training.Capacity + '</td>' +
+                                '<td>' + formatDateTime(training.ClosingDate) + '</td>' +
+                                '<td>' + training.TrainingStatus + '</td>' +
+                                '<td>' + formatDateTime(training.TrainingStartDate) + '</td>' +
+                                '<td> <button id ="viewPrerequisites" value = "' + training.TrainingID + '" > View Prerequisites </button> </td>' +
+                                '</tr>';
+                            tableBody.append(row);
+                        });
+                        resolve();
+                    }
+                }).catch((error) => {
+                    console.error(error);
+                    toastr.error("error cannot load data");
+                    reject();
+                });
             });
         }
 
@@ -158,7 +232,9 @@
             $('div#trainingTable').fadeIn();
         })
 
-        function testFunction() {
+
+        //I was testing to get all training with their prerequisites
+        function testFunction() { 
             var URL = "/Training/GetAllTrainingWithPrerequisitesAndDepartments";
             getAJAXCall(URL).then((response) => {
                 console.log(response);
@@ -166,10 +242,6 @@
             });
         }
 
-
-        //General flow
-        populateTable();
-        testFunction();
     });
 
 </script>
@@ -178,29 +250,58 @@
 
 <!-- rendered Body -->
 <div id="second-container">
-    <div id="trainingTable">
-        <table id="trainingTable" border="1">
-            <thead>
-                <tr>
-                    <th>Training ID</th>  <!--If you are changing this structure remember to change the function where dealing with <td> when viewing prerequisites-->
-                    <th>Training Name</th>
-                    <th>Capacity</th>
-                    <th>Closing Date</th>
-                    <th>Training Status</th>
-                    <th>Training Start Date</th>
-                    <th>Prerequisites</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Table body will be populated dynamically -->
-            </tbody>
-        </table>
-        <span id="info"></span>
+    <!--Mini navbar-->
+    <div class="navbar">
+        <input type="radio" id="myTrainings" name="navbarRadio" class="myTrainings" checked>
+        <label for="myTrainings">My Trainings</label>
+
+        <input type="radio" id="trainingsAvailable" name="navbarRadio" class="trainingsAvailable">
+        <label for="trainingsAvailable">Trainings Available</label>
+
+        <input type="radio" id="allTrainings" name="navbarRadio" class="allTrainings">
+        <label for="allTrainings">All Trainings</label>
     </div>
 
-    <div id="popup" style="display: none;">
-        <div id="trainingName"></div>
-        <div id="popupText"></div>
-        <div><button id="closebtn">Close</button></div>
+    <!--My trainings-->
+    <div id="myTrainingsContent" class="content" style="display: block;">
+        <!-- Content for My Trainings -->
+        <h2>My Trainings</h2>
+        <p>This is the content for My Trainings.</p>
     </div>
+
+    <!--Trainings Available -->
+    <div id="trainingsAvailableContent" class="content">
+        <!-- Content for Trainings Available -->
+        <h2>Trainings Available</h2>
+        <p>This is the content for Trainings Available.</p>
+    </div>
+
+    <!--All trainings-->
+    <div id="allTrainingsContent" class="content">
+        <div id="trainingTable">
+            <table id="trainingTable" border="1">
+                <thead>
+                    <tr>
+                        <th>Training ID</th>  <!--If you are changing this structure remember to change the function where dealing with <td> when viewing prerequisites-->
+                        <th>Training Name</th>
+                        <th>Capacity</th>
+                        <th>Closing Date</th>
+                        <th>Training Status</th>
+                        <th>Training Start Date</th>
+                        <th>Prerequisites</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Table body will be populated dynamically -->
+                </tbody>
+            </table>
+            <span id="info"></span>
+        </div>
+        <div id="popup" style="display: none;">
+            <div id="trainingName"></div>
+            <div id="popupText"></div>
+            <div><button id="closebtn">Close</button></div>
+        </div>
+    </div>
+
 </div>
