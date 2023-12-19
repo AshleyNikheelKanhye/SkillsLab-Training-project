@@ -29,7 +29,7 @@ namespace DataLibrary.Services
             {
                 return null;
             }
-
+            //TODO : Add hashing for passwords
             String givenPwd = loginUserViewModel.Password;
             String obtainedPwd = user.Password;
 
@@ -42,6 +42,13 @@ namespace DataLibrary.Services
                 return null;
             }
         }
+
+        public List<int> GetRoleList(int userId)
+        {
+            return _userRepo.GetRoleList(userId);
+        }
+
+
 
         public IEnumerable<ListOfManagersModel> GetAllManagers()
         {

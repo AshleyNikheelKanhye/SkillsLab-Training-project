@@ -30,7 +30,7 @@ function GetListOfDepartmentsFromDb() {
     })
         .catch(error => {
             console.error('Error fetching departments:', error);
-            toastr.error('could not load Departments list')
+            toastr.error('could not load Departments list');
         });
 }
 

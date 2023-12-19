@@ -12158,6 +12158,7 @@
     <Content Include="Views\Employee\QualificationsView.cshtml" />
     <Content Include="tsconfig.json" />
     <Content Include="Views\Dojo\Login.cshtml" />
+    <Content Include="Views\User\SelectLoginRole.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

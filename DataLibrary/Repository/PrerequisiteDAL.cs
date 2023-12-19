@@ -25,28 +25,20 @@ namespace DataLibrary.Repo
 
         public IEnumerable<IPrerequisite> GetPrerequisites(int trainingID)
         {
-            try
-            {
-                IEnumerable<IPrerequisite> list = new List<IPrerequisite>();
-                string searchQuery = "SELECT p.Details,tp.PrerequisiteID FROM ((Training t INNER JOIN TrainingPrequisite tp ON t.TrainingID = tp.TrainingID) INNER JOIN Prerequisite p ON p.PrerequisiteID = tp.PrerequisiteID) WHERE t.TrainingID=@trainingID";
-                SqlCommand command = new SqlCommand(searchQuery, _dbContext.GetConn());
-                command.Parameters.AddWithValue("@trainingID",trainingID);
-                SqlDataReader reader = command.ExecuteReader();
+            IEnumerable<IPrerequisite> list = new List<IPrerequisite>();
+            string searchQuery = "SELECT p.Details,tp.PrerequisiteID FROM ((Training t INNER JOIN TrainingPrequisite tp ON t.TrainingID = tp.TrainingID) INNER JOIN Prerequisite p ON p.PrerequisiteID = tp.PrerequisiteID) WHERE t.TrainingID=@trainingID";
+            SqlCommand command = new SqlCommand(searchQuery, _dbContext.GetConn());
+            command.Parameters.AddWithValue("@trainingID",trainingID);
+            SqlDataReader reader = command.ExecuteReader();
 
-                if (reader.HasRows)
-                {
-                    list = DataBaseHelper.ReturnAllRowsFromDB<Prerequisite>(reader);
-                }
-                
-                //If there is not prerequisites the list will be empty
-                reader.Close();
-                return list;
-
-            }catch (Exception ex)
+            if (reader.HasRows)
             {
-                return null;
-                throw;
+                list = DataBaseHelper.ReturnAllRowsFromDB<Prerequisite>(reader);
             }
+                
+            //If there is not prerequisites the list will be empty
+            reader.Close();
+            return list;
         }
 
 

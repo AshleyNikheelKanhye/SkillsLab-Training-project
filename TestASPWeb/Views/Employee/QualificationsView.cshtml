@@ -5,6 +5,10 @@
     DataLibrary.Entities.User currentUser = Session["CurrentUser"] as DataLibrary.Entities.User;
 }
 
+
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
 <style>
     body {
         font-family: Arial, sans-serif;
@@ -50,7 +54,7 @@
 
         function getQualifications() {
             var URL = "/Employee/GetEmployeeQualifications";
-            var userID = @currentUser.UserID; 
+            var userID = @currentUser.UserID;
             var userIDObj = { userID: userID };
             var table = $("#myQualificationTable tbody");
             table.empty();
@@ -132,8 +136,16 @@
                     processData: false,
                     contentType: false,
                     success: function (response) {
-                        console.log(response);
-                        toastr.success("file uploaded "); // TODO :need to change directory after uploading prerequisite
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'File Uploaded',
+                            text: 'Press OK to continue',
+                            allowOutsideClick: false,
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location = "/Employee/QualificationsView";
+                            }
+                        });
                     },
                     error: function (error) {
                         console.log(error);
@@ -142,7 +154,7 @@
                 });
             }
             else {
-                alert('please upload your goddamn pdf file');
+                alert('please upload your pdf file');
             }
         });
 

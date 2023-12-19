@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Remoting.Services;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,5 +17,6 @@ namespace DataLibrary.Entities
         public DateTime? ClosingDate { get; set; }
         public string TrainingStatus { get; set; }
         public DateTime? TrainingStartDate { get; set; }
+        public bool IsActive { get; set; }
     }
 }

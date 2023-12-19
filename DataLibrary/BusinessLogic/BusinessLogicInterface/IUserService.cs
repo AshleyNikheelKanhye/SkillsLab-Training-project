@@ -20,5 +20,6 @@ namespace DataLibrary.BusinessLogic.BusinessLogicInterface
         IEnumerable<ListOfManagersModel> GetAllManagers();
         bool CheckUserExist(CheckUserExistViewModel checkUserExistViewModel);
         IUser Register(User user);
+        List<int> GetRoleList(int userId);
     }
 }

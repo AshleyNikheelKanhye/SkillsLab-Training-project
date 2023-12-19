@@ -31,7 +31,8 @@ namespace DataLibrary.BusinessLogic
             }
             catch (Exception ex)
             {
-                throw ex;
+                //log the exception
+                return null;
             }
         }
         

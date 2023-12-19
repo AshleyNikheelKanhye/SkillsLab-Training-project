@@ -1,8 +1,10 @@
 ﻿using DataLibrary.BusinessLogic.BusinessLogicInterface;
 using DataLibrary.Entities;
+using DataLibrary.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Web;
 using System.Web.Mvc;
 using TestASPWeb.Custom;
@@ -10,7 +12,7 @@ using TestASPWeb.Custom;
 namespace TestASPWeb.Controllers
 {
     [UserSessionAttribute]
-    [CustomAuthorizationAttribute("employee")]//authorization
+    [CustomAuthorizationAttribute("Employee")]//authorization
     public class EmployeeController : Controller
     {
         private readonly IPrerequisiteService _prerequisiteService;
@@ -38,7 +40,14 @@ namespace TestASPWeb.Controllers
         public JsonResult GetEmployeeQualifications(int userID) 
         { 
             var list = _prerequisiteService.GetEmployeeQualifications(userID);
-            return Json(new { result = list }, JsonRequestBehavior.AllowGet);    
+            if(list != null)
+            {
+                return Json(new { result = list }, JsonRequestBehavior.AllowGet);    
+            }
+            else
+            {
+                return Json(new {error="an error occured"},JsonRequestBehavior.AllowGet);
+            }
         }
 
         public ActionResult DownloadQualification(int userID, int prerequisiteID)

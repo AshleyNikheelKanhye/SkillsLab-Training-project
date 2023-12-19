@@ -19,6 +19,8 @@ namespace DataLibrary.Repository.RepoInterfaces
         void Delete(int userID);
         IUser Find(string email);
         bool CheckUserExists(string Email, string NIC, int PhoneNo);
-        
+        List<int> GetRoleList(int userID);
+
+
     }
 }

@@ -1,0 +1,117 @@
+﻿
+@{
+    Layout = null;
+    List<DataLibrary.Enum.UserRole> rolesList = ViewBag.Roles;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Role</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/ServerCallScripts/ServerCall.js"></script>
+    <style>
+        body {
+            background-color: #f0f8ff; /* Light blue background color */
+            font-family: Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #3498db; /* Blue color for the container */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            color: white;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input[type="radio"] {
+            display: none; /* Hide the actual radio buttons */
+        }
+
+            input[type="radio"] + label {
+                background-color: #2980b9; /* Dark blue color for unselected labels */
+                padding: 10px;
+                border-radius: 4px;
+                display: block; /* Display labels as block elements */
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+                margin-bottom: 5px;
+            }
+
+            input[type="radio"]:checked + label {
+                background-color: #2c3e50; /* Slightly darker blue for selected labels */
+            }
+
+        #confirmButton {
+            background-color: #2ecc71; /* Green color for the confirm button */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Select User Role</h2>
+
+        <form id="roleForm">
+            @foreach (var userRole in rolesList)
+            {
+                <input type="radio" id="@userRole" name="userRole" value="@userRole">
+                <label for="@userRole">@userRole</label>
+            }
+
+            <button type="button" id="confirmButton" onclick="confirmRole()">Confirm</button>
+        </form>
+    </div>
+
+    <script>
+        function confirmRole() {
+            var selectedRole = document.querySelector('input[name="userRole"]:checked');
+            if (selectedRole) {
+                console.log(selectedRole.id);
+
+                var paramObj = { selectedRole: selectedRole.id }
+                var serverCall = new ServerCall({ url: "/User/RedirectSelectedRole", parameters: paramObj , callMethod: "POST" });
+                serverCall.fetchApiCall().then((response) => {
+                    if (response.result) {
+                        toastr.success("Authentication Successful");
+                        window.location = response.url;
+                    } 
+                    else {
+                        toastr.error("Invalid Credentials");
+                    }
+                })
+
+            } else {
+                alert("Please select a role.");
+            }
+        }
+    </script>
+
+</body>
+</html>
+

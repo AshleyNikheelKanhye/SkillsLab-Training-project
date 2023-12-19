@@ -18,7 +18,8 @@ namespace DataLibrary.Entities.EntitiesInterface
          string Password { get; set; }
          int? DepartmentID { get; set; }
          int? ManagerID { get; set; }
-         string Role { get; set; }
+
+
 
 
     }

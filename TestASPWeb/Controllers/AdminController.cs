@@ -8,7 +8,7 @@ using TestASPWeb.Custom;
 namespace TestASPWeb.Controllers
 {
     [UserSessionAttribute]
-    [CustomAuthorizationAttribute("admin")]//authorization
+    [CustomAuthorizationAttribute("Admin")]//authorization
     public class AdminController : Controller
     {
         

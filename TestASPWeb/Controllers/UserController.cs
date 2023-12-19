@@ -2,13 +2,16 @@
 using DataLibrary.BusinessLogic.BusinessLogicInterface;
 using DataLibrary.Entities;
 using DataLibrary.Entities.EntitiesInterface;
+using DataLibrary.Enum;
 using DataLibrary.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 using TestASPWeb.Custom;
+using TestASPWeb.Enums;
 
 namespace TestASPWeb.Controllers
 {
@@ -25,7 +28,15 @@ namespace TestASPWeb.Controllers
         }
 
         public ActionResult Login() => View();
-        public ActionResult Register() => View();   
+        public ActionResult Register() => View();
+        public ActionResult SelectLoginRole(String roles)
+        {
+            List<int> rolesList = roles.Split(',').Select(int.Parse).ToList();
+            List<UserRole> userRoles = rolesList.ConvertAll(roleId => (UserRole)roleId);
+
+            ViewBag.Roles = userRoles;
+            return View();
+        }
 
         public ActionResult Logout()
         {
@@ -42,13 +53,39 @@ namespace TestASPWeb.Controllers
             if (user == null) return Json(new { result = false });
 
             this.Session["CurrentUser"] = user;
-            this.Session["CurrentRole"] = user.Role;
             this.Session["CurrentUserID"] = user.UserID;
+            List<int> roleIds = _userService.GetRoleList(user.UserID);
 
-            if(user.Role == "employee") return Json(new { result = true, url = Url.Action("EmployeeView", "Employee") });
-            else if(user.Role == "manager") return Json(new { result = true, url = Url.Action("Index", "Manager") });
-            else return Json(new { result = true, url = Url.Action("Index", "Admin") });
+            if(roleIds.Count > 1)
+            {
+                //meaning that this user has more that one role, we should allow that user to select which type of role he want to login as 
+                return Json(new { pending = true ,url = Url.Action("SelectLoginRole","User",new {roles = string.Join(",",roleIds)})});
+            }
+            else
+            {
+                //only one role for this user, no need to ask him how to login as
+                int roleId = roleIds.FirstOrDefault();
+                UserRole userRole = (UserRole)Enum.ToObject(typeof(UserRole), roleId);
+                this.Session["CurrentRole"] = userRole.ToString();
+
+                if (userRole.ToString() == "Employee") return Json(new { result = true, url = Url.Action("EmployeeView", "Employee") });
+                else if(userRole.ToString() == "Manager") return Json(new { result = true, url = Url.Action("Index", "Manager") });
+                else return Json(new { result = true, url = Url.Action("Index", "Admin") });
+
+            }
         }
+
+        [HttpPost]
+        public JsonResult RedirectSelectedRole (string selectedRole)
+        {
+            if (!ModelState.IsValid) return Json(new { result = false });
+
+            this.Session["CurrentRole"] = selectedRole;
+            if (selectedRole == "Employee") return Json(new { result = true, url = Url.Action("EmployeeView", "Employee") }, JsonRequestBehavior.AllowGet);
+            else if (selectedRole == "Manager") return Json(new { result = true, url = Url.Action("Index", "Manager") }, JsonRequestBehavior.AllowGet);
+            else return Json(new { result = true, url = Url.Action("Index", "Admin") }, JsonRequestBehavior.AllowGet);
+        }
+
 
         [HttpGet]
         public JsonResult GetDepartments()
@@ -92,12 +129,12 @@ namespace TestASPWeb.Controllers
         [HttpPost]
         public JsonResult Register(User user)
         {
-            user.Role = "employee"; //since only employee can register
+            //since only employee can register
             IUser registeredUser = _userService.Register(user);
             if(registeredUser != null)
             {
                 this.Session["CurrentUser"] = registeredUser;
-                this.Session["CurrentRole"] = registeredUser.Role;
+                this.Session["CurrentRole"] = UserRole.Employee.ToString();
                 this.Session["CurrentUserID"] = registeredUser.UserID;
                 return Json(new { result = registeredUser });
             }

@@ -31,7 +31,10 @@ function signIn() {
             for (var error in response.errors) {
                 toastr.error(response.errors[error][0]);
             }
-        } else {
+        } else if (response.pending) {
+            window.location = response.url;
+        }
+        else {
             toastr.error("Invalid Credentials");
         }
     })

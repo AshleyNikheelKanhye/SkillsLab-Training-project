@@ -3,6 +3,7 @@ using DataLibrary.Entities.EntitiesInterface;
 using DataLibrary.Repository.DataBaseHelper;
 using DataLibrary.Repository.RepoInterfaces;
 using DataLibrary.ViewModels;
+using Microsoft.SqlServer.Server;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -22,8 +23,8 @@ namespace DataLibrary.Repo
 
         public IUser Add(IUser user) 
         {
-            string insertQuery = "INSERT INTO [dbo].[UserTable] (FirstName,LastName,Password,Email,NIC,PhoneNo,Role,DepartmentID,ManagerID) VALUES " +
-                                "(@FirstName,@LastName,@Password,@Email,@NIC,@PhoneNo,@Role,@DepartmentID,@ManagerID);";
+            string insertQuery = "INSERT INTO [dbo].[UserTable] (FirstName,LastName,Password,Email,NIC,PhoneNo,DepartmentID,ManagerID) VALUES " +
+                                "(@FirstName,@LastName,@Password,@Email,@NIC,@PhoneNo,@DepartmentID,@ManagerID);";
             try
             {
                 SqlCommand cmd = new SqlCommand(insertQuery, _dbContext.GetConn());
@@ -34,7 +35,7 @@ namespace DataLibrary.Repo
                 cmd.Parameters.AddWithValue("@Email", user.Email);
                 cmd.Parameters.AddWithValue("@NIC", user.NIC);
                 cmd.Parameters.AddWithValue("@PhoneNo", user.PhoneNo);
-                cmd.Parameters.AddWithValue("@Role", user.Role);
+                //cmd.Parameters.AddWithValue("@Role", user.Role);
                 cmd.Parameters.AddWithValue("@DepartmentID", user.DepartmentID);
                 cmd.Parameters.AddWithValue("@ManagerID", user.ManagerID);
 
@@ -66,8 +67,10 @@ namespace DataLibrary.Repo
 
         public IUser Find(string email)
         {
-            try { 
-                SqlCommand command = new SqlCommand("SELECT UserID,Email,FirstName,LastName,NIC,PhoneNo,Password,Role,DepartmentID,ManagerID FROM [UserTable] WHERE Email = @Email", _dbContext.GetConn());
+            try {
+                string selectQuery = "SELECT UserID,Email,FirstName,LastName,NIC,PhoneNo,Password,DepartmentID,ManagerID " +
+                                        "FROM [UserTable] WHERE Email = @Email AND IsActive=1 ";
+                SqlCommand command = new SqlCommand(selectQuery, _dbContext.GetConn());
                 command.Parameters.AddWithValue("@Email", email);
                 SqlDataReader reader = command.ExecuteReader();
 
@@ -109,7 +112,24 @@ namespace DataLibrary.Repo
             catch (Exception ex) { return null; }
         }
 
+        public List<int> GetRoleList(int userID)
+        {
+            List<int> listofRoleIds = new List<int>();
+            string selectQuery = "SELECT ur.RoleID " +
+                                "FROM (UserRole ur INNER JOIN Role r ON ur.RoleID = r.RoleID) " +
+                                "WHERE ur.UserID = @UserID";
+            SqlCommand command = new SqlCommand(selectQuery, _dbContext.GetConn());
+            command.Parameters.AddWithValue("@UserID", userID);
+            SqlDataReader reader = command.ExecuteReader();
+            int roleID;
+            while (reader.Read())
+            {
+                roleID = (int)reader["RoleID"];
+                listofRoleIds.Add(roleID);
+            }
 
+            return listofRoleIds;
+        }
 
         public IEnumerable<IUser> GetAll()
         {
