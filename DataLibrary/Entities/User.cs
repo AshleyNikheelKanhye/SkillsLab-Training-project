@@ -19,6 +19,5 @@ namespace DataLibrary.Entities
         public int? DepartmentID { get; set; }
         public int? ManagerID { get; set; }
 
-
     }
 }

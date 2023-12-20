@@ -247,14 +247,50 @@
             });
         });
 
+
+        //function to be triggered when clicking on apply for training button
+        $("#availableTraining tbody").on("click", "#Applybtn", function () {
+            var row = $(this).closest("tr");
+            var selectedTrainingID = $(this).val();
+            var selectedTrainingName = row.find("td:eq(0)").text();
+            var selectedTrainingSeatsAvailable = row.find("td:eq(1)").text();
+            var selectedTrainingClosingDate = row.find("td:eq(2)").text();
+            var selectedTrainingStartDate = row.find("td:eq(3)").text();
+            var selectedTrainingDepartmentFavoured = row.find("td:eq(4)").text();
+            // TODO : include manager full name and user's current departmentName and total number of applications
+
+            //modify the popupdiv
+            $('#trainingTitleHeader').text("Apply for Training : " + selectedTrainingName);
+            var bodyText = "<h2>You Meet all the Prerequisites to enroll for this Training</h2>" +
+                "<h4>Once you apply, You will need your Manager's Approval before you can be enrolled in the Training</h4>" +
+                "<h4>Your Manager has to approve your request before the Training enrollment deadline : " + selectedTrainingClosingDate + "</h4>" +
+                "<h4>This training favours employees in the " + selectedTrainingDepartmentFavoured + " department</h4>" +
+                "<h6>Training Starting Date : " + selectedTrainingStartDate + "</h6>" +
+                "<h6>Number of seats this training is accepting is : " + selectedTrainingSeatsAvailable + "</h6>" +
+                "<h3>You will get Emails whenever there are changes on your application</h3>";
+            $('div#applyBodyDiv').html(bodyText);
+            $('button#finalApplyBtn').attr("value", selectedTrainingID);
+            $('div#tableTrainingsAvailable').fadeOut();
+            $('div#applyPopUp').fadeIn(500);
+        });
+
+
         //close popup view prerequisites
-        $(document).on("click", "button#closebtn", function (e) {
+        $(document).on("click", "button#closebtn", function () {
             $('div#trainingName').text('');
             $('div#popupText').text('');
             $('div#popup').fadeOut();
             $('div#divAllTrainingTable').fadeIn();
-        })
+        });
 
+        //cancel button when applypopup
+        $(document).on("click", "button#cancelApplyBtn", function () {
+            $('#trainingTitleHeader').text('');
+            $('div#applyBodyDiv').html("");
+            $('button#finalApplyBtn').attr("value", "");
+            $('div#applyPopUp').fadeOut();
+            $('div#tableTrainingsAvailable').fadeIn(500);
+        });
 
         //I was testing to get all training with their prerequisites
         function testFunction() { 
@@ -295,9 +331,9 @@
     <!--Trainings Available -->
     <div id="trainingsAvailableContent" class="content">
         <!-- Content for Trainings Available -->
-        <h2>Trainings For You</h2>
-        <p>You are elligible to apply for these trainings as you have all the qualifications required</p>
         <div id="tableTrainingsAvailable" class="TableViewsDiv">
+            <h2>Trainings For You</h2>
+            <p>You are elligible to apply for these trainings as you have all the qualifications required</p>
             <table id="availableTraining" border="1" class="classTrainingTable">
                 <thead>
                     <tr>
@@ -313,6 +349,15 @@
                     <!-- Table body will be populated dynamically -->
                 </tbody>
             </table>
+        </div>
+
+        <div id="applyPopUp" style="display: none;">
+            <h2 id="trainingTitleHeader"></h2>
+            <div id="applyBodyDiv"></div>
+            <div id="applyOptionBtnsDiv">
+                <button id="finalApplyBtn">Apply</button>
+                <button id="cancelApplyBtn">Cancel</button>
+            </div>
         </div>
     </div>
 
@@ -331,7 +376,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Table body will be populated dynamically -->
                 </tbody>
             </table>
             <span id="info"></span>
