@@ -15,8 +15,9 @@ namespace DataLibrary.Entities
         public string TrainingName { get; set; }
         public int Capacity { get; set; }
         public DateTime? ClosingDate { get; set; }
-        public string TrainingStatus { get; set; }
         public DateTime? TrainingStartDate { get; set; }
+        public int DepartmentID { get; set; }
+        public string DepartmentName { get; set; }
         public bool IsActive { get; set; }
     }
 }

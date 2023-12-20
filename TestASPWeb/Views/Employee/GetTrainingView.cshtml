@@ -67,41 +67,41 @@
         margin: 20px;
     }
 
-    #trainingTable {
+    .TableViewsDiv {
         background-color: #ffffff;
         padding: 10px;
         border-radius: 8px;
         margin: 20px;
     }
 
-        #trainingTable table {
-            border-collapse: collapse;
-            width: 100%;
+    .TableViewsDiv table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    .classTrainingTable th, .classTrainingTable td {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #b2dfdb;
+        border-radius: 5px;
+    }
+
+    .classTrainingTable th {
+        background-color: #e0f2f1;
+        color: #000000;
+    }
+
+    .classTrainingTable tbody tr {
+        background-color: #ffffff;
+    }
+
+        .classTrainingTable tbody tr:nth-child(even) {
+            background-color: #ccffff;
         }
 
-        #trainingTable th, #trainingTable td {
-            padding: 10px;
-            text-align: left;
-            border: 1px solid #b2dfdb;
-            border-radius: 5px;
-        }
-
-        #trainingTable th {
-            background-color: #e0f2f1;
-            color: #000000;
-        }
-
-        #trainingTable tbody tr {
+        .classTrainingTable tbody tr:nth-child(odd) {
             background-color: #ffffff;
         }
-
-            #trainingTable tbody tr:nth-child(even) {
-                background-color: #ccffff;
-            }
-
-            #trainingTable tbody tr:nth-child(odd) {
-                background-color: #ffffff;
-            }
 
     
 
@@ -112,12 +112,6 @@
 <script>
     $(document).ready(function () {
 
-        //navbar functions
-        /*        $('input[name="navbarRadio"]').change(function () {
-                    $('.content').hide(); // Hide all content divs
-                    $('#' + $(this).attr('id') + 'Content').show(); // Show the corresponding content div
-                });
-        */
         $('#myTrainings').change(function () {
             $('.content').hide();
             $('div#myTrainingsContent').show();
@@ -126,7 +120,9 @@
 
         $('#trainingsAvailable').change(function () {
             $('.content').hide();
-            $('div#trainingsAvailableContent').show();
+            populateTableMyTrainings().then(() => {
+                $('div#trainingsAvailableContent').show();
+            });
         });
 
 
@@ -165,23 +161,50 @@
             });
         }
 
-        //function to populate Table
+        //function to populate Table Trainings ellible to apply
+        function populateTableMyTrainings() {
+            return new Promise((resolve, reject) => {
+                var URL = "/Training/GetAllElligilbe";
+                getAJAXCall(URL).then((response) => {
+                    if (response) {
+                        var tableBody = $("#availableTraining tbody");
+                        tableBody.empty();
+                        $.each(response, function (index, training) {
+                            var row = '<tr>' +
+                                '<td>' + training.TrainingName + '</td>' +
+                                '<td>' + training.Capacity + '</td>' +
+                                '<td>' + formatDateTime(training.ClosingDate) + '</td>' +
+                                '<td>' + formatDateTime(training.TrainingStartDate) + '</td>' +
+                                '<td data-DepartmentID = "' + training.DepartmentID + '">' + training.DepartmentName + '</td>' +
+                                '<td> <button id ="Applybtn" value = "' + training.TrainingID + '" > Apply </button> </td>' +
+                                '</tr>';
+                            tableBody.append(row);
+                        });
+                        resolve();
+                    }
+                }).catch((error) => {
+                    console.error(error);
+                    toastr.error("error cannot load data");
+                    reject();
+                });
+            });
+        }
+
+        //function to populate Table All trainings
         function populateTable() {
             return new Promise((resolve, reject) => {
                 var URL = "/Training/getAll";
                 getAJAXCall(URL).then((response) => {
                     if (response) {
-                        console.log(response);
                         var tableBody = $("#trainingTable tbody");
                         tableBody.empty();
                         $.each(response, function (index, training) {
                             var row = '<tr>' +
-                                '<td>' + training.TrainingID + '</td>' +
                                 '<td>' + training.TrainingName + '</td>' +
                                 '<td>' + training.Capacity + '</td>' +
                                 '<td>' + formatDateTime(training.ClosingDate) + '</td>' +
-                                '<td>' + training.TrainingStatus + '</td>' +
                                 '<td>' + formatDateTime(training.TrainingStartDate) + '</td>' +
+                                '<td data-DepartmentID = "'+training.DepartmentID+'">' + training.DepartmentName + '</td>'+
                                 '<td> <button id ="viewPrerequisites" value = "' + training.TrainingID + '" > View Prerequisites </button> </td>' +
                                 '</tr>';
                             tableBody.append(row);
@@ -213,9 +236,9 @@
                     });
 
                     //Access value within the clicked row
-                    var clickedTrainingName = row.find("td:eq(1)").text();
+                    var clickedTrainingName = row.find("td:eq(0)").text(); ///check table header position in table
                     $('div#trainingName').text("Training prerequisites for : " + clickedTrainingName);
-                    $('div#trainingTable').fadeOut();
+                    $('div#divAllTrainingTable').fadeOut();
                     $('div#popup').fadeIn(1000);
                 }
                 else {
@@ -229,7 +252,7 @@
             $('div#trainingName').text('');
             $('div#popupText').text('');
             $('div#popup').fadeOut();
-            $('div#trainingTable').fadeIn();
+            $('div#divAllTrainingTable').fadeIn();
         })
 
 
@@ -272,22 +295,38 @@
     <!--Trainings Available -->
     <div id="trainingsAvailableContent" class="content">
         <!-- Content for Trainings Available -->
-        <h2>Trainings Available</h2>
-        <p>This is the content for Trainings Available.</p>
+        <h2>Trainings For You</h2>
+        <p>You are elligible to apply for these trainings as you have all the qualifications required</p>
+        <div id="tableTrainingsAvailable" class="TableViewsDiv">
+            <table id="availableTraining" border="1" class="classTrainingTable">
+                <thead>
+                    <tr>
+                        <th>Training Name</th>
+                        <th>Seats Available</th>
+                        <th>Closing Date</th>
+                        <th>Training Start Date</th>
+                        <th>Department Favoured</th>
+                        <th>Click to Apply for training</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Table body will be populated dynamically -->
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <!--All trainings-->
     <div id="allTrainingsContent" class="content">
-        <div id="trainingTable">
-            <table id="trainingTable" border="1">
+        <div id="divAllTrainingTable" class="TableViewsDiv">
+            <table id="trainingTable" border="1" class="classTrainingTable">
                 <thead>
                     <tr>
-                        <th>Training ID</th>  <!--If you are changing this structure remember to change the function where dealing with <td> when viewing prerequisites-->
                         <th>Training Name</th>
-                        <th>Capacity</th>
+                        <th>Seats Available</th>
                         <th>Closing Date</th>
-                        <th>Training Status</th>
                         <th>Training Start Date</th>
+                        <th>Department Favoured</th>
                         <th>Prerequisites</th>
                     </tr>
                 </thead>

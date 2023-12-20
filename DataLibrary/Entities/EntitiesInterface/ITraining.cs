@@ -12,8 +12,9 @@ namespace DataLibrary.Entities.EntitiesInterface
          string TrainingName { get; set; }
          int Capacity { get; set; }
          DateTime? ClosingDate { get; set; }
-         string TrainingStatus { get; set; }
          DateTime? TrainingStartDate { get; set; }
-         bool IsActive { get; set; }
+        int DepartmentID { get; set; }
+        string DepartmentName { get; set; }
+        bool IsActive { get; set; }
     }
 }

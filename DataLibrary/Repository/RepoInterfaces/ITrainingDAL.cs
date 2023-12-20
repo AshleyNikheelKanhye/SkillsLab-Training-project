@@ -12,5 +12,6 @@ namespace DataLibrary.Repository.RepoInterfaces
     {
         IEnumerable<ITraining> GetAll();
         IEnumerable<Prerequisite> GetListOfPrerequisites(int trainingID);
+        IEnumerable<ITraining> GetAllElligible(int UserID);
     }
 }

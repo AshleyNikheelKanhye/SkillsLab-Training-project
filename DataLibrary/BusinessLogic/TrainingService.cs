@@ -28,6 +28,12 @@ namespace DataLibrary.BusinessLogic
             return listOfAllTraining;
         }
 
+        public IEnumerable<ITraining> GetAllElligible(int UserID)
+        {
+            var listOfElligibleTrainings = _trainingRepo.GetAllElligible(UserID);
+            return listOfElligibleTrainings;
+        }
+
         public IEnumerable<IPrerequisite> GetPrerequisites(int trainingID)  //do not need that , delete this method, to preserve single responsiblity
         {
             try

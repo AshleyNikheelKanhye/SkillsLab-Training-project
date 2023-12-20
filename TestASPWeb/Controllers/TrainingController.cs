@@ -34,6 +34,14 @@ namespace TestASPWeb.Controllers
             return Json(trainingList,JsonRequestBehavior.AllowGet);
         }
 
+        [HttpGet]
+        public JsonResult GetAllElligilbe()
+        {
+            User thisUser = this.Session["CurrentUser"] as User;
+            IEnumerable<ITraining> trainingList = _trainingService.GetAllElligible(thisUser.UserID);
+            return Json(trainingList, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpPost]
         public JsonResult GetPrerequisites(int trainingID)
         {
