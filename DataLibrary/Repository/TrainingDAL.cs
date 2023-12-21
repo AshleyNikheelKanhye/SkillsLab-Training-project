@@ -51,7 +51,10 @@ namespace DataLibrary.Repo
                                                                                    "HAVING COUNT(DISTINCT tp.PrerequisiteID) = " +
                                                                                                                                 "(SELECT COUNT(DISTINCT PrerequisiteID) " +
                                                                                                                                 "FROM TrainingPrequisite " +
-                                                                                                                                "WHERE TrainingID = tp.TrainingID));";
+                                                                                                                                "WHERE TrainingID = tp.TrainingID))" +
+                                                                                                                                " AND t.TrainingID NOT IN (SELECT e.TrainingID" +
+                                                                                                                                                            " FROM Enrollment e" +
+                                                                                                                                                            " WHERE e.UserID = @UserID)";
                 SqlCommand command = new SqlCommand(query, _dbContext.GetConn());
                 command.Parameters.AddWithValue("@UserID", UserID);
                 SqlDataReader reader = command.ExecuteReader();

@@ -153,6 +153,7 @@
     <Compile Include="Controllers\CommonController.cs" />
     <Compile Include="Controllers\DojoController.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
+    <Compile Include="Controllers\EnrollmentController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManagerController.cs" />
     <Compile Include="Controllers\PrerequisiteController.cs" />
@@ -12163,6 +12164,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Images\" />
+    <Folder Include="Views\Enrollment\" />
     <Folder Include="Views\Prerequisite\" />
     <Folder Include="Views\Training\" />
   </ItemGroup>

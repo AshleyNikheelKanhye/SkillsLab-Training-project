@@ -80,16 +80,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessLogic\BusinessLogicInterface\IDepartmentService.cs" />
+    <Compile Include="BusinessLogic\BusinessLogicInterface\IEnrollmentService.cs" />
     <Compile Include="BusinessLogic\BusinessLogicInterface\IPrerequisiteService.cs" />
     <Compile Include="BusinessLogic\BusinessLogicInterface\ITrainingService.cs" />
     <Compile Include="BusinessLogic\BusinessLogicInterface\IUserService.cs" />
     <Compile Include="BusinessLogic\DepartmentService.cs" />
+    <Compile Include="BusinessLogic\EnrollmentService.cs" />
     <Compile Include="BusinessLogic\PrerequisiteService.cs" />
     <Compile Include="BusinessLogic\TrainingService.cs" />
     <Compile Include="DBContext.cs" />
     <Compile Include="Entities\Department.cs" />
     <Compile Include="Entities\EmployeeQualification.cs" />
+    <Compile Include="Entities\Enrollment.cs" />
     <Compile Include="Entities\EntitiesInterface\IDepartment.cs" />
+    <Compile Include="Entities\EntitiesInterface\IEnrollment.cs" />
     <Compile Include="Entities\EntitiesInterface\IPrerequisite.cs" />
     <Compile Include="Entities\EntitiesInterface\ITraining.cs" />
     <Compile Include="Entities\EntitiesInterface\IUser.cs" />
@@ -100,8 +104,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\DataBaseHelper\DataBaseHelper.cs" />
     <Compile Include="Repository\DepartmentDAL.cs" />
+    <Compile Include="Repository\EnrollmentDAL.cs" />
     <Compile Include="Repository\PrerequisiteDAL.cs" />
     <Compile Include="Repository\RepoInterfaces\IDepartmentDAL.cs" />
+    <Compile Include="Repository\RepoInterfaces\IEnrollmentDAL.cs" />
     <Compile Include="Repository\RepoInterfaces\IPrerequisiteDAL.cs" />
     <Compile Include="Repository\RepoInterfaces\ITrainingDAL.cs" />
     <Compile Include="Repository\RepoInterfaces\IUserDAL.cs" />

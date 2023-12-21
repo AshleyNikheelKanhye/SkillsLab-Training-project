@@ -74,7 +74,10 @@ namespace TestASPWeb
             container.RegisterType<IPrerequisiteDAL, PrerequisiteDAL>(new PerRequestLifetimeManager());
             container.RegisterType<IPrerequisiteService, PrerequisiteService>(new PerRequestLifetimeManager());
 
-
+            //Enrollment
+            container.RegisterType<IEnrollment, Enrollment>(new PerRequestLifetimeManager());
+            container.RegisterType<IEnrollmentDAL, EnrollmentDAL>(new PerRequestLifetimeManager());
+            container.RegisterType<IEnrollmentService, EnrollmentService>(new PerRequestLifetimeManager());
 
         }
     }
