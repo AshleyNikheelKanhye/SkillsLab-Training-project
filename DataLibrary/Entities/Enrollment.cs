@@ -1,4 +1,5 @@
 ﻿using DataLibrary.Entities.EntitiesInterface;
+using DataLibrary.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,10 +13,15 @@ namespace DataLibrary.Entities
         public int EnrollmentID { get; set; }
         public int UserID { get; set; }
         public int TrainingID { get; set; }
+        public string TrainingName { get; set; }
+        public DateTime ClosingDate { get; set; }  //TrainingClosingDate
+        public DateTime TrainingStartDate { get; set; } //Training Start Date
+        public int Capacity { get; set; } //Training Capacity
+        public string DepartmentName { get; set; } //favoured DepartmentName
         public DateTime DateRegistered { get; set; }
-        public DateTime ApprovalDate { get; set; }
+        public DateTime ?ApprovalDate { get; set; }
         public string FinalStatus { get; set; }
         public string ManagerStatus { get; set; }
-        public bool IsActive { get; set; }
+        public bool ?IsActive { get; set; }
     }
 }

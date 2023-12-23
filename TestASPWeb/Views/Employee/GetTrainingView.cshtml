@@ -6,6 +6,14 @@
 }
 
 <style>
+    .card {
+        border: 1px solid #3498db;
+        padding: 10px;
+        margin: 10px;
+        width: 500px;
+        display: inline-block;
+    }
+
 
     .navbar {
         background-color: #3498db; /* Blue color for the navbar-like div */
@@ -130,6 +138,34 @@
             });
         });
 
+        //dropdown for MyTrainings 
+        $('#mySelect').change(function () {
+            var selectedOption = $(this).val();
+            $('div#selectContentDiv').empty().hide();
+            $('div#headerSelectDiv').empty();
+            var URL = "";
+            if (selectedOption == "1") {
+                URL = "/Enrollment/GetFinalApprovedTrainings";
+                $('div#headerSelectDiv').append('Registered Trainings');
+            }
+            if (selectedOption == "2") {
+                URL = "/Enrollment/GetManagerApprovedTrainings";
+                $('div#headerSelectDiv').append('Trainings Approved by Manager');
+            }
+            if (selectedOption == "3") {
+                URL = "/Enrollment/GetPendingTrainings";
+                $('div#headerSelectDiv').append('Trainings pending to be Approved by Manager');
+            }
+            if (selectedOption == "4") {
+                URL = "/Enrollment/GetDeclinedTrainings"; // TODO : need to use another method to deals with getDeclinedTrainints, having ambiguity between finalStatus disapproved when managerStatus==approved.
+                $('div#headerSelectDiv').append('Trainings Declined by Manager or Automatic selection');
+            }
+            populateDivCards(URL).then(() => {
+                $('div#selectContentDiv').show();
+            });
+
+        });
+
 
 
         function formatDateTime(date) {
@@ -178,6 +214,52 @@
                             tableBody.append(row);
                         });
                         resolve();
+                    }
+                }).catch((error) => {
+                    console.error(error);
+                    toastr.error("error cannot load data");
+                    reject();
+                });
+            });
+        }
+
+
+        //function to populate MyTrainings card divs
+        function populateDivCards(URL) {
+            return new Promise((resolve, reject) => {
+                getAJAXCall(URL).then((response) => {
+                    if (response) {
+                        //populate div cards from response data
+                        console.log(response);
+                        $("div#selectContentDiv").empty();
+                        if (response.length === 0) {
+                            $("div#selectContentDiv").append('<div>You dont have any Enrollments on this </div>'); //TODO : just display custom error div
+                            resolve();
+                        }
+                        else {
+                            var card = $('<div class="card">');
+                            $.each(response, function (index, enrollment) {
+                                card.append('<p> Training Name : '+enrollment.TrainingName+'</p>');
+                                card.append('<p> Date Registered : ' + formatDateTime(enrollment.DateRegistered) + '</p>');
+                                if (enrollment.ApprovalDate !== null) {
+                                    card.append('<p> Approval date : ' + enrollment.ApprovalDate + '</p>');
+                                    //later add button to click to expand to see further details about training starting date.
+                                }
+                                card.append('<p> Training Deadline Registration Date : ' + formatDateTime(enrollment.ClosingDate) + '</p>');
+                                card.append('<p> Training Start Date : ' + formatDateTime(enrollment.TrainingStartDate) + '</p>');
+                                card.append('<p> Training Capacity : ' + enrollment.Capacity + '</p>');
+                                card.append('<p> Training Department Favoured : ' + enrollment.DepartmentName + '</p>');
+                                card.append('<p> Manager Approval Status : ' + enrollment.ManagerStatus + '</p>');
+                                card.append('<p> Final Registration Status : ' + enrollment.FinalStatus+ '</p>');
+                                card.append('</div>');
+
+                                $("div#selectContentDiv").append(card);
+                            });
+                            resolve();
+                        }
+                    }
+                    else {
+                        toastr.error("backend error");
                     }
                 }).catch((error) => {
                     console.error(error);
@@ -324,6 +406,9 @@
         }
 
 
+        //flow 
+        $('#mySelect').trigger('change'); //for display my trainings 
+
     });
 
 </script>
@@ -345,10 +430,22 @@
     </div>
 
     <!--My trainings-->
-    <div id="myTrainingsContent" class="content" style="display: block;">
-        <!-- Content for My Trainings -->
-        <h2>My Trainings</h2>
-        <p>This is the content for My Trainings.</p>
+    <div id="myTrainingsContent" class="content" style="display: block;"
+        <div style="text-align: right;">
+            <label for="mySelect" style="background-color:white;">Select an option:</label>
+            <select id="mySelect" class="custom-select" style="display: inline-block; margin-left:10px; ">
+                <option value="1" selected>My Registered Trainings</option>
+                <option value="2">Manager Approved Requests</option>
+                <option value="3">Pending Training Requests</option>
+                <option value="4">Declined Training Requests</option>
+            </select>
+        </div>
+        <div id="headerSelectDiv">
+
+        </div>
+        <div id="selectContentDiv">
+
+        </div>        
     </div>
 
     <!--Trainings Available -->
@@ -399,6 +496,7 @@
                     </tr>
                 </thead>
                 <tbody>
+
                 </tbody>
             </table>
             <span id="info"></span>

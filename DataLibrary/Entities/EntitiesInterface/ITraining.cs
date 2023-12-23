@@ -15,6 +15,6 @@ namespace DataLibrary.Entities.EntitiesInterface
          DateTime? TrainingStartDate { get; set; }
         int DepartmentID { get; set; }
         string DepartmentName { get; set; }
-        bool IsActive { get; set; }
+        bool? IsActive { get; set; }
     }
 }

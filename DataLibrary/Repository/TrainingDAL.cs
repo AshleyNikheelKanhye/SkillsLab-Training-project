@@ -39,7 +39,7 @@ namespace DataLibrary.Repo
         public IEnumerable<ITraining> GetAllElligible(int UserID)
         {
             try
-            { //need to add check in query for if the trainingID selected is not already enrolled with userid in Enrollment ( just add another check constraint where tid not in enrollment.tid)
+            { 
                 List<Training> returnList = new List<Training>();
                 string query = "SELECT t.TrainingID,t.TrainingName,t.Capacity,t.ClosingDate,t.TrainingStartDate,t.DepartmentID,d.DepartmentName " +
                                 "FROM Training t INNER JOIN Department d ON t.DepartmentID = d.DepartmentID " +
