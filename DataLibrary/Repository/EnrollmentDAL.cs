@@ -3,6 +3,7 @@ using DataLibrary.Entities.EntitiesInterface;
 using DataLibrary.Enum;
 using DataLibrary.Repository.DataBaseHelper;
 using DataLibrary.Repository.RepoInterfaces;
+using DataLibrary.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -61,6 +62,30 @@ namespace DataLibrary.Repo
             catch(Exception ex) { return null; }
         }
 
+        public IEnumerable<ManagerEnrollmentViewModel> GetPendingEnrollments(int ManagerID)
+        {
+            try
+            {
+                List<ManagerEnrollmentViewModel> list= new List<ManagerEnrollmentViewModel>();
+                string selectQuery = "SELECT ut.FirstName,ut.LastName,ut.Email,t.TrainingName,t.ClosingDate,t.TrainingStartDate,e.DateRegistered,e.EnrollmentID " +
+                                     "FROM Enrollment e , Training t, UserTable ut " +
+                                     "WHERE e.UserID = ut.UserID AND e.TrainingID=t.TrainingID " +
+                                     "AND ut.ManagerID=@ManagerID " +
+                                     "AND e.ManagerStatus='Processing' " +
+                                     "AND t.ClosingDate > GETDATE() " +
+                                     "AND e.IsActive =1 AND ut.IsActive =1 AND t.IsActive =1";
+                SqlCommand command = new SqlCommand( selectQuery, _dbContext.GetConn());
+                command.Parameters.AddWithValue("@ManagerID",ManagerID.ToString());
+                SqlDataReader reader = command.ExecuteReader();
+                if(reader.HasRows)
+                {
+                    list = DataBaseHelper.ReturnAllRowsFromDB<ManagerEnrollmentViewModel>(reader);
+                }
+                reader.Close(); 
+                return list;
+            }
+            catch (Exception ex) { return null; }  
+        }
 
     }
 }

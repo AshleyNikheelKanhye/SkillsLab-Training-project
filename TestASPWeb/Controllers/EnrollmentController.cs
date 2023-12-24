@@ -67,5 +67,18 @@ namespace TestASPWeb.Controllers
             var list = _enrollmentService.GetEnrollments(userID, DataLibrary.Enum.Status.Disapproved, DataLibrary.Enum.Status.Disapproved);  //(FinalStatus, ManagerStatus)
             return Json(list,JsonRequestBehavior.AllowGet);
         }
+
+
+        //manager only
+        [HttpGet]
+        public JsonResult GetPendingEnrollments()
+        {
+            IUser user = this.Session["CurrentUser"] as User;
+            int ManagerID = user.UserID;
+            var list = _enrollmentService.GetPendingEnrollments(ManagerID);
+            return Json(list, JsonRequestBehavior.AllowGet);
+
+        }
+
     }
 }

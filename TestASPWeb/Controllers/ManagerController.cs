@@ -15,5 +15,17 @@ namespace TestASPWeb.Controllers
         {
             return View();
         }
+        public ActionResult ManagerView()
+        {
+            return View();
+        }
+
+        public ActionResult ApproveRequestView()
+        {
+            return View();
+        }
+
+
+
     }
 }

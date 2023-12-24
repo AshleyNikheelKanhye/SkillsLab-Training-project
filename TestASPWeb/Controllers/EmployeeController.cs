@@ -61,9 +61,7 @@ namespace TestASPWeb.Controllers
             {
                 return Content("file not found");
             }
-            
         }
-
 
         public ActionResult GetHomeView()
         {

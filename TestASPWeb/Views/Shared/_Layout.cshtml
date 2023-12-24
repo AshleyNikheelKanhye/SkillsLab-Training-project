@@ -21,20 +21,28 @@
     </header>
     @{ 
         DataLibrary.Entities.User currentUser = Session["CurrentUser"] as DataLibrary.Entities.User;
+        string currentUserRoleString = Session["CurrentRole"] as string;
+
     }
 
     <nav>
         <div class="nav-container">
             <a href="#">Welcome @currentUser.FirstName </a>
-            <a href="@Url.Action("EmployeeView", "Employee")">Home</a>
-            <a href="@Url.Action("GetProfile", "Employee")">Profile</a>
-            <a href="@Url.Action("GetTrainingView", "Employee")">Training</a>
-            <a href="@Url.Action("QualificationsView", "Employee")">My Qualifications</a>
-            <a href="@Url.Action("Logout", "User")">Logout</a>
-
+            @if (currentUserRoleString == "Employee")
+            {
+                <a href="@Url.Action("EmployeeView", "Employee")">Home</a>
+                <a href="@Url.Action("GetProfile", "Employee")">Profile</a>
+                <a href="@Url.Action("GetTrainingView", "Employee")">Training</a>
+                <a href="@Url.Action("QualificationsView", "Employee")">My Qualifications</a>
+                <a href="@Url.Action("Logout", "User")">Logout</a>
+            }
+            else if (currentUserRoleString == "Manager")
+            {
+                <a href="@Url.Action("ManagerView","Manager")">Home</a>
+                <a href="@Url.Action("ApproveRequestView","Manager")">Approve Training Requests</a>
+            }
 
         </div>
-
     </nav>
 
     <div>

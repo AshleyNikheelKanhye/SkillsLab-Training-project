@@ -2,6 +2,7 @@
 using DataLibrary.Entities.EntitiesInterface;
 using DataLibrary.Enum;
 using DataLibrary.Repository.RepoInterfaces;
+using DataLibrary.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +29,10 @@ namespace DataLibrary.BusinessLogic
             return _enrollmentDAL.GetEnrollments(UserID,FinalStatus, ManagerStatus);
         }
 
+        public IEnumerable<ManagerEnrollmentViewModel> GetPendingEnrollments(int ManagerID)
+        {
+            return _enrollmentDAL.GetPendingEnrollments(ManagerID);
+        }
 
 
     }

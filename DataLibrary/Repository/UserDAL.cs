@@ -91,8 +91,10 @@ namespace DataLibrary.Repo
             try
             {
                 List<ListOfManagersModel> list = new List<ListOfManagersModel>();
-                SqlCommand command = new SqlCommand("SELECT UserID,FirstName,LastName FROM UserTable WHERE Role = @Role", _dbContext.GetConn());
-                command.Parameters.AddWithValue("@Role", "manager"); // TODO: change that to enum later
+                string selectQuery = "SELECT ut.UserID,FirstName,LastName " +
+                                     "FROM UserTable ut INNER JOIN UserRole ur ON ut.UserID=ur.UserID " +
+                                     "WHERE ur.RoleID = 2"; //manager has roleID = 2
+                SqlCommand command = new SqlCommand(selectQuery, _dbContext.GetConn());
                 SqlDataReader reader = command.ExecuteReader();
 
                 int userID;

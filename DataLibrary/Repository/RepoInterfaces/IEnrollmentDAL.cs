@@ -1,5 +1,6 @@
 ﻿using DataLibrary.Entities.EntitiesInterface;
 using DataLibrary.Enum;
+using DataLibrary.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace DataLibrary.Repository.RepoInterfaces
     {
         bool AddEnrollment(int UserID, int TrainingID);
         IEnumerable<IEnrollment> GetEnrollments(int UserID, Status FinalStatus, Status ManagerStatus);
+        IEnumerable<ManagerEnrollmentViewModel> GetPendingEnrollments(int ManagerID);
 
     }
 }

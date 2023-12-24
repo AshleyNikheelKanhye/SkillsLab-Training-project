@@ -1,0 +1,232 @@
+﻿
+@{
+    ViewBag.Title = "ApproveRequestView";
+}
+
+<style>
+    .content {
+        display: none;
+        padding: 20px;
+    }
+    .TableViewDiv {
+        background-color: #ffffff;
+        padding: 10px;
+        border-radius: 8px;
+        margin: 20px;
+    }
+        .TableViewDiv table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+    .requestsTable th, .requestsTable td {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #b2dfdb;
+        border-radius: 5px;
+    }
+    .requestsTable th {
+        background-color: #e0f2f1;
+        color: #000000;
+    }
+    .requestsTable tbody tr {
+        background-color: #ffffff;
+    }
+        .requestsTable tbody tr:nth-child(even) {
+            background-color: #ccffff;
+        }
+        .requestsTable tbody tr:nth-child(odd) {
+            background-color: #ffffff;
+        }
+</style>
+
+<script>
+    $(document).ready(function () {
+
+        //dropdown to select options
+        $('#mySelect').change(function () {
+            var selectedOption = $(this).val();
+            $('.content').hide();
+            if (selectedOption == "1") {
+                populateTablePendingRequest().then(() => {
+                    $('div#pendingRequestDIV').show();
+                });
+            }
+            if (selectedOption == "2") {
+/*                populateTableApprovedRequest().then(() => {
+                    $('div#approvedRequestDIV').show();
+                });*/
+                alert('in progress');
+            }
+            if (selectedOption == "3") {
+/*                populateTableDisapprovedRequest().then(() => {
+                    $('div#declinedRequestDIV').show();
+                });*/
+                alert('in progress');
+            }
+        });
+
+        function populateTablePendingRequest() {
+            return new Promise((resolve, reject) => {
+                var URL = "/Enrollment/GetPendingEnrollments";
+                getAJAXCall(URL).then((response) => {
+                    if (response) {
+                        var tableBody = $('#pendingRequestTable tbody');
+                        tableBody.empty();
+                        if (response.length === 0) {
+                            $('div#EmptyListHeaderDiv').append("There are No Pending Training Applications for you");
+                            $('div#EmptyListHeaderDiv').show();
+                            $('div.TableViewDiv').hide();
+                            resolve();
+                        }
+                        else {
+                            $.each(response, function (index, enrollment) {
+                                var row = '<tr>' +
+                                    '<td>' + enrollment.FirstName + ' ' + enrollment.LastName + '</td>' +
+                                    '<td>' + enrollment.Email + '</td>' +
+                                    '<td>' + enrollment.TrainingName + '</td>' +
+                                    '<td>' + formatDateTime(enrollment.ClosingDate) + '</td>' +
+                                    '<td>' + formatDateTime(enrollment.TrainingStartDate) + '</td>' +
+                                    '<td>' + formatDateTime(enrollment.DateRegistered) + '</td>' +
+                                    '<td><button id="viewEmployeeQualificationBtn" value="' + enrollment.EnrollmentID + '">View Employee Qualification Proofs</button></td>' +
+                                    '<td><button id="actionBtn" value="' + enrollment.EnrollmentID + '" > Accept/Reject </button></td>' +
+                                    '</tr>';
+                                tableBody.append(row);
+                            });
+                            $('div#EmptyListHeaderDiv').hide();
+                            $('div.TableViewDiv').show();
+                            resolve();
+                        }
+                    }
+                    else {
+                        toast.error("error in backend");
+                        resolve();
+                    }
+                }).catch((error) => {
+                    console.error(error);
+                    toastr.error("error cannot load data");
+                    reject();
+                })
+            });
+        }
+
+
+        function getAJAXCall(URL) {
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    type: "GET",
+                    url: URL,
+                    data: null,
+                    dataType: "json",
+                    success: function (data) {
+                        resolve(data);
+                    },
+                    error: function (data) {
+                        reject(data);
+                    }
+                })
+            });
+        }
+        function formatDateTime(date) {
+            if (date) {
+                var parsedDate = new Date(parseInt(date.substr(6)));
+                return parsedDate.toLocaleDateString() + ' ' + parsedDate.toLocaleTimeString();
+            } else {
+                return 'No date';
+            }
+        }
+        //flow
+        $('#mySelect').trigger('change'); //at start to display pending requests
+
+    });
+</script>
+
+
+
+<div id="second-container">
+
+    <!--dropdownlist DIV-->
+    <div style="text-align:right; padding:10px;">
+        <label for="mySelect" style="background-color:white;">Select an option:</label>
+        <select id="mySelect" class="custom-select" style="display: inline-block; margin-left:10px; ">
+            <option value="1" selected>Pending Requests</option>
+            <option value="2">Approved Requests</option>
+            <option value="3">Declined Requests</option>
+        </select>
+    </div>
+
+
+    <!--Pending Request-->
+    <div id="pendingRequestDIV" class="content">
+        <div id="headerPendingRequestDiv">Applications for your Employees</div>
+        <div id="EmptyListHeaderDiv" style="display:none;"></div>
+        <div class="TableViewDiv" style="display:none;">
+            <table id="pendingRequestTable" border="1" class="requestsTable">
+                <thead>
+                    <tr>
+                        <th>Employee Name</th>
+                        <th>Employee Email</th>
+                        <th>Training Name Applied</th>
+                        <th>Training Application Deadline Date</th>
+                        <th>Training Start Date</th>
+                        <th>Date Applied</th>
+                        <th>View Employee Qualifications</th>
+                        <th>Action</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+    <!--Approved Request-->
+    <div id="approvedRequestDIV" class="content">
+        approvedRequest
+    </div>
+
+    <!--Declined Request-->
+    <div id="declinedRequestDIV" class="content">
+        declined request
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>

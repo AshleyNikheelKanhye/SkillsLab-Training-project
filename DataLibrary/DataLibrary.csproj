@@ -119,6 +119,7 @@
     <Compile Include="ViewModels\EmployeeQualificationDetailsViewModel.cs" />
     <Compile Include="ViewModels\ListOfManagersModel.cs" />
     <Compile Include="ViewModels\LoginUserViewModel.cs" />
+    <Compile Include="ViewModels\ManagerEnrollmentViewModel.cs" />
     <Compile Include="ViewModels\RegisterEmployeeViewModel.cs" />
     <Compile Include="ViewModels\TrainingPrerequisiteDepartmentViewModel.cs" />
   </ItemGroup>

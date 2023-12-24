@@ -1,13 +1,9 @@
 ﻿
 @{
-    ViewBag.Title = "Profile";
+    ViewBag.Title = "ManagerView";
     Layout = "~/Views/Shared/_Layout.cshtml";
     DataLibrary.Entities.User currentUser = Session["CurrentUser"] as DataLibrary.Entities.User;
 }
 
-<h2>Profile</h2>
-Here is your profile @currentUser.FirstName
-
-
-FETCH FROM DATABASE TO GET THE Profile Details
+<h2> WELCOME MANAGER : @currentUser.FirstName</h2>
 
