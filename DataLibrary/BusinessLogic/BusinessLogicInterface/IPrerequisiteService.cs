@@ -17,6 +17,7 @@ namespace DataLibrary.BusinessLogic.BusinessLogicInterface
         EmployeeQualification DownloadQualification(int userID, int prerequisiteID);
         bool UploadQualifications(HttpPostedFileBase file, int prerequisiteID,int userID,string fileName);
         IEnumerable<IPrerequisite> GetPrerequisitesNotInEmployee(int userID);
+        IEnumerable<EmployeeQualificationDetailsViewModel> GetUserPrerequisiteForEnrollment(int enrollmentID);
 
     }
 }

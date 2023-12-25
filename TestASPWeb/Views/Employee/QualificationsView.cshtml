@@ -53,7 +53,7 @@
     $(document).ready(function () {
 
         function getQualifications() {
-            var URL = "/Employee/GetEmployeeQualifications";
+            var URL = "/Employee/GetEmployeeQualifications"; //TODO : move that to Prerequisite Controller
             var userID = @currentUser.UserID;
             var userIDObj = { userID: userID };
             var table = $("#myQualificationTable tbody");

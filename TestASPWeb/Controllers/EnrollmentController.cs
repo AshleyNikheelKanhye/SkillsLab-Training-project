@@ -28,7 +28,19 @@ namespace TestASPWeb.Controllers
             IUser user = this.Session["CurrentUser"] as User;
             int userID = user.UserID;
             bool status = _enrollmentService.AddEnrollment(userID, trainingID);
-            return Json(new { result = status },JsonRequestBehavior.AllowGet);
+            bool emailStatus = _enrollmentService.EmployeeSendMailToManagerForApplication(userID, trainingID);
+
+            return Json(new { result = status ,emailResult=emailStatus},JsonRequestBehavior.AllowGet);
+            //return Json(new { result = status }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult TestingEmailService(int trainingID) //test function to test if manager gets email.
+        {
+            IUser user = this.Session["CurrentUser"] as User;
+            int userID = user.UserID;
+            bool emailStatus = _enrollmentService.EmployeeSendMailToManagerForApplication(userID, trainingID);
+            return Json(new {result = emailStatus}, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]

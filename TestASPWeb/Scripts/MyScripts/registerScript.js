@@ -122,7 +122,7 @@ function register(formData) {
     serverCall.fetchApiCall().then(response => {
         if (response.result) {
             toastr.success("Registered Successfully !");
-            window.location = "/Employee/Index";
+            window.location = "/Employee/EmployeeView";
         } else {
             toastr.error("Error while registering");
         }

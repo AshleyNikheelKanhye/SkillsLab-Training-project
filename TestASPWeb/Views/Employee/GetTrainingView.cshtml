@@ -109,10 +109,34 @@
         .classTrainingTable tbody tr:nth-child(odd) {
             background-color: #ffffff;
         }
+
+    .spinner-container {
+        position: relative;
+    }
+
+    .spinner {
+        border: 2px solid #000;
+        border-top: 2px solid #fff;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-top: -25px;
+        margin-left: -25px;
+    }
+
+    @@keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
 </style>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
+
 
 <script>
     $(document).ready(function () {
@@ -138,7 +162,7 @@
             });
         });
 
-        //dropdown for MyTrainings 
+        //dropdown for MyTrainings
         $('#mySelect').change(function () {
             var selectedOption = $(this).val();
             $('div#selectContentDiv').empty().hide();
@@ -198,22 +222,32 @@
         function populateTableMyTrainings() {
             return new Promise((resolve, reject) => {
                 var URL = "/Training/GetAllElligilbe";
-                getAJAXCall(URL).then((response) => { //need to add is empty list check validation
+                getAJAXCall(URL).then((response) => {
                     if (response) {
-                        var tableBody = $("#availableTraining tbody");
-                        tableBody.empty();
-                        $.each(response, function (index, training) {
-                            var row = '<tr>' +
-                                '<td>' + training.TrainingName + '</td>' +
-                                '<td>' + training.Capacity + '</td>' +
-                                '<td>' + formatDateTime(training.ClosingDate) + '</td>' +
-                                '<td>' + formatDateTime(training.TrainingStartDate) + '</td>' +
-                                '<td data-DepartmentID = "' + training.DepartmentID + '">' + training.DepartmentName + '</td>' +
-                                '<td> <button id ="Applybtn" value = "' + training.TrainingID + '" > Apply </button> </td>' +
-                                '</tr>';
-                            tableBody.append(row);
-                        });
-                        resolve();
+                        if (response.length === 0) {
+                            $('div#NoAvailableTrainingsForYou').html("<h2>Looks like there are no Trainings available for you based on your Qualifications at the moment<h2>");
+                            $('div#tableTrainingsAvailable').hide();
+                            $('div#NoAvailableTrainingsForYou').show();
+                            resolve();
+                        } else {
+                            var tableBody = $("#availableTraining tbody");
+                            tableBody.empty();
+                            $.each(response, function (index, training) {
+                                var row = '<tr>' +
+                                    '<td>' + training.TrainingName + '</td>' +
+                                    '<td>' + training.Capacity + '</td>' +
+                                    '<td>' + formatDateTime(training.ClosingDate) + '</td>' +
+                                    '<td>' + formatDateTime(training.TrainingStartDate) + '</td>' +
+                                    '<td data-DepartmentID = "' + training.DepartmentID + '">' + training.DepartmentName + '</td>' +
+                                    '<td> <button id ="Applybtn" value = "' + training.TrainingID + '" > Apply </button> </td>' +
+                                    '</tr>';
+                                tableBody.append(row);
+                            });
+                            $('div#NoAvailableTrainingsForYou').html("");
+                            $('div#NoAvailableTrainingsForYou').hide();
+                            $('div#tableTrainingsAvailable').show();
+                            resolve();
+                        }
                     }
                 }).catch((error) => {
                     console.error(error);
@@ -230,16 +264,15 @@
                 getAJAXCall(URL).then((response) => {
                     if (response) {
                         //populate div cards from response data
-                        console.log(response);
                         $("div#selectContentDiv").empty();
                         if (response.length === 0) {
-                            $("div#selectContentDiv").append('<div>You dont have any Enrollments on this </div>'); //TODO : just display custom error div
+                            $("div#selectContentDiv").html('<h2>You do not have any applied Trainings for this option</h2>');
                             resolve();
                         }
                         else {
-                            var card = $('<div class="card">');
                             $.each(response, function (index, enrollment) {
-                                card.append('<p> Training Name : '+enrollment.TrainingName+'</p>');
+                                var card = $('<div class="card">');
+                                card.append('<p> Training Name : ' + enrollment.TrainingName + '</p>');
                                 card.append('<p> Date Registered : ' + formatDateTime(enrollment.DateRegistered) + '</p>');
                                 if (enrollment.ApprovalDate !== null) {
                                     card.append('<p> Approval date : ' + enrollment.ApprovalDate + '</p>');
@@ -250,7 +283,7 @@
                                 card.append('<p> Training Capacity : ' + enrollment.Capacity + '</p>');
                                 card.append('<p> Training Department Favoured : ' + enrollment.DepartmentName + '</p>');
                                 card.append('<p> Manager Approval Status : ' + enrollment.ManagerStatus + '</p>');
-                                card.append('<p> Final Registration Status : ' + enrollment.FinalStatus+ '</p>');
+                                card.append('<p> Final Registration Status : ' + enrollment.FinalStatus + '</p>');
                                 card.append('</div>');
 
                                 $("div#selectContentDiv").append(card);
@@ -260,6 +293,7 @@
                     }
                     else {
                         toastr.error("backend error");
+                        reject();
                     }
                 }).catch((error) => {
                     console.error(error);
@@ -328,19 +362,30 @@
         //when applied button is pressed
         $(document).on("click", "button#finalApplyBtn", function () {
             var selectedTrainingID = $(this).val();
-            var URL = "/Enrollment/AddEnrollment"
+            var URL = "/Enrollment/AddEnrollment";
             var trainingObj = { trainingID: selectedTrainingID };
             var serverCall = new ServerCall({ url: URL, parameters: trainingObj, callMethod: "POST" });
+
+            // Show spinner while waiting for the backend call
+            $('#applyPopUp').hide();
+            var spinnerContainer = document.getElementById('spinner-container');
+            spinnerContainer.innerHTML = '<div class="spinner"></div>';
+
             serverCall.fetchApiCall().then((response) => {
-                console.log(response);
+                spinnerContainer.innerHTML = '';
                 if (response.result == true) {
-                    //redirect
+                    var emailStatus;
+                    if (response.emailResult == true) {
+                        emailStatus = "Email was sent to your manager about your application";
+                    } else {
+                        emailStatus = "Email could not be sent to your manager";
+                    }
                     Swal.fire({
                         icon: 'success',
-                        title: 'Training Successfully Applied',
+                        title: 'Training Successfully Applied. ' + emailStatus,
                         text: 'Press OK to continue',
                         allowOutsideClick: false,
-                    }).then((result) =>{
+                    }).then((result) => {
                         if (result.isConfirmed) {
                             window.location = "/Employee/GetTrainingView";
                         }
@@ -406,8 +451,8 @@
         }
 
 
-        //flow 
-        $('#mySelect').trigger('change'); //for display my trainings 
+        //flow
+        $('#mySelect').trigger('change'); //for display my trainings
 
     });
 
@@ -430,7 +475,7 @@
     </div>
 
     <!--My trainings-->
-    <div id="myTrainingsContent" class="content" style="display: block;"
+    <div id="myTrainingsContent" class="content" style="display: block;">
         <div style="text-align: right;">
             <label for="mySelect" style="background-color:white;">Select an option:</label>
             <select id="mySelect" class="custom-select" style="display: inline-block; margin-left:10px; ">
@@ -445,14 +490,14 @@
         </div>
         <div id="selectContentDiv">
 
-        </div>        
+        </div>
     </div>
 
     <!--Trainings Available -->
     <div id="trainingsAvailableContent" class="content">
         <!-- Content for Trainings Available -->
+        <div id="NoAvailableTrainingsForYou" style="display: none;"></div>
         <div id="tableTrainingsAvailable" class="TableViewsDiv">
-            <h2>Trainings For You</h2>
             <p>You are elligible to apply for these trainings as you have all the qualifications required</p>
             <table id="availableTraining" border="1" class="classTrainingTable">
                 <thead>
@@ -479,6 +524,7 @@
                 <button id="cancelApplyBtn">Cancel</button>
             </div>
         </div>
+        <div id="spinner-container"></div>
     </div>
 
     <!--All trainings-->
@@ -496,7 +542,6 @@
                     </tr>
                 </thead>
                 <tbody>
-
                 </tbody>
             </table>
             <span id="info"></span>

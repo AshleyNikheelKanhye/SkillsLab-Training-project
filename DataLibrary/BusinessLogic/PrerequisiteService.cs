@@ -53,9 +53,6 @@ namespace DataLibrary.BusinessLogic
             return _prerequisiteRepo.GetPrerequisitesNotInEmployee(userID);
         }
 
-
-
-
         public bool UploadQualifications(HttpPostedFileBase file, int prerequisiteID, int userID,string fileName)
         {
             return _prerequisiteRepo.UploadQualification(file, prerequisiteID, userID, fileName);
@@ -64,6 +61,11 @@ namespace DataLibrary.BusinessLogic
         public EmployeeQualification DownloadQualification(int userID, int prerequisiteID)
         {
             return _prerequisiteRepo.GetQualification(userID, prerequisiteID);
+        }
+
+        public IEnumerable<EmployeeQualificationDetailsViewModel> GetUserPrerequisiteForEnrollment(int enrollmentID)
+        {
+            return _prerequisiteRepo.GetUserPrerequisiteForEnrollment(enrollmentID);
         }
 
     }

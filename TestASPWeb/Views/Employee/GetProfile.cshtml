@@ -6,8 +6,25 @@
 }
 
 <h2>Profile</h2>
-Here is your profile @currentUser.FirstName
+Here is your profile @currentUser.FirstName <br /> <br />
 
 
 FETCH FROM DATABASE TO GET THE Profile Details
+<script>
+    $(document).ready(function () {
+        $('button#testbtn').click(function () {
+            var testTrainingID = 1;
+            var trainingObj = { trainingID: testTrainingID };
+            var URL = "/Enrollment/TestingEmailService"
+            var serverCall = new ServerCall(({ url: URL, parameters: trainingObj, callMethod: "POST" }));
+            serverCall.fetchApiCall().then((response) => {
+                console.log(response);
+            });
+        });
 
+    });
+</script>
+<button id="testbtn">Click me to test if my manager get an application mail</button>
+
+<br />
+this button is a test button to check if the manager gets an email when employee applies for a training with training ID 1.

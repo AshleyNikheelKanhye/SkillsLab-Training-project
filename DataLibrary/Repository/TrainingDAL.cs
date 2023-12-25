@@ -74,5 +74,23 @@ namespace DataLibrary.Repo
             throw new NotImplementedException();
         }
 
+        public string GetTrainingName(int trainingID)
+        {
+            try
+            {
+                string TrainingName = "";
+                string selectQuery = " SELECT TrainingName FROM Training WHERE TrainingID = @trainingID ";
+                SqlCommand command = new SqlCommand(selectQuery, _dbContext.GetConn());
+                command.Parameters.AddWithValue("@trainingID", trainingID);
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.Read())
+                {
+                    TrainingName = (string)reader["TrainingName"];
+                }
+                reader.Close();
+                return TrainingName;
+            }
+            catch (Exception ex) { throw ex; }
+        }
     }
 }

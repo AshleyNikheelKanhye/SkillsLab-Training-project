@@ -1,4 +1,5 @@
 ﻿using DataLibrary.BusinessLogic.BusinessLogicInterface;
+using DataLibrary.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,6 +36,31 @@ namespace TestASPWeb.Controllers
             }
         }
 
+        [HttpPost]
+        public JsonResult GetUserPrerequisiteForEnrollment(int enrollmentID)
+        {
+            var listQualifications = _prerequisiteService.GetUserPrerequisiteForEnrollment(enrollmentID);
+            if( listQualifications != null)
+            {
+                return Json(new { list=listQualifications},JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { error = "error" },JsonRequestBehavior.AllowGet);   
+            }
+        }
 
+        public ActionResult DownloadQualification(int userID,int prerequisiteID)
+        {
+            EmployeeQualification qualification = _prerequisiteService.DownloadQualification(userID, prerequisiteID);
+            if (qualification != null)
+            {
+                return File(qualification.FileContent, "application/pdf", qualification.FileName);
+            }
+            else
+            {
+                return Content("file not found");
+            }
+        }
     }
 }

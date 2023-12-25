@@ -86,6 +86,7 @@
     <Compile Include="BusinessLogic\BusinessLogicInterface\IUserService.cs" />
     <Compile Include="BusinessLogic\DepartmentService.cs" />
     <Compile Include="BusinessLogic\EnrollmentService.cs" />
+    <Compile Include="BusinessLogic\Notification\EmailSender.cs" />
     <Compile Include="BusinessLogic\PrerequisiteService.cs" />
     <Compile Include="BusinessLogic\TrainingService.cs" />
     <Compile Include="DBContext.cs" />
