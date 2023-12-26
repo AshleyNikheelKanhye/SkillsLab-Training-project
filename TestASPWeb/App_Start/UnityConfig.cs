@@ -3,6 +3,7 @@ using System.Configuration;
 using DataLibrary;
 using DataLibrary.BusinessLogic;
 using DataLibrary.BusinessLogic.BusinessLogicInterface;
+using DataLibrary.BusinessLogic.Logger;
 using DataLibrary.Entities;
 using DataLibrary.Entities.EntitiesInterface;
 using DataLibrary.Repo;
@@ -78,6 +79,9 @@ namespace TestASPWeb
             container.RegisterType<IEnrollment, Enrollment>(new PerRequestLifetimeManager());
             container.RegisterType<IEnrollmentDAL, EnrollmentDAL>(new PerRequestLifetimeManager());
             container.RegisterType<IEnrollmentService, EnrollmentService>(new PerRequestLifetimeManager());
+
+            //Logger
+            container.RegisterType<ILogger, Logger>(new PerRequestLifetimeManager());
 
         }
     }

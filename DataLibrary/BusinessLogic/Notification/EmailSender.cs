@@ -9,7 +9,7 @@ namespace DataLibrary.BusinessLogic.Notification
 {
     public static class EmailSender
     {
-        public static bool SendEmail(string Subject, string Body, string recipientEmail)
+        public static async Task<bool> SendEmail(string Subject, string Body, string recipientEmail)
         {
             string senderMail = "TrainingAdmin@ceridian.com";
 
@@ -28,13 +28,12 @@ namespace DataLibrary.BusinessLogic.Notification
             };
             try
             {
-                smtpClient.Send(mailMessage);
+                await smtpClient.SendMailAsync(mailMessage);
                 return true;
             }
             catch (Exception ex)
             {
-                //need to log exception
-                return false;
+                throw;
             }
         }
     }

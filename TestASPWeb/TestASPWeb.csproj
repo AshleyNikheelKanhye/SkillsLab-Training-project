@@ -154,12 +154,14 @@
     <Compile Include="Controllers\DojoController.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\EnrollmentController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManagerController.cs" />
     <Compile Include="Controllers\PrerequisiteController.cs" />
     <Compile Include="Controllers\TrainingController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Custom\CustomAuthorizationAttribute.cs" />
+    <Compile Include="Custom\GlobalExceptionFilter.cs" />
     <Compile Include="Custom\UserSessionAttribute.cs" />
     <Compile Include="Enums\Role.cs" />
     <Compile Include="Global.asax.cs">
@@ -12160,6 +12162,10 @@
     <Content Include="Views\User\SelectLoginRole.cshtml" />
     <Content Include="Views\Manager\ManagerView.cshtml" />
     <Content Include="Views\Manager\ApproveRequestView.cshtml" />
+    <Content Include="Views\Error\Error404.cshtml" />
+    <Content Include="Views\Error\Error500.cshtml" />
+    <Content Include="Views\Error\NotFound.cshtml" />
+    <Content Include="Views\Error\InternalError.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

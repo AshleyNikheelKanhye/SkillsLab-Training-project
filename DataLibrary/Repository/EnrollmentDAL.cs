@@ -10,6 +10,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.UI.WebControls;
 
 namespace DataLibrary.Repo
 {
@@ -36,6 +37,50 @@ namespace DataLibrary.Repo
                 }
                 return false;
             }catch (Exception ex) { return false; }
+        }
+
+        public bool ManagerUpdatesEnrollment(int EnrollmentID,string ManagerResult)
+        {
+            try
+            {
+                string updateQuery = "UPDATE Enrollment SET ManagerStatus = @ManagerStatus WHERE EnrollmentID = @EnrollmentID";
+                SqlCommand command = new SqlCommand(updateQuery, _dbContext.GetConn());
+                command.Parameters.AddWithValue("@ManagerStatus", ManagerResult);
+                command.Parameters.AddWithValue("@EnrollmentID", EnrollmentID);
+                int rowsAffected = command.ExecuteNonQuery();
+                if(rowsAffected > 0)
+                {
+                    return true;
+                }
+                return false;
+            }catch(Exception ex) {
+
+                throw;
+            }
+        }
+
+        public EnrollmentEmailViewModel GetEnrollmentEmailViewModel(int EnrollmentID)
+        {
+            try
+            {
+                EnrollmentEmailViewModel enrollmentEmailViewModel = new EnrollmentEmailViewModel();
+                string selectQuery = "SELECT ut.FirstName,ut.LastName,ut.Email,t.TrainingName " +
+                                    "FROM ((Enrollment e INNER JOIN UserTable ut ON e.UserID=ut.UserID) INNER JOIN Training t ON e.TrainingID=t.TrainingID) " +
+                                    "WHERE e.IsActive=1 AND e.EnrollmentID=@EnrollmentID;";
+                SqlCommand command = new SqlCommand(selectQuery, _dbContext.GetConn());
+                command.Parameters.AddWithValue("@EnrollmentID",EnrollmentID);
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.Read())
+                {
+                     enrollmentEmailViewModel = DataBaseHelper.ReturnSingleRowFromDB<EnrollmentEmailViewModel>(reader);
+                }
+                reader.Close();
+                return enrollmentEmailViewModel;
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public IEnumerable<IEnrollment> GetEnrollments(int UserID, Status FinalStatus, Status ManagerStatus)

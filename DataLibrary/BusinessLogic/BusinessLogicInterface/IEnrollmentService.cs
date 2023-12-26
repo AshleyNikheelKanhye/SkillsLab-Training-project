@@ -14,6 +14,9 @@ namespace DataLibrary.BusinessLogic.BusinessLogicInterface
         bool AddEnrollment(int UserID, int TrainingID);
         IEnumerable<IEnrollment> GetEnrollments(int UserID,Status FinalStatus, Status ManagerStatus);
         IEnumerable<ManagerEnrollmentViewModel> GetPendingEnrollments(int ManagerID);
-        bool EmployeeSendMailToManagerForApplication(int userID, int trainingID);
+        Task<bool> EmployeeSendMailToManagerForApplication(int userID, int trainingID);
+        bool ManagerUpdatesEnrollment(int EnrollmentID,string ManagerResult);
+        Task<bool> SendTestMail();
+        Task<bool> ManagerSendMailToEmployeeForApproval(int EnrollmentID, int ManagerID);
     }
 }

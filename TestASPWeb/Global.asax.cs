@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataLibrary.BusinessLogic.Logger;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,12 +11,48 @@ namespace TestASPWeb
 {
     public class MvcApplication : System.Web.HttpApplication
     {
+        private ILogger _logger;
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+        }
+
+        protected void Application_BeginRequest()
+        {
+            Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            Response.Cache.SetNoStore();
+        }
+
+        protected void Application_Error(object sender, EventArgs e)
+        {
+            Exception ex = Server.GetLastError();
+
+            _logger = new Logger("Log.txt");
+            _logger.LogError(ex);
+
+            //Server.ClearError();
+
+            if (ex is HttpException httpException)
+            {
+                Response.StatusCode = httpException.GetHttpCode();
+
+                if (Response.StatusCode == 404)
+                {
+                    Response.Redirect("/Error/Error404");
+                }
+                else
+                {
+                    Response.Redirect("/Error/Error500");
+                }
+            }
+            else
+            {
+                Response.Redirect("/Error/InternalError");
+            }
+
         }
     }
 }

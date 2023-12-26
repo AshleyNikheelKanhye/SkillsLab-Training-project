@@ -374,15 +374,9 @@
             serverCall.fetchApiCall().then((response) => {
                 spinnerContainer.innerHTML = '';
                 if (response.result == true) {
-                    var emailStatus;
-                    if (response.emailResult == true) {
-                        emailStatus = "Email was sent to your manager about your application";
-                    } else {
-                        emailStatus = "Email could not be sent to your manager";
-                    }
                     Swal.fire({
                         icon: 'success',
-                        title: 'Training Successfully Applied. ' + emailStatus,
+                        title: 'Training Successfully Applied. Email will be sent to inform your Manager ',
                         text: 'Press OK to continue',
                         allowOutsideClick: false,
                     }).then((result) => {
@@ -393,6 +387,7 @@
                 }
                 else {
                     toastr.error("Error, could not apply for training");
+                    $('#applyPopUp').show();
                 }
             })
         });

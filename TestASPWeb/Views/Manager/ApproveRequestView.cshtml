@@ -8,36 +8,74 @@
         display: none;
         padding: 20px;
     }
+
     .TableViewDiv {
         background-color: #ffffff;
         padding: 10px;
         border-radius: 8px;
         margin: 20px;
     }
+
         .TableViewDiv table {
             border-collapse: collapse;
             width: 100%;
         }
+
     .requestsTable th, .requestsTable td {
         padding: 10px;
         text-align: left;
         border: 1px solid #b2dfdb;
         border-radius: 5px;
     }
+
     .requestsTable th {
         background-color: #e0f2f1;
         color: #000000;
     }
+
     .requestsTable tbody tr {
         background-color: #ffffff;
     }
+
         .requestsTable tbody tr:nth-child(even) {
             background-color: #ccffff;
         }
+
         .requestsTable tbody tr:nth-child(odd) {
             background-color: #ffffff;
         }
+
+    .spinner-container {
+        position: relative;
+    }
+
+    .spinner {
+        border: 2px solid #000;
+        border-top: 2px solid #fff;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-top: -25px;
+        margin-left: -25px;
+    }
+
+    @@keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
 </style>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
 
 <script>
     $(document).ready(function () {
@@ -52,15 +90,15 @@
                 });
             }
             if (selectedOption == "2") {
-/*                populateTableApprovedRequest().then(() => {
-                    $('div#approvedRequestDIV').show();
-                });*/
+                /*                populateTableApprovedRequest().then(() => {
+                                    $('div#approvedRequestDIV').show();
+                                });*/
                 alert('in progress');
             }
             if (selectedOption == "3") {
-/*                populateTableDisapprovedRequest().then(() => {
-                    $('div#declinedRequestDIV').show();
-                });*/
+                /*                populateTableDisapprovedRequest().then(() => {
+                                    $('div#declinedRequestDIV').show();
+                                });*/
                 alert('in progress');
             }
         });
@@ -158,7 +196,7 @@
                     $('button#ManagerDeclineBtn').attr("value", selectedEnrollmentID);
                     $('#pendingTableDIV').hide();
                     $('#TakeActionPopUpDiv').show();
-                    
+
                 }
                 else {
                     toastr.error("error loading page");
@@ -166,6 +204,46 @@
             });
 
         });
+
+        //function approve button is clicked
+        $(document).on("click", "button#ManagerApproveBtn", function () {
+            var selectedEnrollmentID = $(this).val();
+            var URL = "/Enrollment/ManagerUpdatesEnrollment";
+            var enrollmentObj = { enrollmentID: selectedEnrollmentID, ManagerResult:"Approved" };
+            var serverCall = new ServerCall({ url: URL, parameters: enrollmentObj, callMethod: "POST" });
+
+            //show spinner while waiting for backendCall
+            $('#pendingRequestDIV').hide();
+            var spinnerContainer = document.getElementById('spinner-container');
+            spinnerContainer.innerHTML = '<div class="spinner"></div>';
+            serverCall.fetchApiCall().then((response) => {
+                spinnerContainer.innerHTML = '';
+                if (response.result == true) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'You have Approved the Training Request',
+                        text: 'Press Ok to continue',
+                        allowOutsideClick: false,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location = "/Manager/ApproveRequestView";
+                        }
+                    })
+                } else {
+                    spinnerContainer.innerHTML = '';
+                    $('#pendingRequestDIV').show();
+                    toastr.error("Error , could not accept this application")
+                }
+            }).catch((error) => {
+                spinnerContainer.innerHTML = '';
+                $('#pendingRequestDIV').show();
+                toastr.error("an error occured");
+            });
+        });
+
+
+
+
 
         //go back button is clicked
         $(document).on("click", "button#GobackBtn", function () {
@@ -262,7 +340,6 @@
                             </tr>
                         </thead>
                         <tbody>
-
                         </tbody>
                     </table>
                 </div>
@@ -287,5 +364,8 @@
         declined request
     </div>
 
+
+    <!--Spinner-->
+    <div id="spinner-container"></div>
 
 </div>

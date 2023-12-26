@@ -19,6 +19,12 @@ FETCH FROM DATABASE TO GET THE Profile Details
             var serverCall = new ServerCall(({ url: URL, parameters: trainingObj, callMethod: "POST" }));
             serverCall.fetchApiCall().then((response) => {
                 console.log(response);
+                if (response.result == "ok") {
+                    toastr.success("email was sent asynchronously check logger for any errors");
+                }
+                else {
+                    toastr.error("an error occured");
+                }
             });
         });
 
@@ -27,4 +33,4 @@ FETCH FROM DATABASE TO GET THE Profile Details
 <button id="testbtn">Click me to test if my manager get an application mail</button>
 
 <br />
-this button is a test button to check if the manager gets an email when employee applies for a training with training ID 1.
+this will trigger an async email.

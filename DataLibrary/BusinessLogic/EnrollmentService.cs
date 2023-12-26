@@ -1,4 +1,5 @@
 ﻿using DataLibrary.BusinessLogic.BusinessLogicInterface;
+using DataLibrary.BusinessLogic.Logger;
 using DataLibrary.BusinessLogic.Notification;
 using DataLibrary.Entities.EntitiesInterface;
 using DataLibrary.Enum;
@@ -17,16 +18,31 @@ namespace DataLibrary.BusinessLogic
         IEnrollmentDAL _enrollmentDAL;
         IUserDAL _userDAL;
         ITrainingDAL _trainingDAL;
-        public EnrollmentService(IEnrollmentDAL enrollmentDAL,IUserDAL userDAL, ITrainingDAL trainingDAL)
+        ILogger _logger;
+        public EnrollmentService(IEnrollmentDAL enrollmentDAL,IUserDAL userDAL, ITrainingDAL trainingDAL,ILogger logger)
         {
             this._enrollmentDAL = enrollmentDAL;
             this._userDAL = userDAL;
             this._trainingDAL = trainingDAL;
+            this._logger = logger;
         }
 
         public bool AddEnrollment(int UserID, int TrainingID)
         {
             return _enrollmentDAL.AddEnrollment(UserID, TrainingID);
+        }
+
+        public bool ManagerUpdatesEnrollment(int EnrollmentID,string ManagerResult)
+        {
+            try
+            {
+                return _enrollmentDAL.ManagerUpdatesEnrollment(EnrollmentID, ManagerResult);
+            }
+            catch (Exception ex) 
+            {
+                this._logger.LogError(ex);
+                return false;
+            }
         }
 
         public IEnumerable<IEnrollment> GetEnrollments(int UserID, Status FinalStatus,Status ManagerStatus)
@@ -39,13 +55,11 @@ namespace DataLibrary.BusinessLogic
             return _enrollmentDAL.GetPendingEnrollments(ManagerID);
         }
 
-        public bool EmployeeSendMailToManagerForApplication(int userID, int trainingID)
+        public async Task<bool> EmployeeSendMailToManagerForApplication(int userID, int trainingID)
         {
             string managerEmail = _userDAL.GetManagerEmailOfEmployee(userID);
             string employeeName = _userDAL.GetFullName(userID);
             string trainingName = _trainingDAL.GetTrainingName(trainingID);
-
-
 
             // build the message body
             string htmlBody = $@"
@@ -65,11 +79,76 @@ namespace DataLibrary.BusinessLogic
             string subject = $"Training application by {employeeName}";
             try
             {
-                bool emailResult = EmailSender.SendEmail(subject, htmlBody, managerEmail);
-                return emailResult;
+                await EmailSender.SendEmail(subject, htmlBody, managerEmail);
+                return true;
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception ex) 
+            {
+                this._logger.LogError(ex);
+                return false;
+            }
         }
+
+        public async Task<bool> ManagerSendMailToEmployeeForApproval(int EnrollmentID , int ManagerID)
+        {
+            string ManagerName = _userDAL.GetFullName(ManagerID);
+            EnrollmentEmailViewModel model = _enrollmentDAL.GetEnrollmentEmailViewModel(EnrollmentID);
+            string htmlBody = $@"
+                <html>
+                <head>
+                    <title>Manager Approval</title>
+                </head>
+                <body>
+                    <p>Hello {model.FirstName +" " + model.LastName}</p>
+                    <p>Manager <strong>{ManagerName}</strong> has approved you request for Training <strong>{model.TrainingName}</strong></p>
+                    <br/>
+                </body>
+                </html>
+            ";
+
+            string subject = $"{ManagerName} approved your request for {model.TrainingName}";
+            try
+            {
+                await EmailSender.SendEmail(subject, htmlBody, model.Email);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(ex);
+                return false;
+            }
+
+        }
+
+
+
+        public async Task<bool> SendTestMail()
+        {
+            string managerEmail = "lordnk7@gmail.com";
+            string htmlBody = $@"
+                <html>
+                <head>
+                    <title>HTML Email</title>
+                </head>
+                <body>
+                    <p>This is a testing email , please ignore </p>
+                </body>
+                </html>
+            ";
+
+            string subject = "this is a test email";
+            try
+            {
+               bool emailResult = await EmailSender.SendEmail(subject, htmlBody, managerEmail);
+               return true;
+            }
+            catch (Exception ex) 
+            {
+                this._logger.LogError(ex);
+                return false;
+            }
+        }
+
 
     }
 }

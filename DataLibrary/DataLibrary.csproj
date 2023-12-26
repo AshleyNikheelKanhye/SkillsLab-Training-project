@@ -86,6 +86,8 @@
     <Compile Include="BusinessLogic\BusinessLogicInterface\IUserService.cs" />
     <Compile Include="BusinessLogic\DepartmentService.cs" />
     <Compile Include="BusinessLogic\EnrollmentService.cs" />
+    <Compile Include="BusinessLogic\Logger\ILogger.cs" />
+    <Compile Include="BusinessLogic\Logger\Logger.cs" />
     <Compile Include="BusinessLogic\Notification\EmailSender.cs" />
     <Compile Include="BusinessLogic\PrerequisiteService.cs" />
     <Compile Include="BusinessLogic\TrainingService.cs" />
@@ -118,6 +120,7 @@
     <Compile Include="BusinessLogic\UserService.cs" />
     <Compile Include="ViewModels\CheckUserExistViewModel.cs" />
     <Compile Include="ViewModels\EmployeeQualificationDetailsViewModel.cs" />
+    <Compile Include="ViewModels\EnrollmentEmailViewModel.cs" />
     <Compile Include="ViewModels\ListOfManagersModel.cs" />
     <Compile Include="ViewModels\LoginUserViewModel.cs" />
     <Compile Include="ViewModels\ManagerEnrollmentViewModel.cs" />
