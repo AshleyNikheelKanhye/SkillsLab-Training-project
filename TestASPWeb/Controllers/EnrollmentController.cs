@@ -26,12 +26,12 @@ namespace TestASPWeb.Controllers
 
         //managerOnly
         [HttpPost]
-        public async Task<JsonResult> ManagerUpdatesEnrollment(int enrollmentID,string ManagerResult)
+        public async Task<JsonResult> ManagerUpdatesEnrollment(int enrollmentID,string ManagerResult,string DisapproveMessage)
         {
             bool status = _enrollmentService.ManagerUpdatesEnrollment(enrollmentID, ManagerResult);
             if (status)
             {
-                bool emailResult = await _enrollmentService.ManagerSendMailToEmployeeForApproval(enrollmentID,GetUserID()); //need to cater for decline
+                bool emailResult = await _enrollmentService.ManagerSendMailToEmployee(enrollmentID,GetUserID(),DisapproveMessage); 
                 return Json(new { result = status }, JsonRequestBehavior.AllowGet);
             }
             else
@@ -105,9 +105,16 @@ namespace TestASPWeb.Controllers
         [HttpGet]
         public JsonResult GetPendingEnrollments()
         {
-            IUser user = this.Session["CurrentUser"] as User;
-            int ManagerID = user.UserID;
+            int ManagerID = GetUserID();
             var list = _enrollmentService.GetPendingEnrollments(ManagerID);
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
+        //managerOnly
+        [HttpPost]
+        public JsonResult GetManagerApproveAndDisapproved(string Choice)
+        {
+            var list = _enrollmentService.GetManagerApproveAndDisapproved(Choice, GetUserID());
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 

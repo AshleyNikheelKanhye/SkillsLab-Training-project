@@ -16,6 +16,7 @@ namespace DataLibrary.Repository.RepoInterfaces
         IEnumerable<ManagerEnrollmentViewModel> GetPendingEnrollments(int ManagerID);
         bool ManagerUpdatesEnrollment(int EnrollmentID,string ManagerResult);
         EnrollmentEmailViewModel GetEnrollmentEmailViewModel(int EnrollmentID);
+        IEnumerable<ManagerEnrollmentViewModel> GetManagerApproveAndDisapproved(string choice, int ManagerID);
 
     }
 }

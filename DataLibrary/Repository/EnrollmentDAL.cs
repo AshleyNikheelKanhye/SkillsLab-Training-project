@@ -53,10 +53,64 @@ namespace DataLibrary.Repo
                     return true;
                 }
                 return false;
-            }catch(Exception ex) {
+            }
+            catch (Exception ex)
+            {
 
                 throw;
             }
+        }
+
+        public IEnumerable<ManagerEnrollmentViewModel> GetManagerApproveAndDisapproved(string choice,int ManagerID)
+        {
+            try
+            {
+                List<ManagerEnrollmentViewModel> list = new List<ManagerEnrollmentViewModel> ();
+                string selectQuery = "SELECT ut.FirstName,ut.LastName,ut.Email,t.TrainingName,t.ClosingDate,t.TrainingStartDate,e.DateRegistered,e.EnrollmentID,e.ManagerStatus,e.FinalStatus " +
+                                     "FROM Enrollment e , Training t, UserTable ut " +
+                                     "WHERE e.UserID = ut.UserID AND e.TrainingID=t.TrainingID " +
+                                     "AND ut.ManagerID=@ManagerID " +
+                                     "AND e.ManagerStatus=@Choice " +
+                                     "AND e.IsActive =1 AND ut.IsActive =1 AND t.IsActive =1";
+                SqlCommand command = new SqlCommand(selectQuery, _dbContext.GetConn());
+                command.Parameters.AddWithValue("@ManagerID", ManagerID);
+                command.Parameters.AddWithValue("@Choice", choice);
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    list = DataBaseHelper.ReturnAllRowsFromDB<ManagerEnrollmentViewModel>(reader);
+                }
+                reader.Close();
+                return list;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        public IEnumerable<ManagerEnrollmentViewModel> GetPendingEnrollments(int ManagerID)
+        {
+            try
+            {
+                List<ManagerEnrollmentViewModel> list= new List<ManagerEnrollmentViewModel>();
+                string selectQuery = "SELECT ut.FirstName,ut.LastName,ut.Email,t.TrainingName,t.ClosingDate,t.TrainingStartDate,e.DateRegistered,e.EnrollmentID,e.ManagerStatus,e.FinalStatus " +
+                                     "FROM Enrollment e , Training t, UserTable ut " +
+                                     "WHERE e.UserID = ut.UserID AND e.TrainingID=t.TrainingID " +
+                                     "AND ut.ManagerID=@ManagerID " +
+                                     "AND e.ManagerStatus='Processing' " +
+                                     "AND t.ClosingDate > GETDATE() " +
+                                     "AND e.IsActive =1 AND ut.IsActive =1 AND t.IsActive =1";
+                SqlCommand command = new SqlCommand( selectQuery, _dbContext.GetConn());
+                command.Parameters.AddWithValue("@ManagerID",ManagerID.ToString());
+                SqlDataReader reader = command.ExecuteReader();
+                if(reader.HasRows)
+                {
+                    list = DataBaseHelper.ReturnAllRowsFromDB<ManagerEnrollmentViewModel>(reader);
+                }
+                reader.Close(); 
+                return list;
+            }
+            catch (Exception ex) { return null; }  
         }
 
         public EnrollmentEmailViewModel GetEnrollmentEmailViewModel(int EnrollmentID)
@@ -107,30 +161,7 @@ namespace DataLibrary.Repo
             catch(Exception ex) { return null; }
         }
 
-        public IEnumerable<ManagerEnrollmentViewModel> GetPendingEnrollments(int ManagerID)
-        {
-            try
-            {
-                List<ManagerEnrollmentViewModel> list= new List<ManagerEnrollmentViewModel>();
-                string selectQuery = "SELECT ut.FirstName,ut.LastName,ut.Email,t.TrainingName,t.ClosingDate,t.TrainingStartDate,e.DateRegistered,e.EnrollmentID " +
-                                     "FROM Enrollment e , Training t, UserTable ut " +
-                                     "WHERE e.UserID = ut.UserID AND e.TrainingID=t.TrainingID " +
-                                     "AND ut.ManagerID=@ManagerID " +
-                                     "AND e.ManagerStatus='Processing' " +
-                                     "AND t.ClosingDate > GETDATE() " +
-                                     "AND e.IsActive =1 AND ut.IsActive =1 AND t.IsActive =1";
-                SqlCommand command = new SqlCommand( selectQuery, _dbContext.GetConn());
-                command.Parameters.AddWithValue("@ManagerID",ManagerID.ToString());
-                SqlDataReader reader = command.ExecuteReader();
-                if(reader.HasRows)
-                {
-                    list = DataBaseHelper.ReturnAllRowsFromDB<ManagerEnrollmentViewModel>(reader);
-                }
-                reader.Close(); 
-                return list;
-            }
-            catch (Exception ex) { return null; }  
-        }
-
     }
+
+
 }

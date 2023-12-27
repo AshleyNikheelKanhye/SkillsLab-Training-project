@@ -17,6 +17,7 @@ namespace DataLibrary.BusinessLogic.BusinessLogicInterface
         Task<bool> EmployeeSendMailToManagerForApplication(int userID, int trainingID);
         bool ManagerUpdatesEnrollment(int EnrollmentID,string ManagerResult);
         Task<bool> SendTestMail();
-        Task<bool> ManagerSendMailToEmployeeForApproval(int EnrollmentID, int ManagerID);
+        Task<bool> ManagerSendMailToEmployee(int EnrollmentID, int ManagerID,string DisapproveMessage);
+        IEnumerable<ManagerEnrollmentViewModel> GetManagerApproveAndDisapproved(string Choice, int ManagerID);
     }
 }

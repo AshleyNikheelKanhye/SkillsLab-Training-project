@@ -90,19 +90,83 @@
                 });
             }
             if (selectedOption == "2") {
-                /*                populateTableApprovedRequest().then(() => {
-                                    $('div#approvedRequestDIV').show();
-                                });*/
-                alert('in progress');
+                populateTableApprovedOrDisapprovedRequest("Approved").then(() => {
+                    $('div#approvedRequestDIV').show();
+                });
             }
             if (selectedOption == "3") {
-                /*                populateTableDisapprovedRequest().then(() => {
-                                    $('div#declinedRequestDIV').show();
-                                });*/
-                alert('in progress');
+                populateTableApprovedOrDisapprovedRequest("Disapproved").then(() => {
+                    $('div#declinedRequestDIV').show();
+                });
             }
         });
 
+        //function to populate Approved requests
+        function populateTableApprovedOrDisapprovedRequest(Choice) {
+            return new Promise((resolve, reject) => {
+                var URL = "/Enrollment/GetManagerApproveAndDisapproved";
+                var choiceObj = { Choice: Choice };
+                var serverCall = new ServerCall({ url: URL, parameters: choiceObj, callMethod: "POST" });
+                serverCall.fetchApiCall().then((response) => {
+                    if (response) {
+                        if (Choice == "Approved") {
+                            var tableBody = $('#approvedRequestTable tbody');
+                        } else {
+                            var tableBody = $('#declinedRequestTable tbody');
+                        }
+                        tableBody.empty();
+                        if (response.length === 0) {
+                            if (Choice == "Approved") {
+                                $('div#approvedTableDiv').hide();
+                                $('div#approvedEmptyListDiv').html("<h2>You have not approved any requests yet</h2>");
+                                $('div#approvedEmptyListDiv').show();
+                            }
+                            else {
+                                $('div#declinedTableDiv').hide();
+                                $('div#declinedEmptyListDiv').html("<h2>You have not decline any requests yet</h2>");
+                                $('div#declinedEmptyListDiv').show();
+                            }
+                            resolve();
+                        }
+                        else {
+                            $.each(response, function (index, enrollment) {
+                                var row = '<tr>' +
+                                    '<td>' + enrollment.FirstName + ' ' + enrollment.LastName + '</td>' +
+                                    '<td>' + enrollment.Email + '</td>' +
+                                    '<td>' + enrollment.TrainingName + '</td>' +
+                                    '<td>' + formatDateTime(enrollment.ClosingDate) + '</td>' +
+                                    '<td>' + formatDateTime(enrollment.TrainingStartDate) + '</td>' +
+                                    '<td>' + formatDateTime(enrollment.DateRegistered) + '</td>' +
+                                    '<td>' + enrollment.ManagerStatus + '</td>' +
+                                    '<td>' + enrollment.FinalStatus + '</td>' +
+                                    '</tr>';
+                                tableBody.append(row);
+                            })
+                            if (Choice == "Approved") {
+                                $('approvedEmptyListDiv').hide();
+                                $('div#approvedTableDiv').show();
+                            } else {
+                                $('div#declinedEmptyListDiv').hide();
+                                $('div#declinedTableDiv').show();
+                            }
+                            resolve();
+                        }
+                    }
+                    else {
+                        toast.error("error in backend");
+                        reject();
+                    }
+                }).catch((error) => {
+                    console.error(error);
+                    toastr.error("error cannot load data");
+                    reject();
+                })
+            });
+        }
+
+
+
+        //function to populate pending requests
         function populateTablePendingRequest() {
             return new Promise((resolve, reject) => {
                 var URL = "/Enrollment/GetPendingEnrollments";
@@ -111,9 +175,9 @@
                         var tableBody = $('#pendingRequestTable tbody');
                         tableBody.empty();
                         if (response.length === 0) {
+                            $('div#pendingTableDIV').hide();
                             $('div#EmptyListHeaderDiv').html("<h2>There are No Pending Training Applications for you</h2>");
                             $('div#EmptyListHeaderDiv').show();
-                            $('div#pendingTableDIV').hide();
                             resolve();
                         }
                         else {
@@ -136,7 +200,7 @@
                     }
                     else {
                         toast.error("error in backend");
-                        resolve();
+                        reject();
                     }
                 }).catch((error) => {
                     console.error(error);
@@ -196,7 +260,6 @@
                     $('button#ManagerDeclineBtn').attr("value", selectedEnrollmentID);
                     $('#pendingTableDIV').hide();
                     $('#TakeActionPopUpDiv').show();
-
                 }
                 else {
                     toastr.error("error loading page");
@@ -205,13 +268,73 @@
 
         });
 
+        //textArea for declining training
+         function getTextAreaValue() {
+            return new Promise((resolve, reject) => {
+                Swal.fire({
+                    title: 'Please enter your reason for Declining this application',
+                    input: 'textarea',
+                    inputPlaceholder: 'Type your text here...',
+                    showCancelButton: true,
+                    confirmButtonText: 'Submit',
+                    cancelButtonText: 'Cancel',
+                    inputValidator: (value) => {
+                        if (!value) {
+                            return 'You cannot provide an empty reason';
+                        }
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var message = result.value;
+                        resolve(message);
+                    }
+                });
+            });
+         }
+
+        //function disapprove button is clicked 
+        $(document).on("click", "button#ManagerDeclineBtn", function () {
+            var selectedEnrollmentID = $(this).val();
+            var URL = "/Enrollment/ManagerUpdatesEnrollment";
+            getTextAreaValue().then((message) => {
+                var enrollmentObj = { enrollmentID: selectedEnrollmentID, ManagerResult: "Disapproved", DisapproveMessage: message };
+                var serverCall = new ServerCall({ url: URL, parameters: enrollmentObj, callMethod: "POST" });
+                //show spinner while waiting for backendCall
+                $('#pendingRequestDIV').hide();
+                var spinnerContainer = document.getElementById('spinner-container');
+                spinnerContainer.innerHTML = '<div class="spinner"></div>';
+                serverCall.fetchApiCall().then((response) => {
+                    spinnerContainer.innerHTML = '';
+                    if (response.result == true) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'You have Disapproved the Training Request',
+                            text: 'Press Ok to continue',
+                            allowOutsideClick: false,
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location = "/Manager/ApproveRequestView";
+                            }
+                        })
+                    } else {
+                        spinnerContainer.innerHTML = '';
+                        $('#pendingRequestDIV').show();
+                        toastr.error("Error , could not accept this application")
+                    }
+                }).catch((error) => {
+                    spinnerContainer.innerHTML = '';
+                    $('#pendingRequestDIV').show();
+                    toastr.error("an error occured");
+                });
+            });
+        });
+
         //function approve button is clicked
         $(document).on("click", "button#ManagerApproveBtn", function () {
             var selectedEnrollmentID = $(this).val();
             var URL = "/Enrollment/ManagerUpdatesEnrollment";
-            var enrollmentObj = { enrollmentID: selectedEnrollmentID, ManagerResult:"Approved" };
+            var enrollmentObj = { enrollmentID: selectedEnrollmentID, ManagerResult: "Approved", DisapproveMessage:"" };
             var serverCall = new ServerCall({ url: URL, parameters: enrollmentObj, callMethod: "POST" });
-
             //show spinner while waiting for backendCall
             $('#pendingRequestDIV').hide();
             var spinnerContainer = document.getElementById('spinner-container');
@@ -240,9 +363,6 @@
                 toastr.error("an error occured");
             });
         });
-
-
-
 
 
         //go back button is clicked
@@ -303,7 +423,7 @@
 
     <!--Pending Request-->
     <div id="pendingRequestDIV" class="content">
-        <div id="headerPendingRequestDiv">Applications for your Employees</div>
+        <div id="headerPendingRequestDiv"> Pending Training Applications</div>
         <div id="EmptyListHeaderDiv" style="display:none;"></div>
         <div id="pendingTableDIV" class="TableViewDiv" style="display:none;">
             <table id="pendingRequestTable" border="1" class="requestsTable">
@@ -340,10 +460,12 @@
                             </tr>
                         </thead>
                         <tbody>
+
                         </tbody>
                     </table>
                 </div>
             </div>
+
             <div id="TakeActionOptionBtns">
                 <button id="ManagerApproveBtn">Approve</button>
                 <button id="ManagerDeclineBtn">Decline</button>
@@ -356,12 +478,52 @@
 
     <!--Approved Request-->
     <div id="approvedRequestDIV" class="content">
-        approvedRequest
+        <div id="headerApprovedRequestDiv">Approved Training Applications</div>
+        <div id="approvedEmptyListDiv" style="display:none;"></div>
+        <div id="approvedTableDiv" class="TableViewDiv" style="display:none;">
+            <table id="approvedRequestTable" border="1" class="requestsTable">
+                <thead>
+                    <tr>
+                        <th>Employee Name</th>
+                        <th>Employee Email</th>
+                        <th>Training Name Applied</th>
+                        <th>Training Application Deadline Date</th>
+                        <th>Training Start Date</th>
+                        <th>Date Applied</th>
+                        <th>Manager Approval</th>
+                        <th>Final Approval</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <!--Declined Request-->
     <div id="declinedRequestDIV" class="content">
-        declined request
+        <div id="headerDeclinedRequestDiv">Declined Training Applications</div>
+        <div id="declinedEmptyListDiv" style="display:none;"></div>
+        <div id="declinedTableDiv" class="TableViewDiv" style="display:none;">
+            <table id="declinedRequestTable" border="1" class="requestsTable">
+                <thead>
+                    <tr>
+                        <th>Employee Name</th>
+                        <th>Employee Email</th>
+                        <th>Training Name Applied</th>
+                        <th>Training Application Deadline Date</th>
+                        <th>Training Start Date</th>
+                        <th>Date Applied</th>
+                        <th>Manager Approval</th>
+                        <th>Final Approval</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
     </div>
 
 
