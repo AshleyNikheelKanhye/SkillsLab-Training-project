@@ -36,6 +36,23 @@ namespace TestASPWeb.Controllers
             }
         }
 
+
+
+        //admin when inserting a new training
+        [HttpGet]
+        public JsonResult GetAllPrerequisites()
+        {
+            var list = _prerequisiteService.GetAllPrerequisites();
+            if(list != null)
+            {
+                return Json(new {listPrerequisites=list},JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new {error = "error"}, JsonRequestBehavior.AllowGet); 
+            }
+        }
+
         [HttpPost]
         public JsonResult GetUserPrerequisiteForEnrollment(int enrollmentID)
         {
@@ -62,5 +79,7 @@ namespace TestASPWeb.Controllers
                 return Content("file not found");
             }
         }
+
+        
     }
 }

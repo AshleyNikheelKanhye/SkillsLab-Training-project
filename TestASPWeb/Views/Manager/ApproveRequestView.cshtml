@@ -73,9 +73,11 @@
         }
     }
 </style>
-    
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 <script>
     $(document).ready(function () {
@@ -269,7 +271,7 @@
         });
 
         //textArea for declining training
-         function getTextAreaValue() {
+        function getTextAreaValue() {
             return new Promise((resolve, reject) => {
                 Swal.fire({
                     title: 'Please enter your reason for Declining this application',
@@ -290,9 +292,9 @@
                     }
                 });
             });
-         }
+        }
 
-        //function disapprove button is clicked 
+        //function disapprove button is clicked
         $(document).on("click", "button#ManagerDeclineBtn", function () {
             var selectedEnrollmentID = $(this).val();
             var URL = "/Enrollment/ManagerUpdatesEnrollment";
@@ -333,7 +335,7 @@
         $(document).on("click", "button#ManagerApproveBtn", function () {
             var selectedEnrollmentID = $(this).val();
             var URL = "/Enrollment/ManagerUpdatesEnrollment";
-            var enrollmentObj = { enrollmentID: selectedEnrollmentID, ManagerResult: "Approved", DisapproveMessage:"" };
+            var enrollmentObj = { enrollmentID: selectedEnrollmentID, ManagerResult: "Approved", DisapproveMessage: "" };
             var serverCall = new ServerCall({ url: URL, parameters: enrollmentObj, callMethod: "POST" });
             //show spinner while waiting for backendCall
             $('#pendingRequestDIV').hide();
@@ -460,7 +462,6 @@
                             </tr>
                         </thead>
                         <tbody>
-
                         </tbody>
                     </table>
                 </div>
@@ -495,7 +496,6 @@
                     </tr>
                 </thead>
                 <tbody>
-
                 </tbody>
             </table>
         </div>
@@ -520,7 +520,6 @@
                     </tr>
                 </thead>
                 <tbody>
-
                 </tbody>
             </table>
         </div>

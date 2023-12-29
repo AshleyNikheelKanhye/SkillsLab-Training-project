@@ -12,9 +12,31 @@ namespace TestASPWeb.Controllers
     public class AdminController : Controller
     {
         
-        public ActionResult Index()
+
+        public ActionResult AdminView()
         {
             return View();
+        }
+        public ActionResult AutomaticProcessingView()
+        {
+            return View();
+        }
+        public ActionResult ManageRolesView()
+        {
+            return View();
+        }
+        public ActionResult ManageTrainingsView()
+        {
+            return View();
+
+        }
+        public ActionResult ViewTrainingsView()
+        {
+            return View();
+        }
+        public ActionResult AddNewTrainingView()
+        {
+            return View();  
         }
     }
 }

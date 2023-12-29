@@ -1,4 +1,5 @@
 ﻿using DataLibrary.BusinessLogic.BusinessLogicInterface;
+using DataLibrary.BusinessLogic.Logger;
 using DataLibrary.Entities.EntitiesInterface;
 using DataLibrary.Repository.RepoInterfaces;
 using DataLibrary.ViewModels;
@@ -15,12 +16,13 @@ namespace DataLibrary.BusinessLogic
         ITrainingDAL _trainingRepo;
         IPrerequisiteDAL _prerequisiteDAL;
         IDepartmentDAL _departmentDAL;
-        public TrainingService(ITrainingDAL trainingRepo,IPrerequisiteDAL prerequisiteRepo,IDepartmentDAL departmentRepo)
+        ILogger _logger;
+        public TrainingService(ITrainingDAL trainingRepo,IPrerequisiteDAL prerequisiteRepo,IDepartmentDAL departmentRepo,ILogger logger)
         {
             this._trainingRepo = trainingRepo;
             this._prerequisiteDAL = prerequisiteRepo;
             this._departmentDAL = departmentRepo;
-            
+            this._logger = logger;
         }
         public IEnumerable<ITraining> GetAll()
         {
@@ -63,6 +65,17 @@ namespace DataLibrary.BusinessLogic
             return list;
         }
 
-
+        public async Task<bool> Add(AddTrainingViewModel addTrainingViewModel)
+        {
+            try
+            {
+                return await _trainingRepo.Add(addTrainingViewModel);                
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(ex);
+                return false;
+            }
+        }
     }
 }

@@ -2,10 +2,12 @@
 using DataLibrary.Entities.EntitiesInterface;
 using DataLibrary.Repository.DataBaseHelper;
 using DataLibrary.Repository.RepoInterfaces;
+using DataLibrary.ViewModels;
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-
+using System.Threading.Tasks;
 
 namespace DataLibrary.Repo
 {
@@ -92,5 +94,52 @@ namespace DataLibrary.Repo
             }
             catch (Exception ex) { throw ex; }
         }
+
+
+        public async Task<bool> Add(AddTrainingViewModel addTrainingViewModel)
+        {
+            try
+            {
+                string insertQuery = "INSERT INTO Training(TrainingName,Capacity,ClosingDate,TrainingStartDate,DepartmentID) " +
+                                     "OUTPUT INSERTED.TrainingID "+
+                                     "VALUES (@trainingName,@capacity,@closingDate,@trainingStartDate,@departmentID);";
+
+                SqlCommand command = new SqlCommand(insertQuery, _dbContext.GetConn());
+                command.Parameters.AddWithValue("@trainingName", addTrainingViewModel.TrainingName);
+                command.Parameters.AddWithValue("@capacity", addTrainingViewModel.TrainingCapacity);
+                command.Parameters.AddWithValue("@closingDate", addTrainingViewModel.DeadlineRegistration);
+                command.Parameters.AddWithValue("@trainingStartDate", addTrainingViewModel.StartingDate);
+                command.Parameters.AddWithValue("@departmentID", addTrainingViewModel.Department);
+
+                int insertedTrainingID=-1;
+                using(SqlDataReader reader = await command.ExecuteReaderAsync())
+                {
+                    if(reader.Read())
+                    {
+                        insertedTrainingID = reader.GetInt32(0);
+                    }
+                }
+                
+                if (insertedTrainingID >0)
+                {
+                    //now need to update table TrainingPrerequisites
+                    string insertQueryForTrainingPrerequisite = "INSERT INTO TrainingPrequisite VALUES (@trainingID,@prerequisiteID)";
+                    foreach(int prerequisiteID in addTrainingViewModel.PrerequisiteList)
+                    {
+                        SqlCommand command2 = new SqlCommand(insertQueryForTrainingPrerequisite, _dbContext.GetConn());
+                        command2.Parameters.AddWithValue("@trainingID", insertedTrainingID);
+                        command2.Parameters.AddWithValue("@prerequisiteID", prerequisiteID);
+                        await command2.ExecuteNonQueryAsync();
+                    }
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch { throw; }
+        }
+
     }
 }

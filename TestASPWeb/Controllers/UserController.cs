@@ -70,7 +70,7 @@ namespace TestASPWeb.Controllers
 
                 if (userRole.ToString() == "Employee") return Json(new { result = true, url = Url.Action("EmployeeView", "Employee") });
                 else if(userRole.ToString() == "Manager") return Json(new { result = true, url = Url.Action("ManagerView", "Manager") });
-                else return Json(new { result = true, url = Url.Action("Index", "Admin") });
+                else return Json(new { result = true, url = Url.Action("AdminView", "Admin") });
 
             }
         }
@@ -83,7 +83,7 @@ namespace TestASPWeb.Controllers
             this.Session["CurrentRole"] = selectedRole;
             if (selectedRole == "Employee") return Json(new { result = true, url = Url.Action("EmployeeView", "Employee") }, JsonRequestBehavior.AllowGet);
             else if (selectedRole == "Manager") return Json(new { result = true, url = Url.Action("ManagerView", "Manager") }, JsonRequestBehavior.AllowGet);
-            else return Json(new { result = true, url = Url.Action("Index", "Admin") }, JsonRequestBehavior.AllowGet);
+            else return Json(new { result = true, url = Url.Action("AdminView", "Admin") }, JsonRequestBehavior.AllowGet);
         }
 
 

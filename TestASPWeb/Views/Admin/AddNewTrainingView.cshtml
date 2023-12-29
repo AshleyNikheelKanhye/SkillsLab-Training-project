@@ -1,0 +1,326 @@
+﻿
+@{
+    ViewBag.Title = "AddNewTrainingView";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<style>
+    #second-container {
+        /*display: flex;*/
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        padding: 1px;
+    }
+
+    #form-div {
+        background-color: #3498db;
+        display: flex;
+        align-content: center;
+        justify-content: center;
+        padding: 10px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        color: #fff;
+        width: 1000px; /* Adjusted width */
+        margin: 0; /* Removed default margin */
+    }
+
+    label {
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    input, select {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 15px;
+        box-sizing: border-box;
+    }
+
+    button {
+        background-color: #2980b9;
+        color: #fff;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+        button:hover {
+            background-color: #1a5276;
+        }
+
+    .checkbox-group {
+        margin-bottom: 15px;
+        width: 500px;
+        display: grid;
+    }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .checkbox-group input {
+            margin-right: 8px;
+        }
+</style>
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
+
+<script>
+    function validateForm() {
+        var trainingName = document.getElementById('TrainingName').value;
+        var trainingCapacity = document.getElementById('TrainingCapacity').value;
+        var deadlineRegistration = document.getElementById('DeadlineRegistration').value;
+        var startingDate = document.getElementById('StartingDate').value;
+        var department = document.getElementById('Department').value;
+
+        // Validate TrainingName
+        if (trainingName.trim() === '') {
+
+            toastr.error("Training Name cannot be empty.", '', { positionClass: 'toast-bottom-right', backgroundColor: '#4CAF50' });
+            return;
+        }
+        // Validate special characters in TrainingName
+        if (!isValidString(trainingName)) {
+
+            toastr.error("Training Name cannot contain special characters.", '', { positionClass: 'toast-bottom-right', backgroundColor: '#4CAF50' });
+            return;
+        }
+
+        // Validate TrainingCapacity
+        if (parseInt(trainingCapacity) <= 0 || isNaN(trainingCapacity)) {
+
+            toastr.error("Training Capacity should be greater than 0.", '', { positionClass: 'toast-bottom-right', backgroundColor: '#4CAF50' });
+            return;
+        }
+
+        // Validate StartingDate and DeadlineRegistration
+        var startingDateObj = new Date(startingDate);
+        var deadlineRegistrationObj = new Date(deadlineRegistration);
+        if (startingDateObj <= deadlineRegistrationObj) {
+
+            toastr.error("Starting Date should be greater than Deadline Registration.", '', { positionClass: 'toast-bottom-right', backgroundColor: '#4CAF50' });
+            return;
+        }
+
+        // Validate Department
+        if (department === '') {
+
+            toastr.error("Please select a Department.", '', { positionClass: 'toast-bottom-right', backgroundColor: '#4CAF50' });
+            return;
+        }
+
+        // If all validations pass, submit the form
+        submitFormData();
+    }
+
+    function isValidString(str) {
+        // You can customize this regular expression based on your requirements
+        var regex = /^[a-zA-Z0-9\s]*$/;
+        return regex.test(str);
+    }
+
+    function submitFormData() {
+        var form = document.getElementById('sampleForm');
+        // Create FormData object
+        var formData = new FormData(form);
+        var formDataJson = {};
+        //convert FormData object
+        formData.forEach((value, key) => {
+            // Check if the key already exists in formDataJson
+            if (formDataJson[key] !== undefined) {
+                // If it exists and is an array, push the new value
+                if (Array.isArray(formDataJson[key])) {
+                    formDataJson[key].push(value);
+                } else {
+                    // If it exists but is not an array, convert it to an array and add the new value
+                    formDataJson[key] = [formDataJson[key], value];
+                }
+            } else {
+                // If the key doesn't exist, simply add the value
+                formDataJson[key] = value;
+            }
+        });
+
+        //send formdatajson to training controller
+        var serverCall = new ServerCall({ url: "/Training/AddTraining", parameters: formDataJson, callMethod: "POST" });
+        serverCall.fetchApiCall().then((response) => {
+            if (response.result == true) {
+                //swal success;
+                Swal.fire({
+                    icon: 'success',
+                    title: 'New Training Inserted',
+                    text: 'press OK to continue',
+                    allowOutsideClick: false,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location = "/Admin/ViewTrainingsView";
+                    }
+                });
+            } else {
+                toastr.error("could not insert New Training");
+            }
+        }).catch(error => {
+            console.error("error inserting new training");
+            toastr.error('could not insert New training');
+        });
+    }
+
+
+
+    $(document).ready(function () {
+
+        let form = document.querySelector('form');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            return false;
+        });
+
+        function PopulateDropdownListOfDepartments() {
+            var serverCall = new ServerCall({ url: "/User/GetDepartments", callMethod: "GET" });
+            serverCall.fetchApiCall().then((response) => {
+                const departmentDropdown = document.getElementById('Department');
+                if (response.listDepartments) {
+                    response.listDepartments.forEach(department => {
+                        const option = document.createElement('option');
+                        option.value = department.DepartmentID;
+                        option.textContent = department.DepartmentName;
+                        departmentDropdown.appendChild(option);
+                    });
+                }
+                if (response.error) {
+                    toastr.error('could not load Department list');
+                }
+            })
+                .catch(error => {
+                    console.error('Error fetching departments:', error);
+                    toastr.error('could not load Departments list');
+                });
+        }
+
+        function PopulateCheckboxesListOfPrerequisites() {
+            var serverCall = new ServerCall({ url: "/Prerequisite/GetAllPrerequisites", callMethod: "GET" });
+            serverCall.fetchApiCall().then((response) => {
+                var checkboxGroup = document.querySelector('.checkbox-group');
+                if (response && response.listPrerequisites) {
+                    // Iterate through the listPrerequisites array and create checkboxes
+                    response.listPrerequisites.forEach((prerequisite) => {
+                        // create a div space
+                        var checkboxSpan = document.createElement('span');
+
+                        // Create a checkbox element
+                        var checkbox = document.createElement('input');
+                        checkbox.type = 'checkbox';
+                        checkbox.name = 'PrerequisiteList'; // You can set a unique name if needed
+                        checkbox.value = prerequisite.PrerequisiteID;
+                        checkbox.id = prerequisite.PrerequisiteID;
+
+                        var label = document.createElement('label');
+                        label.htmlFor = prerequisite.PrerequisiteID;
+                        label.appendChild(document.createTextNode(prerequisite.Details));
+
+                        // Apply styles to align items in the flex container
+                        checkboxSpan.style.display = 'flex';
+                        checkboxSpan.style.alignItems = 'center';
+
+                        // Append the checkbox and label to the checkboxGroup
+                        checkboxGroup.appendChild(checkboxSpan);
+                        checkboxSpan.appendChild(checkbox);
+                        checkboxSpan.appendChild(label);
+                    });
+                } else {
+                    console.error('Invalid response format');
+                }
+            })
+                .catch(error => {
+                    console.error('Error fetching list of prerequisites:', error);
+                    toastr.error('could not load list of prerequisites');
+                });
+
+        }
+
+        //flow
+        PopulateDropdownListOfDepartments();
+        PopulateCheckboxesListOfPrerequisites();
+
+    });
+
+
+</script>
+
+<div id="second-container">
+    <div id="form-div">
+        <form id="sampleForm">
+            <h2>Training Input Form</h2>
+
+            <label for="TrainingName">Training Name:</label>
+            <input type="text" id="TrainingName" name="TrainingName" required>
+
+            <label for="TrainingCapacity">Training Capacity:</label>
+            <input type="number" id="TrainingCapacity" name="TrainingCapacity" required>
+
+            <label for="DeadlineRegistration">Deadline Registration:</label>
+            <input type="datetime-local" id="DeadlineRegistration" name="DeadlineRegistration" required>
+
+            <label for="StartingDate">Starting Date:</label>
+            <input type="datetime-local" id="StartingDate" name="StartingDate" required>
+
+            <label for="Department">Department Favoured:</label>
+            <select id="Department" name="Department" required>
+                <option value="" disabled selected>Select an option</option>
+                <!--options will be generated by javascript-->
+            </select>
+
+            <label>Prerequisites:</label>
+            <div class="checkbox-group">
+                <!-- the checkboxes will be generated by javascript -->
+            </div>
+
+            <button type="submit" onclick="validateForm()">Create new Training</button>
+        </form>
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

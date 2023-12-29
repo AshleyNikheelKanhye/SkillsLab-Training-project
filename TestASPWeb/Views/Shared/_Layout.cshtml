@@ -4,10 +4,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <!-- First, include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript" src="~/Scripts/ServerCallScripts/ServerCall.js"></script>
     <title>@ViewBag.Title - Training Management System</title>
@@ -41,6 +41,15 @@
                 <a href="@Url.Action("ManagerView","Manager")">Home</a>
                 <a href="@Url.Action("ApproveRequestView","Manager")">Approve Training Requests</a>
             }
+            else
+            {
+                <a href="@Url.Action("AdminView","Admin")">Home</a>
+                <a href="@Url.Action("ViewTrainingsView","Admin")">View Trainings</a>
+                <a href="@Url.Action("ManageTrainingsView","Admin")">Manage Trainings</a>
+                <a href="@Url.Action("AddNewTrainingView","Admin")">Add New Training</a>
+                <a href="@Url.Action("AutomaticProcessingView","Admin")">Automatic Processing</a>
+                <a href="@Url.Action("ManageRolesView","Admin")">Manage Roles</a>
+            }
 
         </div>
     </nav>
@@ -49,9 +58,7 @@
         @RenderBody()
     </div>
 
-    <footer>
-        <p>&copy; 2023 Training Management System</p>
-    </footer>
+
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)

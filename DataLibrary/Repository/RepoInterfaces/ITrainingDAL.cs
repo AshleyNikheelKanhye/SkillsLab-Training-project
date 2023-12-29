@@ -1,5 +1,6 @@
 ﻿using DataLibrary.Entities;
 using DataLibrary.Entities.EntitiesInterface;
+using DataLibrary.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,6 @@ namespace DataLibrary.Repository.RepoInterfaces
         IEnumerable<Prerequisite> GetListOfPrerequisites(int trainingID);
         IEnumerable<ITraining> GetAllElligible(int UserID);
         string GetTrainingName(int trainingID);
+        Task<bool> Add(AddTrainingViewModel addTrainingViewModel);
     }
 }

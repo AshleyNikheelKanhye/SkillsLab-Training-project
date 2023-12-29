@@ -1,4 +1,5 @@
 ﻿using DataLibrary.BusinessLogic.BusinessLogicInterface;
+using DataLibrary.BusinessLogic.Logger;
 using DataLibrary.Entities;
 using DataLibrary.Entities.EntitiesInterface;
 using DataLibrary.Repo;
@@ -16,11 +17,12 @@ namespace DataLibrary.BusinessLogic
     public class PrerequisiteService : IPrerequisiteService
     {
         IPrerequisiteDAL _prerequisiteRepo;
+        ILogger _logger;
 
-
-        public PrerequisiteService(IPrerequisiteDAL prerequisiteRepo ) 
+        public PrerequisiteService(IPrerequisiteDAL prerequisiteRepo,ILogger logger ) 
         { 
             this._prerequisiteRepo = prerequisiteRepo;
+            _logger = logger;
         }
 
         public IEnumerable<EmployeeQualificationDetailsViewModel> GetEmployeeQualifications(int userID)   
@@ -35,7 +37,20 @@ namespace DataLibrary.BusinessLogic
                 return null;
             }
         }
-        
+        public IEnumerable<IPrerequisite> GetAllPrerequisites()
+        {
+            try
+            {
+                return _prerequisiteRepo.GetAllPrerequisites();
+            }
+            catch(Exception ex)
+            {
+                this._logger.LogError(ex);
+                return null;
+            }
+        }
+
+
         public IEnumerable<IPrerequisite> GetPrerequisites(int trainingID)
         {
             try

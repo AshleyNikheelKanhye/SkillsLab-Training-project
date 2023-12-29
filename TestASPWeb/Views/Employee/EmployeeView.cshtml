@@ -4,10 +4,11 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     DataLibrary.Entities.User currentUser = Session["CurrentUser"] as DataLibrary.Entities.User;
 }
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <h2>EmployeeView</h2>
 Welcome @currentUser.FirstName @currentUser.LastName
-Training Registration Website allows you to apply for trainings available based on your qualifications. 
-You will need your Managers approval before having a chance to register for a trainings. 
+Training Registration Website allows you to apply for trainings available based on your qualifications.
+You will need your Managers approval before having a chance to register for a trainings.
 Seats are limited and some Trainings will favour some employees in specific department.
 

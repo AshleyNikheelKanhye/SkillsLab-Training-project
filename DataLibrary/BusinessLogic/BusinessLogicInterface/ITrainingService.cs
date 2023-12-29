@@ -15,5 +15,6 @@ namespace DataLibrary.BusinessLogic.BusinessLogicInterface
         IEnumerable<IPrerequisite> GetPrerequisites(int trainingID);
         IEnumerable<TrainingPrerequisiteDepartmentViewModel> GetAllPrerequisitesAndDepartments();
         IEnumerable<ITraining> GetAllElligible(int UserID);
+        Task<bool> Add(AddTrainingViewModel addTrainingViewModel);
     }
 }

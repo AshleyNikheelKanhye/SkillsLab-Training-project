@@ -118,6 +118,7 @@
     <Compile Include="Repository\TrainingDAL.cs" />
     <Compile Include="Repository\UserDAL.cs" />
     <Compile Include="BusinessLogic\UserService.cs" />
+    <Compile Include="ViewModels\AddTrainingViewModel.cs" />
     <Compile Include="ViewModels\CheckUserExistViewModel.cs" />
     <Compile Include="ViewModels\EmployeeQualificationDetailsViewModel.cs" />
     <Compile Include="ViewModels\EnrollmentEmailViewModel.cs" />

@@ -109,6 +109,24 @@ namespace DataLibrary.Repo
             catch (Exception ex) { return null; }
         }
 
+        public IEnumerable<IPrerequisite> GetAllPrerequisites()
+        {
+            try
+            {
+                IEnumerable<IPrerequisite> list = new List<IPrerequisite>();
+                string selectQuery = "SELECT * FROM Prerequisite";
+                SqlCommand command = new SqlCommand(selectQuery, _dbContext.GetConn());
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    list = DataBaseHelper.ReturnAllRowsFromDB<Prerequisite>(reader);
+                }
+                reader.Close();
+                return list;
+            }
+            catch { throw; }
+        }
+
 
 
         public bool UploadQualification(HttpPostedFileBase file, int prerequisiteID, int userID, string fileName)

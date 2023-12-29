@@ -1,10 +1,13 @@
-﻿using DataLibrary.BusinessLogic.BusinessLogicInterface;
+﻿using DataLibrary.BusinessLogic;
+using DataLibrary.BusinessLogic.BusinessLogicInterface;
 using DataLibrary.Entities;
 using DataLibrary.Entities.EntitiesInterface;
+using DataLibrary.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -58,5 +61,12 @@ namespace TestASPWeb.Controllers
 
 
 
+        //manager only 
+        [HttpPost]
+        public async Task<JsonResult> AddTraining(AddTrainingViewModel addTrainingViewModel)
+        {
+            bool insertResult = await _trainingService.Add(addTrainingViewModel);
+            return Json(new { result = insertResult },JsonRequestBehavior.AllowGet);
+        }
     }
 }

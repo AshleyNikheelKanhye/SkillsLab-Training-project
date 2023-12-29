@@ -4,9 +4,14 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     DataLibrary.Entities.User currentUser = Session["CurrentUser"] as DataLibrary.Entities.User;
 }
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
 
 <h2>Profile</h2>
-Here is your profile @currentUser.FirstName <br /> <br />
+Here is your profile @currentUser.FirstName
+<br />
+<br />
 
 
 FETCH FROM DATABASE TO GET THE Profile Details
