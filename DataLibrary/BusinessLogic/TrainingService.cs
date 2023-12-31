@@ -1,5 +1,6 @@
 ﻿using DataLibrary.BusinessLogic.BusinessLogicInterface;
 using DataLibrary.BusinessLogic.Logger;
+using DataLibrary.BusinessLogic.Notification;
 using DataLibrary.Entities;
 using DataLibrary.Entities.EntitiesInterface;
 using DataLibrary.Repository.RepoInterfaces;
@@ -143,6 +144,90 @@ namespace DataLibrary.BusinessLogic
                 this._logger.LogError(ex);
                 return null;
             }
+        }
+
+        public async Task<bool> ConfirmAutomaticSelection(int trainingID)
+        {
+            try
+            {
+                AutomaticProcessingViewModel TrainingSelectionResult = await GenerateFinalListOfSelectedEmployees(trainingID);
+                if (TrainingSelectionResult != null)
+                {
+                    //add to database
+                    bool UpdateSucess = await _trainingRepo.ConfirmAutomaticSelection(TrainingSelectionResult,trainingID);
+                    if (UpdateSucess)
+                    {
+                        await sendEmployeeEmailForSucessEnrollment(TrainingSelectionResult.listOfAcceptedEmployees);
+                        await sendEmployeeEmailForFailureEnrollment(TrainingSelectionResult.listOfRejectedEmployees);
+                    }
+                    return true; 
+                }
+                else
+                {
+                    return false;
+                }
+            }catch(Exception ex)
+            {
+                this._logger.LogError(ex);
+                return false;
+            }
+        }
+
+        public async Task<bool> sendEmployeeEmailForSucessEnrollment(List<EmployeeApplicationViewModel> listOfSucessApplication)
+        {
+            foreach(EmployeeApplicationViewModel application in listOfSucessApplication)
+            {
+                string htmlBody = $@"
+                    <html>
+                    <head>
+                        <title>Enrollment Sucess</title>
+                    </head>
+                    <body>
+                        <p>Hello {application.FirstName} {application.LastName}.</p>
+                        <p>Good News! , you have been sucessfully enrolled in the training {application.TrainingName}</p>
+                        <br>
+                        <p>See you on {application.TrainingStartDate}. Dont Be late !</p>
+                    </body>
+                    </html>
+                ";
+                string subject = $"{application.TrainingName} Enrollment Success";
+                try
+                {
+                    await EmailSender.SendEmail(subject, htmlBody, application.Email);
+                }
+                catch (Exception ex)
+                {
+                    this._logger.LogError(ex);
+                }
+            }
+            return true;
+        }
+        public async Task<bool> sendEmployeeEmailForFailureEnrollment(List<EmployeeApplicationViewModel> listOfFailureApplication)
+        {
+            foreach(EmployeeApplicationViewModel application in listOfFailureApplication)
+            {
+                string htmlBody = $@"
+                    <html>
+                    <head>
+                        <title>Enrollment Unsucessful</title>
+                    </head>
+                    <body>
+                        <p>Hello {application.FirstName} {application.LastName}.</p>
+                        <p>Unfortunately, you were not selected for the training {application.TrainingName}</p>
+                    </body>
+                    </html>
+                ";
+                string subject = $"{application.TrainingName} Enrollment Unsucessful";
+                try
+                {
+                    await EmailSender.SendEmail(subject, htmlBody, application.Email);
+                }
+                catch (Exception ex)
+                {
+                    this._logger.LogError(ex);
+                }
+            }
+            return true;
         }
     }
 }

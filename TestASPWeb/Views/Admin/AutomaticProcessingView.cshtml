@@ -43,6 +43,33 @@
         .requestsTable tbody tr:nth-child(odd) {
             background-color: #ffffff;
         }
+    .spinner-container {
+        position: relative;
+    }
+
+    .spinner {
+        border: 2px solid #000;
+        border-top: 2px solid #fff;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-top: -25px;
+        margin-left: -25px;
+    }
+
+    @@keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
 </style>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
@@ -165,7 +192,39 @@
         });
 
         //function when confirm Automatic processing is pressed
-
+        $(document).on("click", "button#confirmAutomaticProcessing", function () {
+            var selectedTrainingID = $(this).val();
+            var URL = "/Training/ConfirmAutomaticSelection";
+            var trainingIDobj = { trainingID: selectedTrainingID }
+            var serverCall = new ServerCall({ url: URL, parameters: trainingIDobj, callMethod: "POST" });
+            //show spinner while waiting for backend call
+            $('#trainingsToBeProcessed').hide();
+            var spinnerContainer = document.getElementById('spinner-container');
+            spinnerContainer.innerHTML = '<div class="spinner"></div>';
+            serverCall.fetchApiCall().then((response) => {
+                spinnerContainer.innerHTML = '';
+                if (response == true) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Selected Employees have been registered to Training.',
+                        text: 'Press Ok to continue',
+                        allowOutsideClick: false,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location = "/Admin/AutomaticProcessingView";
+                        }
+                    });
+                } else {
+                    $('#trainingsToBeProcessed').show();
+                    toastr.error("Error, could not start automatic processing for this training");
+                }
+            }).catch((error) => {
+                console.log(error);
+                spinnerContainer.innerHTML = '';
+                $('#trainingsToBeProcessed').show();
+                toastr.error("Error, could not start automatic processing for this training");
+            })
+        });
 
         //function for close popup button
         $(document).on("click", "button#cancelBtn", function () {
@@ -271,66 +330,15 @@
                     </tbody>
                 </table>
             </div>
-
             <hr />
             <div id="popupButtonDiv">
-                <button id="confirmAutomaticProcessing" >Confirm Automatic Processing</button>
+                <button id="confirmAutomaticProcessing">Confirm Automatic Processing</button>
                 <button id="cancelBtn">Cancel</button>
             </div>
         </div>
-
     </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    <!--Spinner-->
+    <div id="spinner-container"></div>
 </div>
 

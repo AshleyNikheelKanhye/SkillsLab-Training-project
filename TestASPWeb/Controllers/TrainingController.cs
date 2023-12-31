@@ -87,5 +87,13 @@ namespace TestASPWeb.Controllers
             var obj = await _trainingService.GenerateFinalListOfSelectedEmployees(trainingId);
             return Json(obj, JsonRequestBehavior.AllowGet);
         }
+
+        //admin only
+        [HttpPost]
+        public async Task<JsonResult> ConfirmAutomaticSelection(int trainingId)
+        {
+            bool result = await _trainingService.ConfirmAutomaticSelection(trainingId);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
     }
 }

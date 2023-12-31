@@ -3,6 +3,7 @@ using DataLibrary.Entities.EntitiesInterface;
 using DataLibrary.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,5 +20,8 @@ namespace DataLibrary.Repository.RepoInterfaces
         Task<IEnumerable<ITraining>> GetUnprocessedTrainings();
         Task<ITraining> GetTraining(int trainingID);
         Task<List<EmployeeApplicationViewModel>> GetListofEmployeeApplication(int trainingID);
+        Task<bool> ConfirmAutomaticSelection(AutomaticProcessingViewModel trainingSelectionResult, int trainingID);
+        Task<bool> UpdateEnrollmentTable(AutomaticProcessingViewModel trainingSelectionResult, SqlTransaction transaction);
+        Task<bool> UpdateTrainingTable(int trainingID, SqlTransaction transaction);
     }
 }

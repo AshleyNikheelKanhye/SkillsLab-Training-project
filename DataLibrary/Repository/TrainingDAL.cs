@@ -1,5 +1,6 @@
 ﻿using DataLibrary.Entities;
 using DataLibrary.Entities.EntitiesInterface;
+using DataLibrary.Enum;
 using DataLibrary.Repository.DataBaseHelper;
 using DataLibrary.Repository.RepoInterfaces;
 using DataLibrary.ViewModels;
@@ -7,6 +8,7 @@ using System;
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Reflection.Emit;
 using System.Threading.Tasks;
 
 namespace DataLibrary.Repo
@@ -66,7 +68,7 @@ namespace DataLibrary.Repo
                 }
                 reader.Close();
                 return returnList;
-            }catch(Exception ex) { return null; }   
+            }catch { return null; }   
         }
 
 
@@ -187,7 +189,7 @@ namespace DataLibrary.Repo
             try
             {
                 List<EmployeeApplicationViewModel> list = new List<EmployeeApplicationViewModel>();
-                string selectQuery = "Select ut.FirstName,ut.LastName,ut.UserID,ut.Email,d.DepartmentID,d.DepartmentName,e.DateRegistered,e.ManagerStatus,e.FinalStatus " +
+                string selectQuery = "Select ut.FirstName,ut.LastName,ut.UserID,ut.Email,d.DepartmentID,d.DepartmentName,e.EnrollmentID,e.DateRegistered,e.ManagerStatus,e.FinalStatus,t.TrainingName,t.TrainingStartDate " +
                                      "FROM Enrollment e, Training t, UserTable ut,Department d " +
                                      "WHERE e.TrainingID=t.TrainingID AND e.UserID=ut.UserID AND ut.DepartmentID=d.DepartmentID " +
                                      "AND e.TrainingID = @trainingID AND e.ManagerStatus='Approved' AND e.IsActive=1 AND t.IsAutomaticProcessed=0";
@@ -200,6 +202,82 @@ namespace DataLibrary.Repo
                 }
                 reader.Close();
                 return list;
+            }
+            catch { throw; }
+        }
+
+        public async Task<bool> ConfirmAutomaticSelection(AutomaticProcessingViewModel trainingSelectionResult,int trainingID)
+        {
+            SqlTransaction transaction = _dbContext.GetConn().BeginTransaction();
+            try
+            {
+                await UpdateEnrollmentTable(trainingSelectionResult,transaction);
+                await UpdateTrainingTable(trainingID,transaction);
+                transaction.Commit();
+                return true;
+            }
+            catch
+            {
+                transaction.Rollback();
+                throw;
+            }
+
+        }
+
+        public async Task<bool> UpdateEnrollmentTable(AutomaticProcessingViewModel trainingSelectionResult,SqlTransaction transaction)
+        {
+            try
+            {
+                List<EmployeeApplicationViewModel> listAccepted = trainingSelectionResult.listOfAcceptedEmployees;
+                List<EmployeeApplicationViewModel> listRejected = trainingSelectionResult.listOfRejectedEmployees;
+                string updateQueryApprove = "UPDATE Enrollment SET FinalStatus = '"+Status.Approved.ToString()+"' WHERE EnrollmentID=@EnrollmentIDApprove";
+                string updateQueryDisapprove = "UPDATE Enrollment SET FinalStatus = '" + Status.Disapproved.ToString() + "' WHERE EnrollmentID=@EnrollmentIDDisapprove";
+
+
+                //approved Enrollments
+
+                foreach (EmployeeApplicationViewModel application in listAccepted)
+                {
+                    using (SqlCommand approveCommand = new SqlCommand(updateQueryApprove, _dbContext.GetConn(), transaction))
+                    {
+                        SqlParameter enrollmentIDApproved = new SqlParameter("@EnrollmentIDApprove", System.Data.SqlDbType.Int);
+                        enrollmentIDApproved.Value = application.EnrollmentID;
+                        approveCommand.Parameters.Add(enrollmentIDApproved);
+                        await approveCommand.ExecuteNonQueryAsync();
+                    }
+                }
+
+
+                //disapproved Enrollments
+                foreach (EmployeeApplicationViewModel application in listRejected)
+                {
+                    using (SqlCommand disapproveCommand = new SqlCommand(updateQueryDisapprove, _dbContext.GetConn(), transaction))
+                    {
+                        SqlParameter enrollmentIDDisapproved = new SqlParameter("@EnrollmentIDDisapprove", System.Data.SqlDbType.Int);
+                        enrollmentIDDisapproved.Value = application.EnrollmentID;
+                        disapproveCommand.Parameters.Add(enrollmentIDDisapproved);
+                        await disapproveCommand.ExecuteNonQueryAsync();
+                    }
+                }
+
+                    
+           
+
+
+                return true;
+            }
+            catch { throw; }
+        }
+
+        public async Task<bool> UpdateTrainingTable(int trainingID,SqlTransaction transaction)
+        {
+            try
+            {
+                string updateQuery = "UPDATE Training SET IsAutomaticProcessed=1 WHERE TrainingID = @trainingID";
+                SqlCommand command = new SqlCommand(updateQuery,_dbContext.GetConn(), transaction);
+                command.Parameters.AddWithValue("@trainingID", trainingID);
+                await command.ExecuteNonQueryAsync();
+                return true;
             }
             catch { throw; }
         }

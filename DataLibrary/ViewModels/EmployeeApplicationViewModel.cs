@@ -17,6 +17,10 @@ namespace DataLibrary.ViewModels
         public DateTime DateRegistered { get; set; }
         public string ManagerStatus {  get; set; }
         public string FinalStatus { get; set; }
+        public int EnrollmentID { get; set; }   
+        public string TrainingName { get; set; }
+        public DateTime TrainingStartDate {  get; set; }
+
 
     }
 }
