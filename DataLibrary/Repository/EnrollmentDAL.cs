@@ -36,7 +36,7 @@ namespace DataLibrary.Repo
                     return true;
                 }
                 return false;
-            }catch (Exception ex) { return false; }
+            }catch { return false; }
         }
 
         public bool ManagerUpdatesEnrollment(int EnrollmentID,string ManagerResult)
@@ -54,18 +54,41 @@ namespace DataLibrary.Repo
                 }
                 return false;
             }
-            catch (Exception ex)
+            catch
             {
-
                 throw;
             }
         }
 
-        public IEnumerable<ManagerEnrollmentViewModel> GetManagerApproveAndDisapproved(string choice,int ManagerID)
+        public async Task<IEnumerable<EnrollmentViewModel>> GetEmployeesAppliedForTraining(int trainingID)
         {
             try
             {
-                List<ManagerEnrollmentViewModel> list = new List<ManagerEnrollmentViewModel> ();
+                List<EnrollmentViewModel> list = new List<EnrollmentViewModel>();
+                string selectQuery = "SELECT ut.FirstName,ut.LastName,ut.Email,t.TrainingName,t.ClosingDate,t.TrainingStartDate,e.DateRegistered,e.EnrollmentID,e.ManagerStatus,e.FinalStatus " +
+                                    "FROM ((Enrollment e INNER JOIN Training t ON e.TrainingID=t.TrainingID) INNER JOIN UserTable ut ON ut.UserID=e.UserID) " +
+                                    "WHERE e.TrainingID= @trainingID AND e.IsActive=1 AND ut.IsActive=1 AND t.IsActive=1";
+                SqlCommand command = new SqlCommand(selectQuery, _dbContext.GetConn());
+                command.Parameters.AddWithValue("@trainingID",trainingID);
+                SqlDataReader reader = await command.ExecuteReaderAsync();
+                if (reader.HasRows)
+                {
+                    list = DataBaseHelper.ReturnAllRowsFromDB<EnrollmentViewModel>(reader);
+                }
+                reader.Close();
+                return list;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public IEnumerable<EnrollmentViewModel> GetManagerApproveAndDisapproved(string choice,int ManagerID)
+        {
+            try
+            {
+                List<EnrollmentViewModel> list = new List<EnrollmentViewModel> ();
                 string selectQuery = "SELECT ut.FirstName,ut.LastName,ut.Email,t.TrainingName,t.ClosingDate,t.TrainingStartDate,e.DateRegistered,e.EnrollmentID,e.ManagerStatus,e.FinalStatus " +
                                      "FROM Enrollment e , Training t, UserTable ut " +
                                      "WHERE e.UserID = ut.UserID AND e.TrainingID=t.TrainingID " +
@@ -78,7 +101,7 @@ namespace DataLibrary.Repo
                 SqlDataReader reader = command.ExecuteReader();
                 if (reader.HasRows)
                 {
-                    list = DataBaseHelper.ReturnAllRowsFromDB<ManagerEnrollmentViewModel>(reader);
+                    list = DataBaseHelper.ReturnAllRowsFromDB<EnrollmentViewModel>(reader);
                 }
                 reader.Close();
                 return list;
@@ -88,11 +111,11 @@ namespace DataLibrary.Repo
                 throw;
             }
         }
-        public IEnumerable<ManagerEnrollmentViewModel> GetPendingEnrollments(int ManagerID)
+        public IEnumerable<EnrollmentViewModel> GetPendingEnrollments(int ManagerID)
         {
             try
             {
-                List<ManagerEnrollmentViewModel> list= new List<ManagerEnrollmentViewModel>();
+                List<EnrollmentViewModel> list= new List<EnrollmentViewModel>();
                 string selectQuery = "SELECT ut.FirstName,ut.LastName,ut.Email,t.TrainingName,t.ClosingDate,t.TrainingStartDate,e.DateRegistered,e.EnrollmentID,e.ManagerStatus,e.FinalStatus " +
                                      "FROM Enrollment e , Training t, UserTable ut " +
                                      "WHERE e.UserID = ut.UserID AND e.TrainingID=t.TrainingID " +
@@ -105,7 +128,7 @@ namespace DataLibrary.Repo
                 SqlDataReader reader = command.ExecuteReader();
                 if(reader.HasRows)
                 {
-                    list = DataBaseHelper.ReturnAllRowsFromDB<ManagerEnrollmentViewModel>(reader);
+                    list = DataBaseHelper.ReturnAllRowsFromDB<EnrollmentViewModel>(reader);
                 }
                 reader.Close(); 
                 return list;

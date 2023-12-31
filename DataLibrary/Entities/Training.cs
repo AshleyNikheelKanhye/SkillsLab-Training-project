@@ -19,5 +19,7 @@ namespace DataLibrary.Entities
         public int DepartmentID { get; set; }
         public string DepartmentName { get; set; }
         public bool? IsActive { get; set; }
+        public bool IsAutomaticProcessed { get; set; }  
+
     }
 }

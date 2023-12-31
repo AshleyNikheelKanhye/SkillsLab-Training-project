@@ -13,11 +13,12 @@ namespace DataLibrary.BusinessLogic.BusinessLogicInterface
     {
         bool AddEnrollment(int UserID, int TrainingID);
         IEnumerable<IEnrollment> GetEnrollments(int UserID,Status FinalStatus, Status ManagerStatus);
-        IEnumerable<ManagerEnrollmentViewModel> GetPendingEnrollments(int ManagerID);
+        IEnumerable<EnrollmentViewModel> GetPendingEnrollments(int ManagerID);
         Task<bool> EmployeeSendMailToManagerForApplication(int userID, int trainingID);
         bool ManagerUpdatesEnrollment(int EnrollmentID,string ManagerResult);
         Task<bool> SendTestMail();
         Task<bool> ManagerSendMailToEmployee(int EnrollmentID, int ManagerID,string DisapproveMessage);
-        IEnumerable<ManagerEnrollmentViewModel> GetManagerApproveAndDisapproved(string Choice, int ManagerID);
+        IEnumerable<EnrollmentViewModel> GetManagerApproveAndDisapproved(string Choice, int ManagerID);
+        Task<IEnumerable<EnrollmentViewModel>> GetEmployeesAppliedForTraining(int trainingID);
     }
 }

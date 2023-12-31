@@ -141,5 +141,67 @@ namespace DataLibrary.Repo
             catch { throw; }
         }
 
+        public async Task<IEnumerable<ITraining>> GetUnprocessedTrainings()
+        {
+            try
+            {
+                List<Training> returnList = new List<Training>();
+                string selectQuery = "SELECT TrainingID,TrainingName,Capacity,ClosingDate,TrainingStartDate,t.DepartmentID,d.DepartmentName " +
+                                    "FROM Training t INNER JOIN Department d ON t.DepartmentID = d.DepartmentID " +
+                                    "WHERE IsAutomaticProcessed = 0 AND t.IsActive =1 ";
+
+                SqlCommand command = new SqlCommand(selectQuery, _dbContext.GetConn());
+                SqlDataReader reader = await command.ExecuteReaderAsync();
+                if (reader.HasRows)
+                {
+                    returnList = DataBaseHelper.ReturnAllRowsFromDB<Training>(reader);
+                }
+                reader.Close();
+                return returnList;
+            }catch { throw; }
+        }
+
+        public async Task<ITraining> GetTraining(int trainingID)
+        {
+            try
+            {
+                Training trainingReturnModel = new Training();
+                string selectQuery = "SELECT TrainingID,TrainingName,Capacity,ClosingDate,TrainingStartDate,t.DepartmentID,d.DepartmentName " +
+                                    "FROM Training t INNER JOIN Department d ON t.DepartmentID = d.DepartmentID " +
+                                    "WHERE t.TrainingID = @trainingID";
+                SqlCommand command = new SqlCommand(selectQuery, _dbContext.GetConn());
+                command.Parameters.AddWithValue("@trainingID", trainingID);
+                SqlDataReader reader = await command.ExecuteReaderAsync();
+                if (reader.Read())
+                {
+                    trainingReturnModel = DataBaseHelper.ReturnSingleRowFromDB<Training>(reader);
+                }
+                reader.Close();
+                return trainingReturnModel;
+            }
+            catch { throw; }
+        }
+
+        public async Task<List<EmployeeApplicationViewModel>> GetListofEmployeeApplication(int trainingID)
+        {
+            try
+            {
+                List<EmployeeApplicationViewModel> list = new List<EmployeeApplicationViewModel>();
+                string selectQuery = "Select ut.FirstName,ut.LastName,ut.UserID,ut.Email,d.DepartmentID,d.DepartmentName,e.DateRegistered,e.ManagerStatus,e.FinalStatus " +
+                                     "FROM Enrollment e, Training t, UserTable ut,Department d " +
+                                     "WHERE e.TrainingID=t.TrainingID AND e.UserID=ut.UserID AND ut.DepartmentID=d.DepartmentID " +
+                                     "AND e.TrainingID = @trainingID AND e.ManagerStatus='Approved' AND e.IsActive=1 AND t.IsAutomaticProcessed=0";
+                SqlCommand command = new SqlCommand( selectQuery, _dbContext.GetConn());
+                command.Parameters.AddWithValue("@trainingID", trainingID);
+                SqlDataReader reader = await command.ExecuteReaderAsync();
+                if(reader.HasRows)
+                {
+                    list = DataBaseHelper.ReturnAllRowsFromDB<EmployeeApplicationViewModel>(reader);    
+                }
+                reader.Close();
+                return list;
+            }
+            catch { throw; }
+        }
     }
 }

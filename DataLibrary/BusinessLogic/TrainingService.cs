@@ -1,5 +1,6 @@
 ﻿using DataLibrary.BusinessLogic.BusinessLogicInterface;
 using DataLibrary.BusinessLogic.Logger;
+using DataLibrary.Entities;
 using DataLibrary.Entities.EntitiesInterface;
 using DataLibrary.Repository.RepoInterfaces;
 using DataLibrary.ViewModels;
@@ -75,6 +76,72 @@ namespace DataLibrary.BusinessLogic
             {
                 this._logger.LogError(ex);
                 return false;
+            }
+        }
+
+        public async Task<IEnumerable<ITraining>> GetUnprocessedTrainings()
+        {
+            try
+            {
+                return await _trainingRepo.GetUnprocessedTrainings();
+            }
+            catch(Exception ex) 
+            { 
+                this._logger.LogError(ex);
+                return null;
+            }
+        }
+
+        public async Task<AutomaticProcessingViewModel> GenerateFinalListOfSelectedEmployees(int trainingID)
+        {
+            try
+            {
+                List<EmployeeApplicationViewModel> acceptedList = new List<EmployeeApplicationViewModel>();
+                List<EmployeeApplicationViewModel> rejectedList = new List<EmployeeApplicationViewModel>(); 
+                AutomaticProcessingViewModel automaticProcessing = new AutomaticProcessingViewModel();
+                //get the required training details
+                ITraining selectedTraining = await _trainingRepo.GetTraining(trainingID);
+
+                //get all the employees application with manager's approval for trainingID
+                List<EmployeeApplicationViewModel> applicationList = await _trainingRepo.GetListofEmployeeApplication(trainingID);
+
+                if(applicationList.Any())
+                {
+                    //if applicationList < training Capacity
+                    if(applicationList.Count() <= selectedTraining.Capacity)
+                    {
+                        acceptedList.AddRange(applicationList);
+                        automaticProcessing.listOfAcceptedEmployees = acceptedList;
+                        return automaticProcessing;
+                    }
+                    else
+                    {
+                        var matchingDepartmentList = applicationList
+                            .Where(employee => employee.DepartmentID == selectedTraining.DepartmentID)
+                            .OrderBy(employee => employee.DateRegistered)
+                            .Take(selectedTraining.Capacity);
+
+                        var nonMatchingDepartmentList = applicationList
+                            .Where(employee => employee.DepartmentID != selectedTraining.DepartmentID)
+                            .OrderBy(employee => employee.DateRegistered)
+                            .Take(selectedTraining.Capacity - matchingDepartmentList.Count());
+
+                        acceptedList = matchingDepartmentList.Concat(nonMatchingDepartmentList).ToList();
+                        rejectedList = applicationList.Except(acceptedList).ToList();
+                        automaticProcessing.listOfAcceptedEmployees= acceptedList;
+                        automaticProcessing.listOfRejectedEmployees = rejectedList;
+                        return automaticProcessing;
+                    }
+                }
+                else
+                {
+                    return automaticProcessing;
+                }
+            }
+            catch(Exception ex)
+            {
+                this._logger.LogError(ex);
+                return null;
             }
         }
     }

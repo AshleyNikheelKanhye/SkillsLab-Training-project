@@ -370,3 +370,31 @@ Stack Trace:    at System.Web.Mvc.Controller.HandleUnknownAction(String actionNa
    at System.Web.HttpApplication.ExecuteStepImpl(IExecutionStep step)
    at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
 --------------------------------------------------
+--------------------------------------------------
+Timestamp: 12/30/2023 10:54:28 PM
+Exception Type: DataLibrary.BusinessLogic.Logger.Logger
+Message: The SMTP host was not found.
+Inner Exception: System.Net.WebException: The remote name could not be resolved: 'relay.ceridian.com'
+   at System.Net.ServicePoint.GetConnection(PooledStream PooledStream, Object owner, Boolean async, IPAddress& address, Socket& abortSocket, Socket& abortSocket6)
+   at System.Net.PooledStream.Activate(Object owningObject, Boolean async, GeneralAsyncDelegate asyncCallback)
+   at System.Net.ConnectionPool.GetConnection(Object owningObject, GeneralAsyncDelegate asyncCallback, Int32 creationTimeout)
+   at System.Net.Mail.SmtpConnection.ConnectAndHandshakeAsyncResult.GetConnection(Boolean synchronous)
+   at System.Net.Mail.SmtpConnection.BeginGetConnection(ServicePoint servicePoint, ContextAwareResult outerResult, AsyncCallback callback, Object state)
+   at System.Net.Mail.SmtpTransport.BeginGetConnection(ServicePoint servicePoint, ContextAwareResult outerResult, AsyncCallback callback, Object state)
+Stack Trace:    at System.Net.Mail.SmtpTransport.BeginGetConnection(ServicePoint servicePoint, ContextAwareResult outerResult, AsyncCallback callback, Object state)
+   at System.Net.Mail.SmtpClient.SendAsync(MailMessage message, Object userToken)
+   at System.Net.Mail.SmtpClient.SendMailAsync(MailMessage message)
+   at DataLibrary.BusinessLogic.Notification.EmailSender.<SendEmail>d__0.MoveNext() in C:\Users\P12ADC6\source\repos\TestASPWeb\DataLibrary\BusinessLogic\Notification\EmailSender.cs:line 36
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at DataLibrary.BusinessLogic.EnrollmentService.<EmployeeSendMailToManagerForApplication>d__11.MoveNext() in C:\Users\P12ADC6\source\repos\TestASPWeb\DataLibrary\BusinessLogic\EnrollmentService.cs:line 109
+--------------------------------------------------
+--------------------------------------------------
+Timestamp: 12/30/2023 10:54:28 PM
+Exception Type: DataLibrary.BusinessLogic.Logger.Logger
+Message: An asynchronous module or handler completed while an asynchronous operation was still pending.
+Inner Exception: 
+Stack Trace: 
+--------------------------------------------------

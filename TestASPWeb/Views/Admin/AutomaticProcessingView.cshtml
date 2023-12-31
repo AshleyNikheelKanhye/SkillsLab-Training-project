@@ -4,5 +4,333 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>AutomaticProcessingView</h2>
+<style>
+    .content {
+        display: none; /* Hide all content divs by default */
+        padding: 20px;
+    }
+    .TableViewDiv {
+        background-color: #ffffff;
+        padding: 10px;
+        border-radius: 8px;
+        margin: 20px;
+    }
+
+        .TableViewDiv table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+    .requestsTable th, .requestsTable td {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #b2dfdb;
+        border-radius: 5px;
+    }
+
+    .requestsTable th {
+        background-color: #e0f2f1;
+        color: #000000;
+    }
+
+    .requestsTable tbody tr {
+        background-color: #ffffff;
+    }
+
+        .requestsTable tbody tr:nth-child(even) {
+            background-color: #ccffff;
+        }
+
+        .requestsTable tbody tr:nth-child(odd) {
+            background-color: #ffffff;
+        }
+</style>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        //function to populate table trainings
+        function populateTableTrainings() {
+            return new Promise((resolve, reject) => {
+                var URL = "/Training/GetUnprocessedTrainings";
+                getAJAXCall(URL).then((response) => {
+                    if (response) {
+                        console.log(response);
+                        var tableBody = $('#trainingsToBeProcessedTable tbody');
+                        tableBody.empty();
+                        if (response.length === 0) {
+                            $('div#trainingsToBeProcessedTableDiv').hide();
+                            $('div#emptyListHeader').html("<h2>Looks like there are no trainings that need to be processed</h2>").show();
+                            resolve();
+                        }
+                        else {
+                            $.each(response, function (index, training) {
+                                var row = '<tr>' +
+                                    '<td>' + training.TrainingName + '</td>' +
+                                    '<td>' + formatDateTime(training.ClosingDate) + '</td>' +
+                                    '<td>' + formatDateTime(training.TrainingStartDate) + '</td>' +
+                                    '<td>' + training.Capacity + '</td>' +
+                                    '<td>' + training.DepartmentName + '</td>' + 
+                                    '<td> <button id ="startPopUPAutoProcessingBtn" value = "' + training.TrainingID + '" > Start Automatic Processing </button> </td>' +
+                                    '</tr>';
+                                tableBody.append(row);
+                            });
+                            $('div#emptyListHeader').html('').hide();
+                            $('div#trainingsToBeProcessedTableDiv').show();
+                            resolve();
+                        }
+                    }
+                    else {
+                        toastr.error("error in loading training list");
+                        reject();
+                    }
+                }).catch((error) => {
+                    console.error(error);
+                    toastr.error("System Error");
+                    reject();
+                });
+            });
+        }
+
+        //function to display popup when buttn is clicked
+        $('#trainingsToBeProcessedTable tbody').on("click", "#startPopUPAutoProcessingBtn", function () {
+            var row = $(this).closest("tr");
+            var selectedTrainingID = $(this).val();
+            var selectedTrainingName = row.find("td:eq(0)").text();
+            var selectedTrainingNumberOfSeats = row.find("td:eq(3)").text();
+
+            var URL = "/Training/GenerateFinalListOfSelectedEmployees";
+            var trainingIDObj = { trainingId: selectedTrainingID };
+            var serverCall = new ServerCall({ url: URL, parameters: trainingIDObj, callMethod: "POST" });
+            serverCall.fetchApiCall().then((response) => {
+                if (response) {
+                    var listOfAccepted = response.listOfAcceptedEmployees;
+                    var listOfRejected = response.listOfRejectedEmployees;
+                    var tableBodyAccepted = $("#tableListOfAccepted tbody");
+                    var tableBodyRejected = $("#tableListOfRejected tbody");
+                    tableBodyAccepted.empty();
+                    tableBodyRejected.empty();
+                    $('#trainingsToBeProcessedTableDiv').hide();
+                    if (listOfAccepted == null) {
+                        //meaning that this training has not received any trainings approved by their managers
+                        $('#subpopupHeader').html("<h2>Looks like nobody has applied for " + selectedTrainingName + ".</h2>");
+                        $('div#popupListOfAcceptedTableDiv').hide();
+                        $('div#popupListOfRejectedTableDiv').hide();
+                        $('button#confirmAutomaticProcessing').hide();
+                        $('div#popupStartAutoProcessingDiv').show();
+                    }
+                    else {
+                        //edit header accordingly
+                        $('#subpopupHeader').html("<h2>Showing List of Selected and Accepted Employee Application for Training : " + selectedTrainingName + "</h2>")
+                        $('#subpopupHeader').append("<h3>Training Number of seats : " + selectedTrainingNumberOfSeats + " , Number of applications selected : " + listOfAccepted.length + "</h3>");
+
+                        //populate acceptedTable
+                        $.each(listOfAccepted, function (index, application) {
+                            var row = '<tr>' +
+                                '<td>' + application.FirstName + ' ' + application.LastName + '</td>' +
+                                '<td>' + application.Email + '</td>' +
+                                '</tr>';
+                            tableBodyAccepted.append(row);
+                        });
+
+                        //populate rejectedTable is not null
+                        if (listOfRejected && listOfRejected.length > 0) {
+                            $.each(listOfRejected, function (index, application) {
+                                var row = '<tr>' +
+                                    '<td>' + application.FirstName + ' ' + application.LastName + '</td>' +
+                                    '<td>' + application.Email + '</td>' +
+                                    '</tr>';
+                                tableBodyRejected.append(row);
+                                          
+                            });
+                            $('div#popupListOfRejectedTableDiv').show();
+                        }
+                        //need to show and hide appropriate divs
+                        $('div#popupStartAutoProcessingDiv').show();
+                        $('div#popupListOfAcceptedTableDiv').show();
+                        $('button#confirmAutomaticProcessing').attr("value", selectedTrainingID).show();
+                        
+                    }
+                }
+                else {
+                    toastr.error("error could not load data");
+                }
+            }).catch((error) => {
+                console.error(error);
+                toastr.error("error could not get details");
+            })
+        });
+
+        //function when confirm Automatic processing is pressed
+
+
+        //function for close popup button
+        $(document).on("click", "button#cancelBtn", function () {
+            $('button#confirmAutomaticProcessing').attr("value", "");
+            $('div#popupStartAutoProcessingDiv').hide();
+            $('div#trainingsToBeProcessedTableDiv').show();
+        })
+
+        function getAJAXCall(URL) {
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    type: "GET",
+                    url: URL,
+                    data: null,
+                    dataType: "json",
+                    success: function (data) {
+                        resolve(data);
+                    },
+                    error: function (data) {
+                        reject(data);
+                    }
+                })
+            });
+        }
+        function formatDateTime(date) {
+            if (date) {
+                var parsedDate = new Date(parseInt(date.substr(6)));
+                return parsedDate.toLocaleDateString() + ' ' + parsedDate.toLocaleTimeString();
+            } else {
+                return 'No date';
+            }
+        }
+
+        //flow
+        populateTableTrainings().then(() => {
+            $('div#trainingsToBeProcessed').show();
+        })
+    });
+</script>
+
+
+<!--Rendered body-->
+<div id="second-container">
+
+    <!--table of trainings available to trigger automatic processing-->
+    <div id="trainingsToBeProcessed" class="content">
+        <h2>Trainings to be processed</h2>
+        <div id="emptyListHeader" style="display:none;"></div>
+        <div id="trainingsToBeProcessedTableDiv" class="TableViewDiv" style="display:none;">
+            <table id="trainingsToBeProcessedTable" border="1" class="requestsTable">
+                <thead>
+                    <tr>
+                        <th>Training Name</th>
+                        <th>Training Registration Deadline</th>
+                        <th>Training Starting Date</th>
+                        <th>Total Available Seats</th>
+                        <th>Department Favoured</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+
+        <!--popup-->
+        <div id="popupStartAutoProcessingDiv" class="content">
+            <div id="popupheader">
+                <div id="subpopupHeader"></div>
+                <h6>
+                    In order to be considered for a Training, the employee's manager need to approve their application.
+                    First priority will be given to those within the same department as the department favoured of that training.
+                    Then, priority will be given based on the date Registered untill the Training number of seats is filled.
+                </h6>
+            </div>
+
+            <!--table for accepted employees-->
+            <div id="popupListOfAcceptedTableDiv" class="TableViewDiv">
+                <table id="tableListOfAccepted" border="1" class="requestsTable">
+                    <caption style="color:green;">Selected Employees For Training</caption>
+                    <thead>
+                        <tr>
+                            <th>Employee Name</th>
+                            <th>Employee Email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+
+            <!--table for rejected employees-->
+            <div id="popupListOfRejectedTableDiv" class="TableViewDiv">
+                <table id="tableListOfRejected" border="1" class="requestsTable">
+                    <caption style="color:indianred;">Rejected Employees For Training</caption>
+                    <thead>
+                        <tr>
+                            <th>Employee Name</th>
+                            <th>Employee Email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+
+            <hr />
+            <div id="popupButtonDiv">
+                <button id="confirmAutomaticProcessing" >Confirm Automatic Processing</button>
+                <button id="cancelBtn">Cancel</button>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
 

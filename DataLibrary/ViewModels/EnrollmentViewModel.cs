@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DataLibrary.ViewModels
 {
-    public class ManagerEnrollmentViewModel
+    public class EnrollmentViewModel
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }

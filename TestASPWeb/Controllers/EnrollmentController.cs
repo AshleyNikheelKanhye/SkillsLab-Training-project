@@ -31,7 +31,8 @@ namespace TestASPWeb.Controllers
             bool status = _enrollmentService.ManagerUpdatesEnrollment(enrollmentID, ManagerResult);
             if (status)
             {
-                bool emailResult = await _enrollmentService.ManagerSendMailToEmployee(enrollmentID,GetUserID(),DisapproveMessage); 
+                //i have disactivated email service  (uncomment to turn on)
+                //bool emailResult = await _enrollmentService.ManagerSendMailToEmployee(enrollmentID,GetUserID(),DisapproveMessage); 
                 return Json(new { result = status }, JsonRequestBehavior.AllowGet);
             }
             else
@@ -49,9 +50,10 @@ namespace TestASPWeb.Controllers
             bool status = _enrollmentService.AddEnrollment(userID, trainingID);
             if (status)
             {
-                //async email fire and forget
-                bool emailResult = await _enrollmentService.EmployeeSendMailToManagerForApplication(userID, trainingID);
-                return Json(new { result = status, emailStatus = emailResult }, JsonRequestBehavior.AllowGet); //TODO : Decide on what to do with the emailStatus
+                //i want to implement fire and forget here
+                //i have disactivated email service (uncomment to turn on)
+                //bool emailResult = await _enrollmentService.EmployeeSendMailToManagerForApplication(userID, trainingID);
+                return Json(new { result = status}, JsonRequestBehavior.AllowGet); //TODO : Decide on what to do with the emailStatus
             }
             else
             {
@@ -118,6 +120,14 @@ namespace TestASPWeb.Controllers
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 
+
+
+        //Admin only
+        public async Task<JsonResult> GetEmployeesAppliedForTraining(int trainingID)
+        {
+            var list = await _enrollmentService.GetEmployeesAppliedForTraining(trainingID);
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
 
         public int GetUserID()
         {

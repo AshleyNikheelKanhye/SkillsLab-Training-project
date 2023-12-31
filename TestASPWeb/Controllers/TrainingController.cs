@@ -30,6 +30,7 @@ namespace TestASPWeb.Controllers
             return View();
         }
 
+        //admin as well
         [HttpGet]
         public JsonResult getAll()
         {
@@ -45,6 +46,8 @@ namespace TestASPWeb.Controllers
             return Json(trainingList, JsonRequestBehavior.AllowGet);
         }
 
+
+        //admin also
         [HttpPost]
         public JsonResult GetPrerequisites(int trainingID)
         {
@@ -67,6 +70,22 @@ namespace TestASPWeb.Controllers
         {
             bool insertResult = await _trainingService.Add(addTrainingViewModel);
             return Json(new { result = insertResult },JsonRequestBehavior.AllowGet);
+        }
+
+        //admin only
+        [HttpGet]
+        public async Task<JsonResult> GetUnprocessedTrainings()
+        {
+            var list = await _trainingService.GetUnprocessedTrainings();
+            return Json(list ,JsonRequestBehavior.AllowGet);  
+        }
+
+        //admin only
+        [HttpPost]
+        public async Task<JsonResult> GenerateFinalListOfSelectedEmployees(int trainingId)
+        {
+            var obj = await _trainingService.GenerateFinalListOfSelectedEmployees(trainingId);
+            return Json(obj, JsonRequestBehavior.AllowGet);
         }
     }
 }

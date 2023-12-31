@@ -16,5 +16,8 @@ namespace DataLibrary.Repository.RepoInterfaces
         IEnumerable<ITraining> GetAllElligible(int UserID);
         string GetTrainingName(int trainingID);
         Task<bool> Add(AddTrainingViewModel addTrainingViewModel);
+        Task<IEnumerable<ITraining>> GetUnprocessedTrainings();
+        Task<ITraining> GetTraining(int trainingID);
+        Task<List<EmployeeApplicationViewModel>> GetListofEmployeeApplication(int trainingID);
     }
 }

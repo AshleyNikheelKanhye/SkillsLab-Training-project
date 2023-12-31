@@ -4,5 +4,338 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>ViewTrainingsView</h2>
+<style>
+    .content {
+        display: none;
+        padding: 20px;
+    }
 
+    .TableViewDiv {
+        background-color: #ffffff;
+        padding: 10px;
+        border-radius: 8px;
+        margin: 20px;
+    }
+
+        .TableViewDiv table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+    .requestsTable th, .requestsTable td {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #b2dfdb;
+        border-radius: 5px;
+    }
+
+    .requestsTable th {
+        background-color: #e0f2f1;
+        color: #000000;
+    }
+
+    .requestsTable tbody tr {
+        background-color: #ffffff;
+    }
+
+        .requestsTable tbody tr:nth-child(even) {
+            background-color: #ccffff;
+        }
+
+        .requestsTable tbody tr:nth-child(odd) {
+            background-color: #ffffff;
+        }
+
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        //dropdown select options
+        $('#mySelect').change(function () {
+            var selectionOption = $(this).val();
+            $('.content').hide();
+            if (selectionOption == "1") {
+                populateTableAllTrainings().then(() => {
+                    $('div#allTrainingsDIV').show();
+                });
+            }
+            if (selectionOption == "2") {
+                $('div#upcomingTrainingsDIV').show();
+            }
+            if (selectionOption == "3") {
+                $('div#completedTrainingsDIV').show();
+            }
+            if (selectionOption == "4") {
+                $('div#deletedTrainingsDIV').show();
+            }
+        });
+
+        //populate table All trainings
+        function populateTableAllTrainings() {
+            return new Promise((resolve, reject) => {
+                var URL = "/Training/getAll";
+                getAJAXCall(URL).then((response) => {
+                    var tableBody = $('#AllTrainingTable tbody');
+                    tableBody.empty();
+                    if (response.length === 0) {
+                        $('div#AllTrainingTableDIV').hide();
+                        $('div#emptyListHeaderDiv').html("<h2>Seems there are no Trainings Yet.</h2>").show();
+                        resolve();
+                    }
+                    else {
+                        $.each(response, function (index, training) {
+                            var row = '<tr>' +
+                                '<td>' + training.TrainingName + '</td>'+
+                                '<td>' + training.DepartmentName + '</td>' +
+                                '<td>' + formatDateTime(training.ClosingDate) + '</td>' +
+                                '<td>' + formatDateTime(training.TrainingStartDate) + '</td>' +
+                                '<td><button id="viewEmployeesBtn" value="' + training.TrainingID + '">View Employees</button></td>' +
+                                '<td><button id="viewTraningPrerequisiteBtn"value="' + training.TrainingID + '">View Training Prerequisites</button></td>' +
+                                '</tr>';
+                            tableBody.append(row);
+                        });
+                        $('div#emptyListHeaderDiv').empty().hide();
+                        $('div#AllTrainingTableDIV').show();
+                        resolve();
+                    }
+                }).catch((error) => {
+                    console.error(error);
+                    toastr.error("Error on loading Trainings table");
+                    reject();
+                });
+            });
+        }
+
+        //When clicking on view employees btn
+        $('#AllTrainingTable tbody').on("click", "#viewEmployeesBtn", function () {
+            var row = $(this).closest("tr");
+            var selectedTrainingID = $(this).val();
+            var selectedTrainingName = row.find("td:eq(0)").text();
+            $('div#popupHeaderDiv').empty();
+            $('div#popupHeaderDiv').html("<h3>Employees that has applied for " + selectedTrainingName + "</h3>");
+            var trainingIDObj = { trainingID: selectedTrainingID };
+            var serverCall = new ServerCall({ url: "/Enrollment/GetEmployeesAppliedForTraining", parameters: trainingIDObj, callMethod: "POST" });
+            serverCall.fetchApiCall().then((response) => {
+                if (response) {
+                    $('#AllTrainingTableDIV').hide();
+                    var tableBody = $('#employeeTable tbody');
+                    tableBody.empty();
+                    if (response.length === 0) {
+                        $('div#employeesTableDiv').hide();
+                        $('div#popupHeaderDiv').append("<br><h1>Looks Like nobody has applied for this training</h1>").fadeIn();
+                        $('div#employeesInTrainingPopUp').show();
+                    }
+                    else {
+                        $('div#popupHeaderDiv').append("<br><h4> Total of " + response.length + " applications received</h4>").show();
+                        $.each(response, function (index, employee) {
+                            var row = '<tr>' +
+                                '<td>' + employee.FirstName + ' ' + employee.LastName + '</td>' +
+                                '<td>' + employee.Email + '</td>' +
+                                '<td>' + formatDateTime(employee.DateRegistered) + '</td>' +
+                                '<td>' + employee.ManagerStatus + '</td>' +
+                                '<td>' + employee.FinalStatus + '</td>' +
+                                '</tr>';
+                            tableBody.append(row);
+                        });
+                        $('div#popupHeaderDiv').show();
+                        $('div#employeesTableDiv').show();
+                        $('div#employeesInTrainingPopUp').show();
+                    }
+                }
+                else {
+                    toastr.error("Error loading Employees");
+                }
+            });
+        });
+
+        //when clicking on view Training Prerequisite
+        $('#AllTrainingTable tbody').on("click", "#viewTraningPrerequisiteBtn", function () {
+            var URL = "/Training/GetPrerequisites";
+            var row = $(this).closest("tr");
+            var trainingID = $(this).val();
+            var selectedTrainingName = row.find("td:eq(0)").text();
+            var trainingobj = { trainingID: trainingID }
+            var serverCall = new ServerCall({ url: URL, parameters: trainingobj, callMethod: "POST" });
+            serverCall.fetchApiCall().then((response) => {
+                if (response) {
+                    $('#AllTrainingTableDIV').hide();
+                    $('div#popupTrainingPrerequisiteContentDiv').empty();
+                    if (response.result.length === 0) {
+                        $('#headerTrainingPrerequisite').html("<h1>Looks like this training does not have any prerequisites</h1>");
+                        $('#popupViewTrainingPrerequisiteDiv').show();
+                    }
+                    else {
+                        $('#headerTrainingPrerequisite').html("<h4>Prerequisites For " + selectedTrainingName + "</h4>");
+                        response.result.forEach(function (p) {
+                            var paragraph = document.createElement('p');
+                            paragraph.textContent = 'Prerequisites Needed : ' + p.Details;
+                            $('div#popupTrainingPrerequisiteContentDiv').append(paragraph);
+                        });
+                        $('#popupViewTrainingPrerequisiteDiv').show();
+                    }
+                }
+                else {
+                    toastr.error("could not load prerequisites");
+                }
+            });
+        });
+
+
+        //close button for popup employees
+        $(document).on("click", "button#closePopUpEmployeeBtn", function () {
+            $('div#employeesInTrainingPopUp').hide();
+            $('div#AllTrainingTableDIV').fadeIn();
+        });
+
+        //close button for popup prerequisite
+        $(document).on("click", "button#closePopupTrainingPrerequisiteBtn", function () {
+            $('div#popupViewTrainingPrerequisiteDiv').hide();
+            $('div#AllTrainingTableDIV').fadeIn();
+        });
+
+        function getAJAXCall(URL) {
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    type: "GET",
+                    url: URL,
+                    data: null,
+                    dataType: "json",
+                    success: function (data) {
+                        resolve(data);
+                    },
+                    error: function (data) {
+                        reject(data);
+                    }
+                })
+            });
+        }
+        function formatDateTime(date) {
+            if (date) {
+                var parsedDate = new Date(parseInt(date.substr(6)));
+                return parsedDate.toLocaleDateString() + ' ' + parsedDate.toLocaleTimeString();
+            } else {
+                return 'No date';
+            }
+        }
+        //flow
+        $('#mySelect').trigger('change'); 
+    });
+</script>
+
+<!--rendered body-->
+<div id="second-container">
+    <!--Dropdonwlist DIV-->
+    <div style="text-align:right; padding:10px;">
+        <label for="mySelect" style="background-color:white;">Select an option:</label>
+        <select id="mySelect" class="custom-select" style="display: inline-block; margin-left:10px; ">
+            <option value="1" selected> All Trainings</option>
+            <option value="2">Upcoming Trainings</option>
+            <option value="3">Completed Trainings</option>
+            <option value="4">Deleted Trainings</option>
+        </select>
+    </div>
+
+    <!--All trainings-->
+    <div id="allTrainingsDIV" class="content">
+        <div id="headerAllTrainingDiv">All Trainings</div>
+        <div id="emptyListHeaderDiv" style="display:none;"></div>
+        <div id="AllTrainingTableDIV" class="TableViewDiv" style="display:none;">
+            <table id="AllTrainingTable" border="1" class="requestsTable">
+                <thead>
+                    <tr>
+                        <th>Training Name</th>
+                        <th>Department Favoured</th>
+                        <th>Training Registration Deadline</th>
+                        <th>Training Start Date</th>
+                        <th>Employees enrolled</th>
+                        <th>View Training Prerequisites</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <!--popup view Employees-->
+        <div id="employeesInTrainingPopUp" style="display:none;">
+            <div id="popupHeaderDiv"></div>
+            <div id="employeesTableDiv" style="display:none;">
+                <hr />
+                <table id="employeeTable" border="1" class="requestsTable">
+                    <thead>
+                        <tr>
+                            <th>Employee Name</th>
+                            <th>Employee Email</th>
+                            <th>Date Registered</th>
+                            <th>Manager Status</th>
+                            <th>Final Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <div id="closeBtnDiv">
+                <button id="closePopUpEmployeeBtn">Close</button>
+            </div>
+        </div>
+
+
+        <!--popup view training prerequisite-->
+        <div id="popupViewTrainingPrerequisiteDiv" style="display: none;">
+            <div id="headerTrainingPrerequisite"></div>
+            <div id="popupTrainingPrerequisiteContentDiv"></div>
+            <div><button id="closePopupTrainingPrerequisiteBtn">Close</button></div>
+        </div>
+    </div>
+
+    <!--Upcoming Trainings-->
+    <div id="upcomingTrainingsDIV" class="content" >
+        upcoming trainings
+    </div>
+
+    <!--completed Trainings-->
+    <div id="completedTrainingsDIV" class="content">
+        completed trainings
+    </div>
+
+    <!--deleted trainings-->
+    <div id="deletedTrainingsDIV" class="content">
+        deleted trainings 
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>

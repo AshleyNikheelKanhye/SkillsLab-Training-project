@@ -45,17 +45,30 @@ namespace DataLibrary.BusinessLogic
             }
         }
 
+        public async Task<IEnumerable<EnrollmentViewModel>> GetEmployeesAppliedForTraining(int trainingID)
+        {
+            try
+            {
+                return await _enrollmentDAL.GetEmployeesAppliedForTraining(trainingID);
+            }
+            catch(Exception ex)
+            {
+                this._logger.LogError(ex);
+                return null;
+            }
+        }
+
         public IEnumerable<IEnrollment> GetEnrollments(int UserID, Status FinalStatus,Status ManagerStatus)
         {
             return _enrollmentDAL.GetEnrollments(UserID,FinalStatus, ManagerStatus);
         }
 
-        public IEnumerable<ManagerEnrollmentViewModel> GetPendingEnrollments(int ManagerID)
+        public IEnumerable<EnrollmentViewModel> GetPendingEnrollments(int ManagerID)
         {
             return _enrollmentDAL.GetPendingEnrollments(ManagerID);
         }
 
-        public IEnumerable<ManagerEnrollmentViewModel> GetManagerApproveAndDisapproved(string Choice,int ManagerID)
+        public IEnumerable<EnrollmentViewModel> GetManagerApproveAndDisapproved(string Choice,int ManagerID)
         {
             try
             {

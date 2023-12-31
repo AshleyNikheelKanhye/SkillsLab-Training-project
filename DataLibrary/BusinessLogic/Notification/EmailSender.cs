@@ -33,7 +33,8 @@ namespace DataLibrary.BusinessLogic.Notification
             }
             catch (Exception ex)
             {
-                throw;
+                return false;
+                
             }
         }
     }

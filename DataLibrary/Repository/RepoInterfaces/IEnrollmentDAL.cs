@@ -13,10 +13,11 @@ namespace DataLibrary.Repository.RepoInterfaces
     {
         bool AddEnrollment(int UserID, int TrainingID);
         IEnumerable<IEnrollment> GetEnrollments(int UserID, Status FinalStatus, Status ManagerStatus);
-        IEnumerable<ManagerEnrollmentViewModel> GetPendingEnrollments(int ManagerID);
+        IEnumerable<EnrollmentViewModel> GetPendingEnrollments(int ManagerID);
         bool ManagerUpdatesEnrollment(int EnrollmentID,string ManagerResult);
         EnrollmentEmailViewModel GetEnrollmentEmailViewModel(int EnrollmentID);
-        IEnumerable<ManagerEnrollmentViewModel> GetManagerApproveAndDisapproved(string choice, int ManagerID);
+        IEnumerable<EnrollmentViewModel> GetManagerApproveAndDisapproved(string choice, int ManagerID);
+        Task<IEnumerable<EnrollmentViewModel>> GetEmployeesAppliedForTraining(int trainingID);
 
     }
 }
