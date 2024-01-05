@@ -10,6 +10,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Helpers;
 
 namespace DataLibrary.Repo
 {
@@ -150,6 +151,27 @@ namespace DataLibrary.Repo
             return listofRoleIds;
         }
 
+        public List<Role> GetRoles(int userID)
+        {
+            try
+            {
+                List<Role> listOfRoles = new List<Role>();
+                string selectQuery = "SELECT ur.RoleID,r.RoleName " +
+                                    "FROM UserRole ur INNER JOIN Role r ON ur.RoleID = r.RoleID " +
+                                    "WHERE ur.UserID = @userID";
+                SqlCommand command = new SqlCommand( selectQuery, _dbContext.GetConn());
+                command.Parameters.AddWithValue("@userID", userID);
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    listOfRoles = DataBaseHelper.ReturnAllRowsFromDB<Role>(reader);
+                }
+                reader.Close();
+                return listOfRoles;
+            }
+            catch { throw; }
+        }
+
         public string GetManagerEmailOfEmployee(int userID)
         {
             try
@@ -188,13 +210,62 @@ namespace DataLibrary.Repo
             catch(Exception ex) { throw ex; }  
         }
 
-        public IEnumerable<IUser> GetAll()
+        public async Task<IEnumerable<IUser>> GetAll()
         {
-            throw new NotImplementedException();
+            try
+            {
+                List<User> list = new List<User>();
+                string selectQuery = "SELECT UserID, Email, FirstName, LastName, NIC, PhoneNo, Password, ut.DepartmentID, ManagerID, DepartmentName " +
+                    "FROM  UserTable ut  INNER JOIN Department d ON ut.DepartmentID = d.DepartmentID " +
+                    "ORDER BY ut.CreatedOn DESC ";
+
+                SqlCommand command = new SqlCommand(selectQuery,_dbContext.GetConn());
+                SqlDataReader reader = await command.ExecuteReaderAsync();
+                if(reader.HasRows)
+                {
+                    list = DataBaseHelper.ReturnAllRowsFromDB<User>(reader);    
+                }
+                reader.Close();
+                return list;
+            }
+            catch { throw; }
         }
-        public IUser GetById(int userID)
+
+        public async Task<int> GetTotalNumberOfUserRecords()
         {
-            throw new NotImplementedException();
+            try
+            {
+                string selectQuery = "SELECT COUNT(UserID) as 'RowCount' FROM UserTable WHERE IsActive =1 ";
+                SqlCommand command = new SqlCommand( selectQuery,_dbContext.GetConn());
+                return (int)  await command.ExecuteScalarAsync();
+
+            }
+            catch { throw; }
+        }
+        public async Task<IUser> GetById(int userID)
+        {
+            try
+            {
+                User user = new User();
+                string selectQuery = "SELECT UserID, Email, FirstName, LastName, NIC, PhoneNo, Password, ut.DepartmentID, ManagerID, DepartmentName " +
+                                      "FROM  UserTable ut  INNER JOIN Department d ON ut.DepartmentID = d.DepartmentID " +
+                                      "WHERE UserID = @UserID ";
+                SqlCommand command = new SqlCommand(selectQuery, _dbContext.GetConn());
+                command.Parameters.AddWithValue("@UserID", userID);
+                SqlDataReader reader = await command.ExecuteReaderAsync();
+                if (reader.Read())
+                {
+                    user = DataBaseHelper.ReturnSingleRowFromDB<User>(reader);
+                    reader.Close();
+                    return user;
+                }
+                reader.Close();
+                return null;
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public void Update(IUser user)

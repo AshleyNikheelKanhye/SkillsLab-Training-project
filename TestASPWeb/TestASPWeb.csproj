@@ -46,6 +46,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -189,6 +192,7 @@
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="Content\MyContent\EmployeeHome.css" />
     <Content Include="Content\MyContent\Login.css" />
+    <Content Include="Content\MyContent\paginationjs.css" />
     <Content Include="Content\MyContent\Register.css" />
     <Content Include="Content\TrainingDetails.css" />
     <Content Include="Content\TrainingLayout.css" />
@@ -12127,6 +12131,7 @@
     <Content Include="Scripts\MyScripts\EmployeeHomeScript.js" />
     <Content Include="Scripts\MyScripts\loginScript.js" />
     <Content Include="Scripts\MyScripts\ManagerHomeScript.js" />
+    <Content Include="Scripts\MyScripts\pagination.js" />
     <Content Include="Scripts\MyScripts\registerScript.js" />
     <Content Include="Scripts\ServerCallScripts\ServerCall.js" />
     <Content Include="StaticView\LoginWidget.html" />

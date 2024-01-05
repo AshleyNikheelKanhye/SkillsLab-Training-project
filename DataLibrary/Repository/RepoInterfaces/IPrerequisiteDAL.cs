@@ -20,5 +20,6 @@ namespace DataLibrary.Repository.RepoInterfaces
         IEnumerable<IPrerequisite> GetPrerequisitesNotInEmployee(int userID);
         IEnumerable<EmployeeQualificationDetailsViewModel> GetUserPrerequisiteForEnrollment(int enrollmentID);
         IEnumerable<IPrerequisite> GetAllPrerequisites();
+        Task<IEnumerable<EmployeeQualificationDetailsViewModel>> GetEmployeeQualificationsDetails(int userID);
     }
 }

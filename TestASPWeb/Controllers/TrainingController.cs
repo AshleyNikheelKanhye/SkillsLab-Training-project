@@ -6,6 +6,7 @@ using DataLibrary.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.EnterpriseServices;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -95,5 +96,14 @@ namespace TestASPWeb.Controllers
             bool result = await _trainingService.ConfirmAutomaticSelection(trainingId);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+
+        //admin only
+        [HttpGet]
+        public async Task<JsonResult> getUpcomings()
+        {
+            var list = await _trainingService.getUpcomings();
+            return Json(list, JsonRequestBehavior.AllowGet);    
+        }
+
     }
 }

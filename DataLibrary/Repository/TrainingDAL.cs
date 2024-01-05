@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Reflection.Emit;
 using System.Threading.Tasks;
+using System.Web.UI.WebControls;
 
 namespace DataLibrary.Repo
 {
@@ -25,9 +26,10 @@ namespace DataLibrary.Repo
         {
             try
             {
-                List<Training> returnList = new List<Training>(); 
+                List<Training> returnList = new List<Training>();
                 string query = "SELECT TrainingID,TrainingName,Capacity,ClosingDate,TrainingStartDate,t.DepartmentID,d.DepartmentName " +
-                                "FROM Training t INNER JOIN Department d ON t.DepartmentID = d.DepartmentID";
+                                "FROM Training t INNER JOIN Department d ON t.DepartmentID = d.DepartmentID ";
+                                
                 SqlCommand command = new SqlCommand(query,_dbContext.GetConn());
                 SqlDataReader reader = command.ExecuteReader();
                 if (reader.HasRows)
@@ -38,6 +40,27 @@ namespace DataLibrary.Repo
                 return returnList;
 
             }catch (Exception ex) { return null; }
+        }
+
+        public async Task<IEnumerable<ITraining>> getUpcomings()
+        {
+            try
+            {
+                List<Training> returnList = new List<Training>();
+                string selectQuery = "SELECT TrainingID,TrainingName,Capacity,ClosingDate,TrainingStartDate,t.DepartmentID,d.DepartmentName,Duration,Description,IsAutomaticProcessed " +
+                                "FROM Training t INNER JOIN Department d ON t.DepartmentID = d.DepartmentID " +
+                                "WHERE t.ClosingDate > GETDATE() AND t.IsActive =1 " +
+                                "ORDER BY t.ClosingDate ASC;";
+                SqlCommand command = new SqlCommand(selectQuery,_dbContext.GetConn());
+                SqlDataReader reader = await command.ExecuteReaderAsync();
+                if (reader.HasRows)
+                {
+                    returnList = DataBaseHelper.ReturnAllRowsFromDB<Training>(reader);
+                }
+                reader.Close();
+                return returnList;
+            }
+            catch { throw; }
         }
 
         public IEnumerable<ITraining> GetAllElligible(int UserID)
@@ -184,6 +207,10 @@ namespace DataLibrary.Repo
             catch { throw; }
         }
 
+
+
+
+
         public async Task<List<EmployeeApplicationViewModel>> GetListofEmployeeApplication(int trainingID)
         {
             try
@@ -233,7 +260,6 @@ namespace DataLibrary.Repo
                 string updateQueryApprove = "UPDATE Enrollment SET FinalStatus = '"+Status.Approved.ToString()+"' WHERE EnrollmentID=@EnrollmentIDApprove";
                 string updateQueryDisapprove = "UPDATE Enrollment SET FinalStatus = '" + Status.Disapproved.ToString() + "' WHERE EnrollmentID=@EnrollmentIDDisapprove";
 
-
                 //approved Enrollments
 
                 foreach (EmployeeApplicationViewModel application in listAccepted)
@@ -247,7 +273,6 @@ namespace DataLibrary.Repo
                     }
                 }
 
-
                 //disapproved Enrollments
                 foreach (EmployeeApplicationViewModel application in listRejected)
                 {
@@ -259,11 +284,6 @@ namespace DataLibrary.Repo
                         await disapproveCommand.ExecuteNonQueryAsync();
                     }
                 }
-
-                    
-           
-
-
                 return true;
             }
             catch { throw; }
@@ -281,5 +301,7 @@ namespace DataLibrary.Repo
             }
             catch { throw; }
         }
+
+
     }
 }

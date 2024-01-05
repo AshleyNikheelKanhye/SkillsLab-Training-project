@@ -1,4 +1,5 @@
 ﻿using DataLibrary.BusinessLogic.BusinessLogicInterface;
+using DataLibrary.BusinessLogic.Logger;
 using DataLibrary.Entities;
 using DataLibrary.Entities.EntitiesInterface;
 using DataLibrary.Repo;
@@ -15,8 +16,15 @@ namespace DataLibrary.Services
     public class UserService : IUserService
     {
         IUserDAL _userRepo;
-        public UserService(IUserDAL userRepo) { 
+        ILogger _logger;
+        IPrerequisiteDAL _prerequisiteDAL;
+        IEnrollmentDAL _enrollmentDAL;
+        public UserService(IUserDAL userRepo,ILogger logger, IPrerequisiteDAL prerequisiteDAl, IEnrollmentDAL enrollmentDAL)
+        {
             this._userRepo = userRepo;
+            this._logger = logger;
+            this._prerequisiteDAL = prerequisiteDAl;
+            this._enrollmentDAL = enrollmentDAL;
         }
         public void Add(IUser user)
         {
@@ -68,13 +76,49 @@ namespace DataLibrary.Services
         {
             throw new NotImplementedException();
         }
-        public IEnumerable<IUser> GetAll()
+        public async Task<IEnumerable<IUser>> GetAll()
         {
-            throw new NotImplementedException();
+            try
+            {
+                return await _userRepo.GetAll();
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(ex);
+                return null;
+            }
         }
-        public IUser GetById(int userID)
+        public async Task<int> GetTotalNumberOfUserRecords()
         {
-            throw new NotImplementedException();
+            try
+            {
+                return await _userRepo.GetTotalNumberOfUserRecords();
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(ex);
+                return -1;
+            }
+        }
+
+        public async Task<IUser> GetById(int userID)
+        {
+            try
+            {
+                IUser user =  await _userRepo.GetById(userID);
+                if(user != null)
+                {
+                    user.listOfQualifications = await _prerequisiteDAL.GetEmployeeQualificationsDetails(userID);
+                    user.listOfRoles = _userRepo.GetRoles(userID);
+                    user.listOfTrainingEnrolled =  await _enrollmentDAL.GetUserEnrollments(userID);
+                }
+                return user;    
+            }
+            catch(Exception ex)
+            {
+                this._logger.LogError(ex);
+                return null;
+            }
         }
         public void Update(IUser user)
         {

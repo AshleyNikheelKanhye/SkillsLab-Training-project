@@ -98,9 +98,11 @@
     <Compile Include="Entities\EntitiesInterface\IDepartment.cs" />
     <Compile Include="Entities\EntitiesInterface\IEnrollment.cs" />
     <Compile Include="Entities\EntitiesInterface\IPrerequisite.cs" />
+    <Compile Include="Entities\EntitiesInterface\IRole.cs" />
     <Compile Include="Entities\EntitiesInterface\ITraining.cs" />
     <Compile Include="Entities\EntitiesInterface\IUser.cs" />
     <Compile Include="Entities\Prerequisite.cs" />
+    <Compile Include="Entities\Role.cs" />
     <Compile Include="Entities\Training.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="Enum\Status.cs" />

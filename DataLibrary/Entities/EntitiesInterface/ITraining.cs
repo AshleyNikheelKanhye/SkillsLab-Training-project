@@ -17,5 +17,8 @@ namespace DataLibrary.Entities.EntitiesInterface
         string DepartmentName { get; set; }
         bool? IsActive { get; set; }
         bool IsAutomaticProcessed { get; set; }
+        int Duration { get; set; }   
+        string Description { get; set; }
+
     }
 }

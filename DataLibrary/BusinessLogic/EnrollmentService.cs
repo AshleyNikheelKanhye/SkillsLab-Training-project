@@ -183,7 +183,7 @@ namespace DataLibrary.BusinessLogic
                     <title>HTML Email</title>
                 </head>
                 <body>
-                    <p>You are ugly and thats is why I rejected your mail</p>
+                    <p>This is a test mail , please ignore</p>
                 </body>
                 </html>
             ";

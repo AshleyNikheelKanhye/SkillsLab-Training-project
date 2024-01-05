@@ -20,6 +20,8 @@ namespace DataLibrary.BusinessLogic.BusinessLogicInterface
         Task<AutomaticProcessingViewModel> GenerateFinalListOfSelectedEmployees(int trainingID);
         Task<bool> ConfirmAutomaticSelection(int trainingID);
 
+        Task<IEnumerable<ITraining>> getUpcomings();
+
 
     }
 }

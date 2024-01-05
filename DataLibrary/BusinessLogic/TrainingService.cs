@@ -80,6 +80,20 @@ namespace DataLibrary.BusinessLogic
             }
         }
 
+        public async Task<IEnumerable<ITraining>> getUpcomings()
+        {
+            try
+            {
+                return await _trainingRepo.getUpcomings();
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(ex);
+                return null;
+            }
+        }
+
+
         public async Task<IEnumerable<ITraining>> GetUnprocessedTrainings()
         {
             try

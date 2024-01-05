@@ -61,8 +61,31 @@ namespace DataLibrary.Repo
                 reader.Close();
                 return list;
             }
-            catch (Exception ex) { return null; }
+            catch{ throw; }
         }
+
+        public async Task<IEnumerable<EmployeeQualificationDetailsViewModel>> GetEmployeeQualificationsDetails(int userID)
+        {
+            try
+            {
+                IEnumerable<EmployeeQualificationDetailsViewModel> list = new List<EmployeeQualificationDetailsViewModel>();
+                string selectQuery = "SELECT ep.UserID,ep.PrerequisiteID,ep.FileName,p.Details " +
+                    "FROM (EmployeePrerequisites ep INNER JOIN Prerequisite p ON ep.PrerequisiteID = p.PrerequisiteID) " +
+                    "WHERE ep.UserID =@UserID";
+                SqlCommand command = new SqlCommand(selectQuery, _dbContext.GetConn());
+                command.Parameters.AddWithValue("@UserID", userID);
+                SqlDataReader reader = await command.ExecuteReaderAsync();
+                if (reader.HasRows)
+                {
+                    list = DataBaseHelper.ReturnAllRowsFromDB<EmployeeQualificationDetailsViewModel>(reader);
+                }
+                //if reader does not has row, the list return will be empty
+                reader.Close();
+                return list;
+            }
+            catch { throw; }
+        }
+
 
         public IEnumerable<EmployeeQualificationDetailsViewModel> GetUserPrerequisiteForEnrollment(int enrollmentID)
         {
@@ -87,6 +110,9 @@ namespace DataLibrary.Repo
             }
             catch(Exception ex) { return null; }
         }
+
+
+
         public IEnumerable<IPrerequisite> GetPrerequisitesNotInEmployee(int userID)
         {
             try

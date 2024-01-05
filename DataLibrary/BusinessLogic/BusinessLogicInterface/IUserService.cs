@@ -11,8 +11,8 @@ namespace DataLibrary.BusinessLogic.BusinessLogicInterface
 {
     public interface IUserService
     {
-        IEnumerable<IUser> GetAll();
-        IUser GetById(int userID);
+        Task<IEnumerable<IUser>> GetAll();
+        Task<IUser> GetById(int userID);
         void Add(IUser user);
         void Update(IUser user);
         void Delete(int userID);
@@ -21,5 +21,6 @@ namespace DataLibrary.BusinessLogic.BusinessLogicInterface
         bool CheckUserExist(CheckUserExistViewModel checkUserExistViewModel);
         IUser Register(User user);
         List<int> GetRoleList(int userId);
+        Task<int> GetTotalNumberOfUserRecords();
     }
 }

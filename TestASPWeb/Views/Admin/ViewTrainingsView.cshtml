@@ -58,18 +58,20 @@
         $('#mySelect').change(function () {
             var selectionOption = $(this).val();
             $('.content').hide();
-            if (selectionOption == "1") {
+            if (selectionOption == "1") { //all trainings
                 populateTableAllTrainings().then(() => {
                     $('div#allTrainingsDIV').show();
                 });
             }
-            if (selectionOption == "2") {
-                $('div#upcomingTrainingsDIV').show();
+            if (selectionOption == "2") { //upcoming trainings, with a future startingDate //need to color scheme green for those who have been automatic processed 
+                populateTableUpcomingTrainings().then(() => {
+                    $('div#upcomingTrainingsDIV').show();
+                });
             }
-            if (selectionOption == "3") {
+            if (selectionOption == "3") {//trainings with startingDate in the past
                 $('div#completedTrainingsDIV').show();
             }
-            if (selectionOption == "4") {
+            if (selectionOption == "4") {//deleted trainings
                 $('div#deletedTrainingsDIV').show();
             }
         });
@@ -110,8 +112,55 @@
             });
         }
 
+        //populate table upcoming Trainings
+        function populateTableUpcomingTrainings() {
+            return new Promise((resolve, reject) => {
+                var URL = "/Training/getUpcomings";
+                getAJAXCall(URL).then((response) => {
+                    if (response) {
+                        var tableBody = $('#UpcomingTrainingTable tbody'); 
+                        tableBody.empty();
+                        if (response.length === 0) {
+                            $('div#UpcomingTrainingTable').hide();
+                            $('div#upcomingTrainingEmptyListHeader').html("<h2>Seems there are no upcoming trainings</h2>");
+                            resolve();
+                        }
+                        else {
+                            $.each(response, function (index, training) {
+                                var row = '<tr>' +
+                                    '<td>' + training.TrainingName + '</td>' +
+                                    '<td>' + formatDateTime(training.ClosingDate) + '</td>' +
+                                    '<td>' + formatDateTime(training.TrainingStartDate) + '</td>' +
+                                    '<td>' + training.Duration + '</td>' +
+                                    '<td>' + returnStatus(training.IsAutomaticProcessed) + '</td>' + 
+                                    '<td><button id="viewEmployeesBtn" value="' + training.TrainingID + '">View Employees</button></td>' +
+                                    '<td><button id="viewTraningPrerequisiteBtn" value="' + training.TrainingID + '">View Training Prerequisites</button></td>' +
+                                    '<td><button id="moreDetailsBtn" value="' + training.TrainingID + '">More Details</button></td>' +
+                                    '<td><button id="UpdateTrainingBtn" value="' + training.TrainingID + '">Update</button></td>' +
+                                    '<td><button id="DeleteTrainingBtn" value="' + training.TrainingID + '">Delete</button></td>' +
+                                    '</tr>';
+                                tableBody.append(row);
+                            });
+                            $('div#upcomingTrainingEmptyListHeader').empty().hide();
+                            $('div#UpcomingTrainingTableDiv').show();
+                            resolve();
+                        }
+                    }
+                    else {
+                        toastr.error("Error in backend");
+                        reject();
+                    }
+                }).catch((error) => {
+                    console.error(error);
+                    toastr.error('error loading in backend');
+                    reject();
+                });
+            })
+        }
+
+
         //When clicking on view employees btn
-        $('#AllTrainingTable tbody').on("click", "#viewEmployeesBtn", function () {
+        $('.requestsTable tbody').on("click", "#viewEmployeesBtn", function () {
             var row = $(this).closest("tr");
             var selectedTrainingID = $(this).val();
             var selectedTrainingName = row.find("td:eq(0)").text();
@@ -121,7 +170,7 @@
             var serverCall = new ServerCall({ url: "/Enrollment/GetEmployeesAppliedForTraining", parameters: trainingIDObj, callMethod: "POST" });
             serverCall.fetchApiCall().then((response) => {
                 if (response) {
-                    $('#AllTrainingTableDIV').hide();
+                    $('.content').hide();
                     var tableBody = $('#employeeTable tbody');
                     tableBody.empty();
                     if (response.length === 0) {
@@ -153,7 +202,7 @@
         });
 
         //when clicking on view Training Prerequisite
-        $('#AllTrainingTable tbody').on("click", "#viewTraningPrerequisiteBtn", function () {
+        $('.requestsTable tbody').on("click", "#viewTraningPrerequisiteBtn", function () {
             var URL = "/Training/GetPrerequisites";
             var row = $(this).closest("tr");
             var trainingID = $(this).val();
@@ -162,7 +211,7 @@
             var serverCall = new ServerCall({ url: URL, parameters: trainingobj, callMethod: "POST" });
             serverCall.fetchApiCall().then((response) => {
                 if (response) {
-                    $('#AllTrainingTableDIV').hide();
+                    $('.content').hide();
                     $('div#popupTrainingPrerequisiteContentDiv').empty();
                     if (response.result.length === 0) {
                         $('#headerTrainingPrerequisite').html("<h1>Looks like this training does not have any prerequisites</h1>");
@@ -188,13 +237,21 @@
         //close button for popup employees
         $(document).on("click", "button#closePopUpEmployeeBtn", function () {
             $('div#employeesInTrainingPopUp').hide();
-            $('div#AllTrainingTableDIV').fadeIn();
+            var selectedOption = $('#mySelect').val();
+            if (selectedOption == "1") { $('div#allTrainingsDIV').show(); }
+            if (selectedOption == "2") { $('div#upcomingTrainingsDIV').show(); }
+            if (selectedOption == "3") { $('div#completedTrainingsDIV').show(); }
+            if (selectedOption == "4") { $('div#deletedTrainingsDIV').show(); }
         });
 
         //close button for popup prerequisite
         $(document).on("click", "button#closePopupTrainingPrerequisiteBtn", function () {
             $('div#popupViewTrainingPrerequisiteDiv').hide();
-            $('div#AllTrainingTableDIV').fadeIn();
+            var selectedOption = $('#mySelect').val();
+            if (selectedOption == "1") { $('div#allTrainingsDIV').show(); }
+            if (selectedOption == "2") { $('div#upcomingTrainingsDIV').show(); }
+            if (selectedOption == "3") { $('div#completedTrainingsDIV').show(); }
+            if (selectedOption == "4") { $('div#deletedTrainingsDIV').show(); }
         });
 
         function getAJAXCall(URL) {
@@ -221,8 +278,17 @@
                 return 'No date';
             }
         }
+
+        function returnStatus(booleanIsAutomaticProcessed) {
+            if (booleanIsAutomaticProcessed == true) {
+                return 'DONE';
+            } else {
+                return 'PENDING';
+            }
+        }
         //flow
         $('#mySelect').trigger('change'); 
+
     });
 </script>
 
@@ -259,42 +325,34 @@
                 </tbody>
             </table>
         </div>
-        <!--popup view Employees-->
-        <div id="employeesInTrainingPopUp" style="display:none;">
-            <div id="popupHeaderDiv"></div>
-            <div id="employeesTableDiv" style="display:none;">
-                <hr />
-                <table id="employeeTable" border="1" class="requestsTable">
-                    <thead>
-                        <tr>
-                            <th>Employee Name</th>
-                            <th>Employee Email</th>
-                            <th>Date Registered</th>
-                            <th>Manager Status</th>
-                            <th>Final Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-            </div>
-            <div id="closeBtnDiv">
-                <button id="closePopUpEmployeeBtn">Close</button>
-            </div>
-        </div>
 
-
-        <!--popup view training prerequisite-->
-        <div id="popupViewTrainingPrerequisiteDiv" style="display: none;">
-            <div id="headerTrainingPrerequisite"></div>
-            <div id="popupTrainingPrerequisiteContentDiv"></div>
-            <div><button id="closePopupTrainingPrerequisiteBtn">Close</button></div>
-        </div>
     </div>
 
     <!--Upcoming Trainings-->
-    <div id="upcomingTrainingsDIV" class="content" >
-        upcoming trainings
+    <div id="upcomingTrainingsDIV" class="content">
+        <h2>Upcoming Trainings</h2>
+        <div id="upcomingTrainingEmptyListHeader" style="display:none;"></div>
+        <div id="UpcomingTrainingTableDiv" class="TableView" style="display:none;">
+            <table id="UpcomingTrainingTable" border="1" class="requestsTable">
+                <thead>
+                    <tr>
+                        <th>Training Name</th>
+                        <th>Training Registration Deadline</th>
+                        <th>Training Start Date</th>
+                        <th>Training Duration</th>
+                        <th>Automatic Processing</th>
+                        <th>Employees Enrolled</th>
+                        <th>Training Prerequisites</th>
+                        <th>More Details</th>
+                        <th>Update</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+
     </div>
 
     <!--completed Trainings-->
@@ -304,11 +362,42 @@
 
     <!--deleted trainings-->
     <div id="deletedTrainingsDIV" class="content">
-        deleted trainings 
+        deleted trainings
     </div>
 
 
+    <!--popup view Employees-->
+    <div id="employeesInTrainingPopUp" class="content">
+        <div id="popupHeaderDiv"></div>
+        <div id="employeesTableDiv" style="display:none;">
+            <hr />
+            <table id="employeeTable" border="1" class="requestsTable">
+                <thead>
+                    <tr>
+                        <th>Employee Name</th>
+                        <th>Employee Email</th>
+                        <th>Date Registered</th>
+                        <th>Manager Status</th>
+                        <th>Final Status</th>
+                    </tr>
+                </thead>
+                <tbody>
 
+                </tbody>
+            </table>
+        </div>
+        <div id="closeBtnDiv">
+            <button id="closePopUpEmployeeBtn">Close</button>
+        </div>
+    </div>
+
+
+    <!--popup view training prerequisite-->
+    <div id="popupViewTrainingPrerequisiteDiv" class="content">
+        <div id="headerTrainingPrerequisite"></div>
+        <div id="popupTrainingPrerequisiteContentDiv"></div>
+        <div><button id="closePopupTrainingPrerequisiteBtn">Close</button></div>
+    </div>
 
 
 

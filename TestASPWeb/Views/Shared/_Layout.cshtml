@@ -8,7 +8,7 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
 
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+
     <script type="text/javascript" src="~/Scripts/ServerCallScripts/ServerCall.js"></script>
     <title>@ViewBag.Title - Training Management System</title>
 
@@ -19,7 +19,7 @@
     <header>
         <h1>Training Management System</h1>
     </header>
-    @{ 
+    @{
         DataLibrary.Entities.User currentUser = Session["CurrentUser"] as DataLibrary.Entities.User;
         string currentUserRoleString = Session["CurrentRole"] as string;
 
@@ -59,7 +59,7 @@
     </div>
 
 
-    @Scripts.Render("~/bundles/jquery")
+    <!--@@Scripts.Render("~/bundles/jquery")-->
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 </body>

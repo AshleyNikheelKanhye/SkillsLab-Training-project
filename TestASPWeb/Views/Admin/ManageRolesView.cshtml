@@ -4,5 +4,312 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>ManageRolesView</h2>
+<style>
+    .content {
+        display: none;
+        padding: 20px;
+    }
+
+    .TableViewDiv {
+        background-color: #ffffff;
+        padding: 10px;
+        border-radius: 8px;
+        margin: 20px;
+    }
+
+        .TableViewDiv table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+    .requestsTable th, .requestsTable td {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #b2dfdb;
+        border-radius: 5px;
+    }
+
+    .requestsTable th {
+        background-color: #e0f2f1;
+        color: #000000;
+    }
+
+    .requestsTable tbody tr {
+        background-color: #ffffff;
+    }
+
+        .requestsTable tbody tr:nth-child(even) {
+            background-color: #ccffff;
+        }
+
+        .requestsTable tbody tr:nth-child(odd) {
+            background-color: #ffffff;
+        }
+</style>
+
+
+
+
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<!-- Pagination.js script -->
+<!--<script type="text/javascript" src="~/Scripts/MyScripts/pagination.js"></script>
+<link rel="stylesheet" href="~/Content/MyContent/paginationjs.css" />-->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+
+        $.ajax({
+            url: '/Admin/GetAllUsers',
+            method: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                $('div#listOfEmployeesDiv').show();
+                $('#allEmployeesTable').DataTable({
+                    data: data,
+                    columns: [
+                        {
+                            data: null,
+                            render: function (data, type, row) {
+                                return row.FirstName + ' ' + row.LastName;
+                            }
+                        },
+                        { data: 'Email' },
+                        { data: 'PhoneNo' },
+                        { data: 'DepartmentName' },
+                        {
+                            data: 'UserID',
+                            render: function (data, type, row) {
+                                return '<button id="viewEmployeeDetailsBtn" value="'+data+'">More Details</button>';
+                            }
+                        },
+                        {
+                            data: 'UserID',
+                            render: function (data, type, row) {
+                                return '<button id="UpdateEmployeeRoleBtn" value="' + data + '">Update Roles</button>';
+                            }
+                        },
+                    ]
+                })
+            },
+            error: function (error) {
+                console.log('Error: ', error);
+                toastr.error('Error in Loading page');
+            }
+        });
+
+        $('#allEmployeesTable tbody').on("click", "#viewEmployeeDetailsBtn", function () {
+            var URL = "/Admin/GetUserDetails";
+            var row = $(this).closest("tr");
+            var selectedEmployeeName = row.find("td:eq(0)").text();
+            var selectedUserID = $(this).val();
+            var userObj = { UserID: selectedUserID };
+            var serverCall = new ServerCall({ url: URL, parameters: userObj, callMethod: "POST" });
+            serverCall.fetchApiCall().then((response) => {
+                if (response) {
+                    //console.log(response);
+                    $('#listOfEmployeesDiv').hide();
+                    $('#h2headerDetails').html(selectedEmployeeName + " Information");
+
+                    //user details
+                    var UserDetailsHtmlBody = "<h5>" +
+                        "Name : " + response.FirstName + " " + response.LastName + "<br>" +
+                        "Email : " + response.Email + "<br>" +
+                        "NIC : " + response.NIC + "<br>" +
+                        "Phone Number : " + response.PhoneNo + "<br>" +
+                        "Department : " + response.DepartmentName + "<br>" +
+                        "</h5>";
+                    $('#userDetailsDiv').html(UserDetailsHtmlBody);
+
+
+                    //list of roles
+                    var roleTbody = $("#userRolesTable tbody");
+                    roleTbody.empty();
+                    $.each(response.listOfRoles, function (index, role) {
+                        var row = '<tr>' +
+                            '<td>' + role.RoleName + '</td>' +
+                            '</tr>'
+                        roleTbody.append(row);
+                    });
+
+
+                    //list of Qualifications
+                    var qualificationTbody = $("#userQualificationTable tbody");
+                    var qualificationHeader = $("#userQualificationHeaderDiv");
+                    qualificationHeader.empty();
+                    qualificationTbody.empty();
+                    if (response.listOfQualifications.length === 0) {
+                        qualificationHeader.html(selectedEmployeeName + " has no qualification uploaded");
+                        $('#userQualificationTableDiv').hide();
+                    }
+                    else {
+                        qualificationHeader.html(selectedEmployeeName + " Qualifications");
+                        $.each(response.listOfQualifications, function (index, qualification) {
+                            var row = '<tr>' +
+                                '<td>' + qualification.Details + '</td>' +
+                                '<td>' + qualification.FileName + '</td>' +
+                                '<td> <a href="/Employee/DownloadQualification?userID=' + qualification.UserID + '&prerequisiteID=' + qualification.PrerequisiteID + '" target="_blank">Download File </a></td>' +
+                                '</tr>';
+                            qualificationTbody.append(row);
+                        });
+                        qualificationTbody.show();
+                        $('#userQualificationTableDiv').show();
+                    }
+                    
+
+                    //list of enrollments
+                    var enrollmentTbody = $("#userEnrollmentTable tbody");
+                    var enrollmentHeader = $("#userEnrollmentHeaderDiv");
+                    enrollmentHeader.empty();
+                    enrollmentTbody.empty();
+                    if (response.listOfTrainingEnrolled.length === 0) {
+                        enrollmentHeader.html(selectedEmployeeName + " has not enrolled in any training");
+                        $('#userEnrollmentTableDiv').hide();
+                    }
+                    else {
+                        enrollmentHeader.html(selectedEmployeeName + " Enrollments");
+                        $.each(response.listOfTrainingEnrolled, function (index, enrollment) {
+                            var row = '<tr>' +
+                                '<td>' + enrollment.TrainingName + '</td>' +
+                                '<td>' + formatDateTime(enrollment.DateRegistered) + '</td>' +
+                                '<td>' + enrollment.ManagerStatus + '</td>' +
+                                '<td>' + enrollment.FinalStatus + '</td>' +
+                                '</tr>';
+                            enrollmentTbody.append(row);
+                        });
+                        enrollmentTbody.show();
+                        $('#userEnrollmentTableDiv').show();
+                    }
+                    $('#popupViewUserDiv').show();
+                } else {
+                    toastr.error("Error in loading User Details");
+                }
+            }).catch((error) => {
+                console.error("could not load user details");
+                toastr.error('could not load user details');
+            });
+        });
+
+        $(document).on("click", "button#goBackBtn", function () {
+            $("#popupViewUserDiv").hide();
+            $("#listOfEmployeesDiv").show();
+        })
+
+        function formatDateTime(date) {
+            if (date) {
+                var parsedDate = new Date(parseInt(date.substr(6)));
+                return parsedDate.toLocaleDateString() + ' ' + parsedDate.toLocaleTimeString();
+            } else {
+                return 'No date';
+            }
+        }
+
+    });
+</script>
+
+<div id="second-container">
+
+    <!--List of all employees-->
+    <div id="listOfEmployeesDiv" class="content">
+        <h2>List of All Users</h2>
+        <div id="allEmployeesTableDiv" class="TableViewDiv">
+            <table id="allEmployeesTable" border="1" class="requestsTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone No</th>
+                        <th>Department</th>
+                        <th>View More Details</th>
+                        <th>Update Role</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!--popup view more details of user-->
+    <div id="popupViewUserDiv" class="content">
+        <h2 id="h2headerDetails"></h2>
+        <div id="userContentDetailsDiv">
+
+            <!--user Details-->
+            <div id="userDetailsDiv"></div>
+            <hr />
+
+            <!--for displaying the roles the user has -->
+            <div id="userRolesContentDiv">
+                <div id="userRolesTableDiv" class="TableViewDiv">
+                    <table id="userRolesTable" border="1" class="requestsTable">
+                        <thead>
+                            <tr>
+                                <th>Role</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <hr />
+
+            <!--for displaying user Qualification-->
+            <div id="userQualificationContentDiv">
+                <div id="userQualificationHeaderDiv"></div>
+                <div id="userQualificationTableDiv" class="TableViewDiv">
+                    <table id="userQualificationTable" border="1" class="requestsTable">
+                        <thead>
+                            <tr>
+                                <th>Qualification Name</th>
+                                <th>File Name Uploaded</th>
+                                <th>View Qualification</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <hr />
+
+            <!--for displaying user enrollments-->
+            <div id="userEnrollmentsContentDiv">
+                <div id="userEnrollmentHeaderDiv"></div>
+                <div id="userEnrollmentTableDiv" class="TableViewDiv">
+                    <table id="userEnrollmentTable" border="1" class="requestsTable">
+                        <thead>
+                            <tr>
+                                <th>Training Name</th>
+                                <th>Date Registered</th>
+                                <th>Manager Status</th>
+                                <th>Final Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!--Back button div-->
+            <div style="padding:5px">
+                <button id="goBackBtn">Go Back</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
 

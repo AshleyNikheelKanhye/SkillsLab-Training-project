@@ -5,6 +5,7 @@ using DataLibrary.Repository.DataBaseHelper;
 using DataLibrary.Repository.RepoInterfaces;
 using DataLibrary.ViewModels;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -184,6 +185,26 @@ namespace DataLibrary.Repo
             catch(Exception ex) { return null; }
         }
 
+        public async Task<IEnumerable<IEnrollment>> GetUserEnrollments(int userid)
+        {
+            try
+            {
+                List<Enrollment>list = new List<Enrollment>();
+                string selectQuery = "SELECT EnrollmentID,e.TrainingID,DateRegistered,ApprovalDate,FinalStatus,ManagerStatus,t.TrainingName,t.ClosingDate,t.TrainingStartDate,t.Capacity,d.DepartmentName " +
+                                                     "FROM ((Enrollment e INNER JOIN Training t ON e.TrainingID=t.TrainingID) INNER JOIN Department d ON t.DepartmentID = d.DepartmentID) " +
+                                                     "WHERE UserID = @UserID AND e.IsActive = 1 AND t.IsActive = 1";
+                SqlCommand command = new SqlCommand( selectQuery, _dbContext.GetConn());
+                command.Parameters.AddWithValue("@userID", userid);
+                SqlDataReader reader = await command.ExecuteReaderAsync();
+                if(reader.HasRows)
+                {
+                    list = DataBaseHelper.ReturnAllRowsFromDB<Enrollment>(reader);
+                }
+                reader.Close();
+                return list;
+            }
+            catch { throw; }
+        }
     }
 
 

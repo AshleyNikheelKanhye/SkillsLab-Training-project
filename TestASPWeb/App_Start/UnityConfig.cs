@@ -83,6 +83,9 @@ namespace TestASPWeb
             //Logger
             container.RegisterType<ILogger, Logger>(new PerRequestLifetimeManager());
 
+            //role
+            container.RegisterType<IRole, Role>(new PerRequestLifetimeManager());
+
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using DataLibrary.BusinessLogic.BusinessLogicInterface;
+using DataLibrary.BusinessLogic.Logger;
 using DataLibrary.Entities;
 using DataLibrary.Entities.EntitiesInterface;
 using System;
@@ -13,9 +14,11 @@ namespace TestASPWeb.Controllers
     public class EnrollmentController : Controller
     {
         private readonly IEnrollmentService _enrollmentService;
+       
         public EnrollmentController(IEnrollmentService enrollmentService)
         {
             this._enrollmentService = enrollmentService;
+        
         }
 
         public ActionResult Index()
@@ -135,5 +138,9 @@ namespace TestASPWeb.Controllers
             int userID = user.UserID;
             return userID;
         }
+
+
+
+
     }
 }

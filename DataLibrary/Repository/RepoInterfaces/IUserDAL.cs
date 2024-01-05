@@ -11,9 +11,9 @@ namespace DataLibrary.Repository.RepoInterfaces
 {
     public interface IUserDAL
     {
-        IEnumerable<IUser> GetAll();
+        Task<IEnumerable<IUser>> GetAll();
         IEnumerable<ListOfManagersModel> GetAllManagers();
-        IUser GetById(int userID);
+        Task<IUser> GetById(int userID);
         IUser Add(IUser user);
         void Update(IUser user);
         void Delete(int userID);
@@ -22,6 +22,8 @@ namespace DataLibrary.Repository.RepoInterfaces
         List<int> GetRoleList(int userID);
         string GetManagerEmailOfEmployee(int userID);
         string GetFullName(int userID);
+        Task<int> GetTotalNumberOfUserRecords();
+        List<Role> GetRoles(int userID);
 
 
     }

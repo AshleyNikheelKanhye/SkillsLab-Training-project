@@ -10,6 +10,7 @@ namespace DataLibrary.ViewModels
     {
         public int UserID { get; set; }
         public int PrerequisiteID { get; set; }
+        
         public string FileName { get; set; }
         public byte[] FileContent { get; set; }
         public string Details { get; set; }
