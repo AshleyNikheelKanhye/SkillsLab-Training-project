@@ -122,5 +122,13 @@ namespace TestASPWeb.Controllers
             return Json(new { result = updateStatus }, JsonRequestBehavior.AllowGet);
         }
 
+        //admin only
+        [HttpPost]
+        public async Task<JsonResult> Delete(int trainingID)
+        {
+            bool deleteStatus = await _trainingService.Delete(trainingID);
+            return Json(deleteStatus, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

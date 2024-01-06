@@ -49,13 +49,12 @@ namespace DataLibrary.Repo
                 List<Training> returnList = new List<Training>();
                 string selectQuery = @"
                                     SELECT t.TrainingID,t.TrainingName,COUNT(e.UserID) as NumberOfEnrollments,Capacity,ClosingDate,TrainingStartDate,t.DepartmentID,d.DepartmentName,Duration,Description,IsAutomaticProcessed
-                                    FROM 
-                                    ((Training t LEFT JOIN Enrollment e ON t.TrainingID=e.TrainingID) INNER JOIN Department d ON t.DepartmentID=d.DepartmentID)
-                                    WHERE t.IsActive=1 AND e.IsActive=1 AND t.TrainingStartDate>GETDATE()
-                                    GROUP BY 
-                                    t.TrainingID,t.TrainingName,t.Capacity,t.ClosingDate,t.TrainingStartDate,t.DepartmentID,d.DepartmentName,t.Duration,t.Description,t.IsAutomaticProcessed
-                                    ORDER BY t.ClosingDate ASC";
-
+                                     FROM 
+                                     ((Training t LEFT JOIN Enrollment e ON t.TrainingID=e.TrainingID AND e.IsActive=1) inner JOIN Department d ON t.DepartmentID=d.DepartmentID)
+                                     WHERE t.IsActive=1  AND t.TrainingStartDate>GETDATE()
+                                     GROUP BY 
+                                     t.TrainingID,t.TrainingName,t.Capacity,t.ClosingDate,t.TrainingStartDate,t.DepartmentID,d.DepartmentName,t.Duration,t.Description,t.IsAutomaticProcessed
+                                     ORDER BY t.ClosingDate ASC";
                 SqlCommand command = new SqlCommand(selectQuery,_dbContext.GetConn());
                 SqlDataReader reader = await command.ExecuteReaderAsync();
                 if (reader.HasRows)
@@ -125,48 +124,51 @@ namespace DataLibrary.Repo
 
         public async Task<bool> Add(AddTrainingViewModel addTrainingViewModel)
         {
+            SqlTransaction transaction = _dbContext.GetConn().BeginTransaction();
             try
             {
-                string insertQuery = "INSERT INTO Training(TrainingName,Capacity,ClosingDate,TrainingStartDate,DepartmentID) " +
+                int insertedTrainingID = 0;
+                string insertQuery = "INSERT INTO Training(TrainingName,Capacity,ClosingDate,TrainingStartDate,DepartmentID,Description,Duration) " +
                                      "OUTPUT INSERTED.TrainingID "+
-                                     "VALUES (@trainingName,@capacity,@closingDate,@trainingStartDate,@departmentID);";
-
-                SqlCommand command = new SqlCommand(insertQuery, _dbContext.GetConn());
-                command.Parameters.AddWithValue("@trainingName", addTrainingViewModel.TrainingName);
-                command.Parameters.AddWithValue("@capacity", addTrainingViewModel.TrainingCapacity);
-                command.Parameters.AddWithValue("@closingDate", addTrainingViewModel.DeadlineRegistration);
-                command.Parameters.AddWithValue("@trainingStartDate", addTrainingViewModel.StartingDate);
-                command.Parameters.AddWithValue("@departmentID", addTrainingViewModel.Department);
-
-                int insertedTrainingID=-1;
-                using(SqlDataReader reader = await command.ExecuteReaderAsync())
+                                     "VALUES (@trainingName,@capacity,@closingDate,@trainingStartDate,@departmentID,@description,@duration);";
+                using (SqlCommand command = new SqlCommand(insertQuery, _dbContext.GetConn(), transaction))
                 {
-                    if(reader.Read())
+                    command.Parameters.AddWithValue("@trainingName", addTrainingViewModel.TrainingName);
+                    command.Parameters.AddWithValue("@capacity", addTrainingViewModel.TrainingCapacity);
+                    command.Parameters.AddWithValue("@closingDate", addTrainingViewModel.DeadlineRegistration);
+                    command.Parameters.AddWithValue("@trainingStartDate", addTrainingViewModel.StartingDate);
+                    command.Parameters.AddWithValue("@departmentID", addTrainingViewModel.Department);
+                    command.Parameters.AddWithValue("@description", addTrainingViewModel.TrainingDescription);
+                    command.Parameters.AddWithValue("@duration", addTrainingViewModel.TrainingDuration);
+                    using(SqlDataReader reader = await command.ExecuteReaderAsync())
                     {
-                        insertedTrainingID = reader.GetInt32(0);
+                        if(reader.Read())
+                        {
+                            insertedTrainingID = reader.GetInt32(0);
+                        }
                     }
                 }
-                
-                if (insertedTrainingID >0)
+                string insertQueryForTrainingPrerequisite = "INSERT INTO TrainingPrequisite VALUES (@trainingID,@prerequisiteID)";
+                foreach(int prerequisiteID in addTrainingViewModel.PrerequisiteList)
                 {
-                    //now need to update table TrainingPrerequisites
-                    string insertQueryForTrainingPrerequisite = "INSERT INTO TrainingPrequisite VALUES (@trainingID,@prerequisiteID)";
-                    foreach(int prerequisiteID in addTrainingViewModel.PrerequisiteList)
+                    using (SqlCommand command2 = new SqlCommand(insertQueryForTrainingPrerequisite, _dbContext.GetConn(), transaction))
                     {
-                        SqlCommand command2 = new SqlCommand(insertQueryForTrainingPrerequisite, _dbContext.GetConn());
                         command2.Parameters.AddWithValue("@trainingID", insertedTrainingID);
                         command2.Parameters.AddWithValue("@prerequisiteID", prerequisiteID);
                         await command2.ExecuteNonQueryAsync();
                     }
-                    return true;
                 }
-                else
-                {
-                    return false;
-                }
+                transaction.Commit();
+                return true;
             }
-            catch { throw; }
+            catch 
+            {
+                transaction.Rollback();
+                throw; 
+            }
         }
+
+
 
         public async Task<IEnumerable<ITraining>> GetUnprocessedTrainings()
         {
@@ -229,9 +231,19 @@ namespace DataLibrary.Repo
                 return true;
             } catch { throw; }
         }
-
-
-
+        public async Task<bool> Delete(int trainingID)
+        { //soft delete
+            try
+            {
+                string updateQuery = @"UPDATE Training 
+                                        SET IsActive = 0 
+                                        WHERE TrainingID=@trainingID";
+                SqlCommand command = new SqlCommand(updateQuery, _dbContext.GetConn());
+                command.Parameters.AddWithValue("@trainingID", trainingID);
+                await command.ExecuteNonQueryAsync();
+                return true;
+            }catch { throw; }
+        }
 
         public async Task<List<EmployeeApplicationViewModel>> GetListofEmployeeApplication(int trainingID)
         {

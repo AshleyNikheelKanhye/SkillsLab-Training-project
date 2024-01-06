@@ -92,6 +92,18 @@ namespace DataLibrary.BusinessLogic
                 return false;
             }
         }
+        public async Task<bool> Delete(int trainingID)
+        {
+            try
+            {
+                return await _trainingRepo.Delete(trainingID);
+            }
+            catch(Exception ex)
+            {
+                this._logger.LogError(ex);
+                return false;
+            }
+        }
 
         public async Task<IEnumerable<ITraining>> getUpcomings()
         {

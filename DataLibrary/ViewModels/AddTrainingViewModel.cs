@@ -14,5 +14,7 @@ namespace DataLibrary.ViewModels
         public DateTime StartingDate { get; set; }
         public int Department {  get; set; } //department id
         public List<int> PrerequisiteList { get; set; }
+        public int TrainingDuration { get; set; }
+        public string TrainingDescription { get; set; }
     }
 }
