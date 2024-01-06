@@ -105,5 +105,22 @@ namespace TestASPWeb.Controllers
             return Json(list, JsonRequestBehavior.AllowGet);    
         }
 
+        //admin only
+        [HttpPost]
+        public async Task<JsonResult> GetTrainingToUpdateDetails(int trainingID)
+        {
+            var list = await _trainingService.GetTrainingToUpdateDetails(trainingID);
+            return Json(list, JsonRequestBehavior.AllowGet);
+
+        }
+
+        //admin only
+        [HttpPost]
+        public async Task<JsonResult> UpdateTraining(UpdateTrainingViewModel formUpdateResult)
+        {
+            bool updateStatus = await _trainingService.Update(formUpdateResult);
+            return Json(new { result = updateStatus }, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

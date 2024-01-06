@@ -19,8 +19,9 @@ namespace DataLibrary.BusinessLogic.BusinessLogicInterface
         Task<IEnumerable<ITraining>> GetUnprocessedTrainings();
         Task<AutomaticProcessingViewModel> GenerateFinalListOfSelectedEmployees(int trainingID);
         Task<bool> ConfirmAutomaticSelection(int trainingID);
-
         Task<IEnumerable<ITraining>> getUpcomings();
+        Task<ITraining> GetTrainingToUpdateDetails(int trainingID);
+        Task<bool> Update(UpdateTrainingViewModel updateTrainingViewModel);
 
 
     }

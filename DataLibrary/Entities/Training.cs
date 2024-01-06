@@ -21,8 +21,7 @@ namespace DataLibrary.Entities
         public bool? IsActive { get; set; }
         public bool IsAutomaticProcessed { get; set; }  
         public int Duration { get; set; }
-        public string Description { get; set; } 
-
-
+        public string Description { get; set; }
+        public int NumberOfEnrollments {  get; set; }
     }
 }

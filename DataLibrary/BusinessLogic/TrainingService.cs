@@ -80,6 +80,19 @@ namespace DataLibrary.BusinessLogic
             }
         }
 
+        public async Task<bool> Update(UpdateTrainingViewModel updateTrainingViewModel)
+        {
+            try
+            {
+                return await _trainingRepo.Update(updateTrainingViewModel);
+            }
+            catch(Exception ex)
+            {
+                this._logger.LogError(ex);
+                return false;
+            }
+        }
+
         public async Task<IEnumerable<ITraining>> getUpcomings()
         {
             try
@@ -87,6 +100,19 @@ namespace DataLibrary.BusinessLogic
                 return await _trainingRepo.getUpcomings();
             }
             catch (Exception ex)
+            {
+                this._logger.LogError(ex);
+                return null;
+            }
+        }
+
+        public async Task<ITraining> GetTrainingToUpdateDetails(int trainingID)
+        {
+            try
+            {
+                return await _trainingRepo.GetTraining(trainingID);
+            }
+            catch(Exception ex)
             {
                 this._logger.LogError(ex);
                 return null;

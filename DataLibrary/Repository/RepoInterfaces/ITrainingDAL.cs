@@ -24,5 +24,6 @@ namespace DataLibrary.Repository.RepoInterfaces
         Task<bool> UpdateEnrollmentTable(AutomaticProcessingViewModel trainingSelectionResult, SqlTransaction transaction);
         Task<bool> UpdateTrainingTable(int trainingID, SqlTransaction transaction);
         Task<IEnumerable<ITraining>> getUpcomings();
+        Task<bool> Update(UpdateTrainingViewModel updateTrainingModel);
     }
 }

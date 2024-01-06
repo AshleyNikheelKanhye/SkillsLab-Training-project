@@ -19,6 +19,7 @@ namespace DataLibrary.Entities.EntitiesInterface
         bool IsAutomaticProcessed { get; set; }
         int Duration { get; set; }   
         string Description { get; set; }
+        int NumberOfEnrollments { get; set; }
 
     }
 }

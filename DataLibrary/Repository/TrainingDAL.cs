@@ -47,10 +47,15 @@ namespace DataLibrary.Repo
             try
             {
                 List<Training> returnList = new List<Training>();
-                string selectQuery = "SELECT TrainingID,TrainingName,Capacity,ClosingDate,TrainingStartDate,t.DepartmentID,d.DepartmentName,Duration,Description,IsAutomaticProcessed " +
-                                "FROM Training t INNER JOIN Department d ON t.DepartmentID = d.DepartmentID " +
-                                "WHERE t.ClosingDate > GETDATE() AND t.IsActive =1 " +
-                                "ORDER BY t.ClosingDate ASC;";
+                string selectQuery = @"
+                                    SELECT t.TrainingID,t.TrainingName,COUNT(e.UserID) as NumberOfEnrollments,Capacity,ClosingDate,TrainingStartDate,t.DepartmentID,d.DepartmentName,Duration,Description,IsAutomaticProcessed
+                                    FROM 
+                                    ((Training t LEFT JOIN Enrollment e ON t.TrainingID=e.TrainingID) INNER JOIN Department d ON t.DepartmentID=d.DepartmentID)
+                                    WHERE t.IsActive=1 AND e.IsActive=1 AND t.TrainingStartDate>GETDATE()
+                                    GROUP BY 
+                                    t.TrainingID,t.TrainingName,t.Capacity,t.ClosingDate,t.TrainingStartDate,t.DepartmentID,d.DepartmentName,t.Duration,t.Description,t.IsAutomaticProcessed
+                                    ORDER BY t.ClosingDate ASC";
+
                 SqlCommand command = new SqlCommand(selectQuery,_dbContext.GetConn());
                 SqlDataReader reader = await command.ExecuteReaderAsync();
                 if (reader.HasRows)
@@ -94,8 +99,6 @@ namespace DataLibrary.Repo
             }catch { return null; }   
         }
 
-
-
         public IEnumerable<Prerequisite> GetListOfPrerequisites(int trainingID)
         {
             throw new NotImplementedException();
@@ -119,7 +122,6 @@ namespace DataLibrary.Repo
             }
             catch (Exception ex) { throw ex; }
         }
-
 
         public async Task<bool> Add(AddTrainingViewModel addTrainingViewModel)
         {
@@ -191,7 +193,7 @@ namespace DataLibrary.Repo
             try
             {
                 Training trainingReturnModel = new Training();
-                string selectQuery = "SELECT TrainingID,TrainingName,Capacity,ClosingDate,TrainingStartDate,t.DepartmentID,d.DepartmentName " +
+                string selectQuery = "SELECT TrainingID,TrainingName,Capacity,ClosingDate,TrainingStartDate,t.DepartmentID,d.DepartmentName,t.Description,t.Duration " +
                                     "FROM Training t INNER JOIN Department d ON t.DepartmentID = d.DepartmentID " +
                                     "WHERE t.TrainingID = @trainingID";
                 SqlCommand command = new SqlCommand(selectQuery, _dbContext.GetConn());
@@ -207,6 +209,26 @@ namespace DataLibrary.Repo
             catch { throw; }
         }
 
+        public async Task<bool> Update(UpdateTrainingViewModel model)
+        {
+            try
+            {
+                string updateQuery = @"UPDATE Training 
+                                    SET TrainingName = @trainingName , Capacity=@capacity,ClosingDate=@closingDate,
+                                    TrainingStartDate=@startDate,Duration = @duration,Description=@description  
+                                    WHERE TrainingID=@trainingID";
+                SqlCommand command = new SqlCommand(updateQuery, _dbContext.GetConn());
+                command.Parameters.AddWithValue("@trainingName",model.TrainingName);
+                command.Parameters.AddWithValue("@capacity",model.TrainingCapacity);
+                command.Parameters.AddWithValue("@closingDate",model.DeadlineRegistration);
+                command.Parameters.AddWithValue("@startDate",model.StartingDate);
+                command.Parameters.AddWithValue("@duration",model.TrainingDuration);
+                command.Parameters.AddWithValue("@description",model.TrainingDescription);
+                command.Parameters.AddWithValue("@trainingID",model.TrainingId);
+                await command.ExecuteNonQueryAsync();
+                return true;
+            } catch { throw; }
+        }
 
 
 

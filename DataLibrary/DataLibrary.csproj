@@ -131,6 +131,7 @@
     <Compile Include="ViewModels\EnrollmentViewModel.cs" />
     <Compile Include="ViewModels\RegisterEmployeeViewModel.cs" />
     <Compile Include="ViewModels\TrainingPrerequisiteDepartmentViewModel.cs" />
+    <Compile Include="ViewModels\UpdateTrainingViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

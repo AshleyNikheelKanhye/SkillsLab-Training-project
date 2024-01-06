@@ -10,6 +10,32 @@
         padding: 20px;
     }
 
+    #updatePopupDiv {
+        /*display: flex;*/
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        padding: 1px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    #form-div {
+        background-color: #3498db;
+        display: flex;
+        align-content: center;
+        justify-content: center;
+        padding: 10px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        color: #fff;
+        width: 1000px; /* Adjusted width */
+        margin: 0; /* Removed default margin */
+    }
+
     .TableViewDiv {
         background-color: #ffffff;
         padding: 10px;
@@ -54,6 +80,13 @@
 
 <script>
     $(document).ready(function () {
+
+        let form = document.querySelector('form');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            return false;
+        });
+
         //dropdown select options
         $('#mySelect').change(function () {
             var selectionOption = $(this).val();
@@ -129,16 +162,19 @@
                             $.each(response, function (index, training) {
                                 var row = '<tr>' +
                                     '<td>' + training.TrainingName + '</td>' +
+                                    '<td>' + training.NumberOfEnrollments + '</td>' +
+                                    '<td>' + training.Capacity + '</td>' +
                                     '<td>' + formatDateTime(training.ClosingDate) + '</td>' +
                                     '<td>' + formatDateTime(training.TrainingStartDate) + '</td>' +
                                     '<td>' + training.Duration + '</td>' +
-                                    '<td>' + returnStatus(training.IsAutomaticProcessed) + '</td>' + 
-                                    '<td><button id="viewEmployeesBtn" value="' + training.TrainingID + '">View Employees</button></td>' +
-                                    '<td><button id="viewTraningPrerequisiteBtn" value="' + training.TrainingID + '">View Training Prerequisites</button></td>' +
-                                    '<td><button id="moreDetailsBtn" value="' + training.TrainingID + '">More Details</button></td>' +
-                                    '<td><button id="UpdateTrainingBtn" value="' + training.TrainingID + '">Update</button></td>' +
-                                    '<td><button id="DeleteTrainingBtn" value="' + training.TrainingID + '">Delete</button></td>' +
-                                    '</tr>';
+                                    '<td><button id="viewEmployeesBtn" value="' + training.TrainingID + '">Application List</button></td>' +
+                                    '<td><button id="viewTraningPrerequisiteBtn" value="' + training.TrainingID + '">View Prerequisites</button></td>' + 
+                                    '<td>' + returnStatus(training.IsAutomaticProcessed) + '</td>';
+                                if (training.IsAutomaticProcessed == false) {
+                                    row = row + '<td><button id="UpdateTrainingBtn" value="' + training.TrainingID + '">Update</button></td>' +
+                                        '<td><button id="DeleteTrainingBtn" value="' + training.TrainingID + '">Delete</button></td>';       
+                                }
+                                row = row + '</tr>';
                                 tableBody.append(row);
                             });
                             $('div#upcomingTrainingEmptyListHeader').empty().hide();
@@ -234,6 +270,46 @@
         });
 
 
+        //when clicking on Update Training
+        $('.requestsTable tbody').on('click', "#UpdateTrainingBtn", function () {
+            //need to populate form with selected training details
+            var URL = "/Training/GetTrainingToUpdateDetails";
+            var selectedTrainingID = $(this).val();
+            var trainingIDObj = { trainingID: selectedTrainingID };
+            var serverCall = new ServerCall({ url: URL, parameters: trainingIDObj, callMethod: "POST" });
+            serverCall.fetchApiCall().then((response) => {
+                if (response) {
+                    console.log(response);
+                    $('.content').hide();
+                    $('#updatePopupDiv').show();
+
+                    //populate update form
+                    // Set values for each form field
+                    $('#TrainingName').val(response.TrainingName);
+                    $('#TrainingCapacity').val(response.Capacity);
+
+                    // Convert and set date values
+                    document.getElementById('DeadlineRegistration').value = formatUnixTimestampForInput(response.ClosingDate);
+                    document.getElementById('StartingDate').value = formatUnixTimestampForInput(response.TrainingStartDate);
+
+                    $('#TrainingDuration').val(response.Duration);
+                    $('#TrainingDescription').val(response.Description);
+
+                    //put trainingID in update btn
+                    $('#updateBtn').attr("value", selectedTrainingID);
+
+                } else {
+                    toastr.error("Error loading Training Update Page");
+                }
+            });
+        });
+
+        //close button for update training
+        $(document).on("click", "button#cancelUpdateBtn", function () {
+            $('.content').hide();
+            $("div#upcomingTrainingsDIV").show();
+        })
+
         //close button for popup employees
         $(document).on("click", "button#closePopUpEmployeeBtn", function () {
             $('div#employeesInTrainingPopUp').hide();
@@ -286,10 +362,117 @@
                 return 'PENDING';
             }
         }
+        function formatUnixTimestampForInput(date) {
+            if (date) {
+                var parsedDate = new Date(parseInt(date.substr(6)));
+                return parsedDate.toLocaleDateString() + ' ' + parsedDate.toLocaleTimeString();
+            } else {
+                return 'No date';
+            }
+        }
         //flow
         $('#mySelect').trigger('change'); 
 
     });
+
+    function isValidString(str) {
+        var regex = /^[a-zA-Z0-9\s]*$/;
+        return regex.test(str);
+    }
+
+
+    function validateForm() {
+        var trainingName = document.getElementById('TrainingName').value;
+        var trainingCapacity = document.getElementById('TrainingCapacity').value; 
+        var deadlineRegistration = document.getElementById('DeadlineRegistration').value;
+        var startingDate = document.getElementById('StartingDate').value;
+        var trainingDuration = document.getElementById('TrainingDuration').value;
+        var TrainingDescription = document.getElementById('TrainingDescription').value;
+
+
+        // Validate TrainingName
+        if (trainingName.trim() === '') {
+
+            toastr.error("Training Name cannot be empty.", '', { positionClass: 'toast-bottom-right', backgroundColor: '#4CAF50' });
+            return;
+        }
+        // Validate special characters in TrainingName
+        if (!isValidString(trainingName)) {
+
+            toastr.error("Training Name cannot contain special characters.", '', { positionClass: 'toast-bottom-right', backgroundColor: '#4CAF50' });
+            return;
+        }
+
+        // Validate TrainingCapacity
+        if (parseInt(trainingCapacity) <= 0 || isNaN(trainingCapacity)) {
+            toastr.error("Training Capacity should be greater than 0.", '', { positionClass: 'toast-bottom-right', backgroundColor: '#4CAF50' });
+            return;
+        }
+
+        //validate TrainingDuration
+        if (parseInt(trainingDuration) <= 0 || isNaN(trainingDuration)) {
+            toastr.error("Training Capacity should be greater than 0.", '', { positionClass: 'toast-bottom-right', backgroundColor: '#4CAF50' });
+            return;
+        }
+
+        // Validate StartingDate and DeadlineRegistration
+        var startingDateObj = new Date(startingDate);
+        var deadlineRegistrationObj = new Date(deadlineRegistration);
+        if (startingDateObj <= deadlineRegistrationObj) {
+            toastr.error("Starting Date should be greater than Deadline Registration.", '', { positionClass: 'toast-bottom-right', backgroundColor: '#4CAF50' });
+            return;
+        }
+
+        submitFormData();
+    }
+
+    function submitFormData() {
+        var form = document.getElementById('sampleForm');
+        var formData = new FormData(form);
+        var formDataJson = {};
+        formData.forEach((value, key) => {
+            if (formDataJson[key] !== undefined) {
+                if (Array.isArray(formDataJson[key])) {
+                    formDataJson[key].push(value);
+                } else {
+                    formDataJson[key] = [formDataJson[key], value];
+                }
+            } else {
+                formDataJson[key] = value;
+            }
+        });
+
+        //add trainingID to formdataJson
+        var selectedTrainingID = document.getElementById('updateBtn').value;
+        formDataJson['TrainingID'] = selectedTrainingID;
+
+        //send formdataJson to training Controller
+        var serverCall = new ServerCall({ url: "/Training/UpdateTraining", parameters: formDataJson, callMethod: "POST" });
+        serverCall.fetchApiCall().then((response) => {
+            if (response.result == true) {
+                //swal success;
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Training Updated',
+                    text: 'press OK to continue',
+                    allowOutsideClick: false,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location = "/Admin/ViewTrainingsView";
+                    }
+                });
+            } else {
+                toastr.error("could not insert New Training");
+            }
+        }).catch(error => {
+            console.error("error inserting new training");
+            toastr.error('could not insert New training');
+        });
+
+    }
+
+
+
 </script>
 
 <!--rendered body-->
@@ -337,13 +520,14 @@
                 <thead>
                     <tr>
                         <th>Training Name</th>
-                        <th>Training Registration Deadline</th>
-                        <th>Training Start Date</th>
-                        <th>Training Duration</th>
+                        <th>Number of applications</th>
+                        <th>Number of Seats Available</th>
+                        <th>Registration Deadline</th>
+                        <th>Start Date</th>
+                        <th>Training Duration(days)</th>
+                        <th>Application List</th>
+                        <th>Prerequisites</th>
                         <th>Automatic Processing</th>
-                        <th>Employees Enrolled</th>
-                        <th>Training Prerequisites</th>
-                        <th>More Details</th>
                         <th>Update</th>
                         <th>Delete</th>
                     </tr>
@@ -352,7 +536,6 @@
                 </tbody>
             </table>
         </div>
-
     </div>
 
     <!--completed Trainings-->
@@ -399,7 +582,42 @@
         <div><button id="closePopupTrainingPrerequisiteBtn">Close</button></div>
     </div>
 
+    <!--Update training popup view-->
+    <div id="updatePopupDiv" class="content">
+        <div id="form-div">
+            <form id="sampleForm">
+                <h2>Update Training</h2>
 
+                <label for="TrainingName">Training Name:</label>
+                <input type="text" id="TrainingName" name="TrainingName" required>
+                <br /> <br />
+
+                <label for="TrainingCapacity">Training Capacity:</label>
+                <input type="number" id="TrainingCapacity" name="TrainingCapacity" required>
+                <br />
+
+                <label for="DeadlineRegistration">Deadline Registration:</label>
+                <input type="datetime-local" id="DeadlineRegistration" name="DeadlineRegistration" required>
+                <br /><br />
+
+                <label for="StartingDate">Starting Date:</label>
+                <input type="datetime-local" id="StartingDate" name="StartingDate" required>
+                <br /><br />
+
+                <label for="TrainingDuration">Training Duration(Days)</label>
+                <input type="number" id="TrainingDuration" name="TrainingDuration" required />
+                <br /><br />
+
+                <label for="TrainingDescription">Training Description</label>
+                <textarea id="TrainingDescription" name="TrainingDescription" rows="4" cols="50"></textarea>
+                <br />
+                <br />
+
+                <button id="cancelUpdateBtn">Cancel</button>
+                <button type="submit" id="updateBtn" onclick="validateForm()">Update Training</button>
+            </form>
+        </div>
+    </div>
 
 
 
