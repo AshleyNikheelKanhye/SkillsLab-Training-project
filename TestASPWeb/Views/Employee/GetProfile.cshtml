@@ -17,6 +17,9 @@ Here is your profile @currentUser.FirstName
 FETCH FROM DATABASE TO GET THE Profile Details
 <script>
     $(document).ready(function () {
+        $('nav .nav-container a').removeClass('active');
+        $('#profile').addClass('active');
+
         $('button#testbtn').click(function () {
             var testTrainingID = 1;
             var trainingObj = { trainingID: testTrainingID };

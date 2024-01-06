@@ -34,7 +34,8 @@ nav {
         border-radius: 22px
     }
 
-        nav a:hover {
+        nav a:hover,
+        nav a.active {
             transition: 0.25s;
             background: rgb(56,130,209);
             color: #fff;

@@ -4,12 +4,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- First, include jQuery -->
+    <!--include jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
-
-
     <script type="text/javascript" src="~/Scripts/ServerCallScripts/ServerCall.js"></script>
+    <script type="text/javascript" src="~/Scripts/MyScripts/NavbarScript.js"></script>
     <title>@ViewBag.Title - Training Management System</title>
 
     @Styles.Render("~/Content/css")
@@ -30,11 +28,11 @@
             <a href="#">Welcome @currentUser.FirstName </a>
             @if (currentUserRoleString == "Employee")
             {
-                <a href="@Url.Action("EmployeeView", "Employee")">Home</a>
-                <a href="@Url.Action("GetProfile", "Employee")">Profile</a>
-                <a href="@Url.Action("GetTrainingView", "Employee")">Training</a>
-                <a href="@Url.Action("QualificationsView", "Employee")">My Qualifications</a>
-                <a href="@Url.Action("Logout", "User")">Logout</a>
+                <a id="home" href="@Url.Action("EmployeeView", "Employee")">Home</a>
+                <a id="profile" href="@Url.Action("GetProfile", "Employee")">Profile</a>
+                <a id="Training" href="@Url.Action("GetTrainingView", "Employee")">Training</a>
+                <a id="Qualifications" href="@Url.Action("QualificationsView", "Employee")">My Qualifications</a>
+                <a id="Logout" href="@Url.Action("Logout", "User")">Logout</a>
             }
             else if (currentUserRoleString == "Manager")
             {
@@ -50,16 +48,16 @@
                 <a href="@Url.Action("AutomaticProcessingView","Admin")">Automatic Processing</a>
                 <a href="@Url.Action("ManageRolesView","Admin")">Manage Roles</a>
             }
-
+            
         </div>
     </nav>
-
+   
     <div>
         @RenderBody()
     </div>
 
 
-    <!--@@Scripts.Render("~/bundles/jquery")-->
+
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 </body>

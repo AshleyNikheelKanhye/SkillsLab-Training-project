@@ -23,5 +23,8 @@ namespace DataLibrary.Entities
         public string FinalStatus { get; set; }
         public string ManagerStatus { get; set; }
         public bool ?IsActive { get; set; }
+        public int Duration { get; set; }
+        public string Description { get; set; }
+        public bool IsAutomaticProcessed { get; set; }
     }
 }

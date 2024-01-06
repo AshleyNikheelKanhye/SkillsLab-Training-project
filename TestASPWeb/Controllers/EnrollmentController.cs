@@ -132,6 +132,8 @@ namespace TestASPWeb.Controllers
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 
+
+
         public int GetUserID()
         {
             IUser user = this.Session["CurrentUser"] as User;

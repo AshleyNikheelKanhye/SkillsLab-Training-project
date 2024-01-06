@@ -18,6 +18,10 @@ namespace DataLibrary.Entities.EntitiesInterface
         string FinalStatus { get; set; }
         string ManagerStatus { get; set; }
         bool ?IsActive { get; set; } 
+        int Duration { get; set; }
+        string Description { get; set; }
+        bool IsAutomaticProcessed { get; set; }
+
 
     }
 }

@@ -12131,6 +12131,7 @@
     <Content Include="Scripts\MyScripts\EmployeeHomeScript.js" />
     <Content Include="Scripts\MyScripts\loginScript.js" />
     <Content Include="Scripts\MyScripts\ManagerHomeScript.js" />
+    <Content Include="Scripts\MyScripts\NavbarScript.js" />
     <Content Include="Scripts\MyScripts\pagination.js" />
     <Content Include="Scripts\MyScripts\registerScript.js" />
     <Content Include="Scripts\ServerCallScripts\ServerCall.js" />

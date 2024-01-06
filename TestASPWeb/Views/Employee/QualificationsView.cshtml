@@ -14,45 +14,71 @@
 <style>
     body {
         font-family: Arial, sans-serif;
-        background-color: #f0f8ff; /* Light blue background */
+        background-image: url("../../Images/background.jpg");
+        background-repeat:no-repeat;
+        background-attachment:fixed;
+        background-size:100% 100%;
         margin: 0;
         padding: 0;
     }
+    
+    #second-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 50px;
+    }
 
-    #table-container {
+    .content {
+        display: none;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius:15px;
+    }
+
+    .TableViewDiv {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 8px;
         margin: 20px;
     }
 
-    table {
-        border-collapse: collapse;
-        width: 100%;
-        background-color: #ffffff; /* White background */
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Light shadow for the table */
-    }
+        .TableViewDiv table {
+            border-collapse: collapse;
+            border-radius: 8px;
+            width: 100%;
+        }
 
-    th, td {
-        border: 1px solid #dddddd;
+    .requestsTable th, .requestsTable td {
+        padding: 10px;
         text-align: left;
-        padding: 12px;
+        border: 1px solid #b2dfdb;
+        border-radius: 5px;
     }
 
-    th {
-        background-color: #87CEEB; /* Light blue header */
-        color: #ffffff; /* White text for header */
+    .requestsTable th {
+        background-color: #e0f2f1;
+        color: #000000;
     }
 
-    tr:nth-child(even) {
-        background-color: #f2f2f2; /* Light gray background for even rows */
+    .requestsTable tbody tr {
+        background-color: #ffffff;
     }
 
-    tr:hover {
-        background-color: #e0f7fa; /* Light blue background on hover */
-    }
+        .requestsTable tbody tr:nth-child(even) {
+            background-color: #ccffff;
+        }
+
+        .requestsTable tbody tr:nth-child(odd) {
+            background-color: #ffffff;
+        }
 </style>
 
 
 <script>
     $(document).ready(function () {
+        $('nav .nav-container a').removeClass('active');
+        $('#Training').addClass('active');
 
         function getQualifications() {
             var URL = "/Employee/GetEmployeeQualifications"; //TODO : move that to Prerequisite Controller
@@ -67,23 +93,21 @@
 
                     $.each(results, function (index, qualification) {
                         var row = '<tr>' +
-                            '<td>' + qualification.PrerequisiteID + '</td>' +
                             '<td>' + qualification.Details + '</td>' +
                             '<td>' + qualification.FileName + '</td>' +
                             '<td> <a href="/Employee/DownloadQualification?userID='+userID+'&prerequisiteID='+qualification.PrerequisiteID+'" target="_blank">Download File </a></td>'
                             +'</tr>';
                         table.append(row);
                     });
-                    $('div#viewQualifications').fadeIn(1000);
+                    $('div#viewQualifications').show();
                 }
                 else {
-                    $('div#noQualifications').fadeIn(1000);
+                    $('div#noQualifications').show();
                 }
             });
         }
 
         function loadAddQualifications() {
-            //populate table
             const userID = @currentUser.UserID;
             var URL = "/Prerequisite/GetPrerequisitesNotInEmployee?userID=" + userID;
             var serverCall = new ServerCall({ url: URL, callMethod: "GET" });
@@ -96,7 +120,7 @@
                         option.textContent = qualification.Details;
                         qualificationsDropdown.appendChild(option);
                     });
-                    $('div#AddQualification').fadeIn(1000);
+                    $('div#AddQualification').show();
                 }
                 if (response.error) {
                     toastr.error("could not load list of Qualifications");
@@ -109,8 +133,7 @@
         }
 
         $('button#btnAddQualification').click(function () {
-            $('div#noQualifications').fadeOut();
-            $('div#viewQualifications').fadeOut();
+            $('.content').hide();
             loadAddQualifications();
         });
 
@@ -152,12 +175,10 @@
                 });
             }
             else {
-                alert('please upload your pdf file');
+                toastr.error("please upload your pdf file");
             }
         });
 
-
-        //flow
         getQualifications();
     });
 
@@ -167,46 +188,59 @@
 
 <!--Rendered body-->
 <div id="second-container">
+
+
     <!--No qualifications-->
-    <div id="noQualifications" style="display: none;">
-        Oops, seems You do not have any qualifications
+    <div id="noQualifications" class="content">
+        <div><h2>Oops, seems You do not have any qualifications</h2></div>
+        <br />
+        <br />
         <button id="btnAddQualification">Add New Qualification</button>
     </div>
 
 
 
     <!--Add qualifications-->
-    <div id="AddQualification" style="display: none;">
-        Select your qualification and then upload the file.
-        <!--Add select list and option to upload file here -->
-        <div class="dropdown">
+    <div id="AddQualification" class="content">
+        <h2>Select your qualification and then upload the file.</h2>
+
+        <div class="dropdown" style="padding:10px;">
             <select id="listOfQualifications">
                 <option value="" disabled selected>Select an option</option>
             </select>
         </div>
 
-        <form id="uploadForm" enctype="multipart/form-data">
-            <input type="file" id="fileInput" name="fileInput" accept=".pdf">
-            <button type="button" id="uploadbtn">Upload</button>
-        </form>
+        <div id="uploadForm">
+            <form id="uploadForm" enctype="multipart/form-data">
+                <input type="file" id="fileInput" name="fileInput" accept=".pdf">
+                <br />
+                <br />
+                <button type="button" id="uploadbtn">Upload</button>
+                <button id="cancelBtn">Cancel</button>
+            </form>
+        </div>
     </div>
 
 
     <!--view qualifications-->
-    <div id="viewQualifications" style="display: none;">
-        <table id="myQualificationTable">
-            <thead>
-                <tr>
-                    <th>Qualification ID</th>
-                    <th>Qualification Name</th>
-                    <th>File Name Uploaded</th>
-                    <th>Download</th>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
-        <button id="btnAddQualification">Add New Qualification</button>
+    <div id="viewQualifications" class="content">
+        <h2>Your Qualifications Uploaded</h2>
+        <div id="qualificationTableDiv" class="TableViewDiv">
+            <table id="myQualificationTable" border="1" class="requestsTable">
+                <thead>
+                    <tr>
+                        <th>Qualification Name</th>
+                        <th>File Name Uploaded</th>
+                        <th>Download</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <div style="padding:20px">
+             <button id="btnAddQualification">Add New Qualification</button>
+        </div>
     </div>
 </div>
 

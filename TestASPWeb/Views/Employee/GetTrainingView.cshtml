@@ -6,6 +6,16 @@
 }
 
 <style>
+    body {
+        font-family: Arial, sans-serif;
+        background-image: url("../../Images/background.jpg");
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: 100% 100%;
+        margin: 0;
+        padding: 0;
+    }
+
     .card {
         border: 1px solid #3498db;
         padding: 10px;
@@ -14,6 +24,12 @@
         display: inline-block;
     }
 
+    #second-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 50px;
+    }
 
     .navbar {
         background-color: #3498db; /* Blue color for the navbar-like div */
@@ -26,8 +42,10 @@
     }
 
     .content {
-        display: none; /* Hide all content divs by default */
+        display: none;
         padding: 20px;
+        background-color: #ffffff;
+        border-radius: 15px;
     }
 
     .myTrainings:checked ~ #myTrainingsContent,
@@ -36,7 +54,7 @@
         display: block; /* Show the corresponding content div when the radio button is checked */
     }
 
-    label {
+    label.navLabel {
         background-color: #2980b9; /* Dark blue color for unselected labels */
         padding: 10px;
         border-radius: 4px;
@@ -86,27 +104,27 @@
             width: 100%;
         }
 
-    .classTrainingTable th, .classTrainingTable td {
+    .requestsTable th, .requestsTable td {
         padding: 10px;
         text-align: left;
         border: 1px solid #b2dfdb;
         border-radius: 5px;
     }
 
-    .classTrainingTable th {
+    .requestsTable th {
         background-color: #e0f2f1;
         color: #000000;
     }
 
-    .classTrainingTable tbody tr {
+    .requestsTable tbody tr {
         background-color: #ffffff;
     }
 
-        .classTrainingTable tbody tr:nth-child(even) {
+        .requestsTable tbody tr:nth-child(even) {
             background-color: #ccffff;
         }
 
-        .classTrainingTable tbody tr:nth-child(odd) {
+        .requestsTable tbody tr:nth-child(odd) {
             background-color: #ffffff;
         }
 
@@ -143,10 +161,16 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
 
 
 <script>
     $(document).ready(function () {
+        $('nav .nav-container a').removeClass('active');
+        $('#Training').addClass('active');
+        
+
 
         $('#myTrainings').change(function () {
             $('.content').hide();
@@ -172,26 +196,26 @@
         //dropdown for MyTrainings
         $('#mySelect').change(function () {
             var selectedOption = $(this).val();
-            $('div#selectContentDiv').empty().hide();
-            $('div#headerSelectDiv').empty();
+            $('div#EmptyListHeaderdiv').empty().hide();
+            $('div#selectContentDiv').hide();
             var URL = "";
             if (selectedOption == "1") {
                 URL = "/Enrollment/GetFinalApprovedTrainings";
-                $('div#headerSelectDiv').append('Registered Trainings');
+                $('div#headerSelectDiv').html('<h2>Registered Trainings</h2>');
             }
             if (selectedOption == "2") {
                 URL = "/Enrollment/GetManagerApprovedTrainings";
-                $('div#headerSelectDiv').append('Trainings Approved by Manager');
+                $('div#headerSelectDiv').html('<h2>Trainings Approved by Manager</h2>');
             }
             if (selectedOption == "3") {
                 URL = "/Enrollment/GetPendingTrainings";
-                $('div#headerSelectDiv').append('Trainings pending to be Approved by Manager');
+                $('div#headerSelectDiv').html('<h2>Trainings pending to be Approved by Manager</h2>');
             }
             if (selectedOption == "4") {
                 URL = "/Enrollment/GetDeclinedTrainings"; // TODO : need to use another method to deals with getDeclinedTrainints, having ambiguity between finalStatus disapproved when managerStatus==approved.
-                $('div#headerSelectDiv').append('Trainings Declined by Manager or Automatic selection');
+                $('div#headerSelectDiv').html('<h2>Trainings Declined by Manager or Automatic selection</h2>');
             }
-            populateDivCards(URL).then(() => {
+            populateMyTrainingDiv(URL).then(() => {
                 $('div#selectContentDiv').show();
             });
 
@@ -225,7 +249,7 @@
             });
         }
 
-        //function to populate Table Trainings ellible to apply
+        //function to populate Table Trainings ellible to apply (this function name is not correct change the function name)
         function populateTableMyTrainings() {
             return new Promise((resolve, reject) => {
                 var URL = "/Training/GetAllElligilbe";
@@ -266,35 +290,45 @@
 
 
         //function to populate MyTrainings card divs
-        function populateDivCards(URL) {
+        function populateMyTrainingDiv(URL) {
             return new Promise((resolve, reject) => {
                 getAJAXCall(URL).then((response) => {
                     if (response) {
-                        //populate div cards from response data
-                        $("div#selectContentDiv").empty();
                         if (response.length === 0) {
-                            $("div#selectContentDiv").html('<h2>You do not have any applied Trainings for this option</h2>');
+                            $("div#EmptyListHeaderdiv").html('<h4>No records were found</h4>');
+                            $('#myTrainingTableDiv').hide();
+                            $("div#EmptyListHeaderdiv").show();
                             resolve();
                         }
                         else {
-                            $.each(response, function (index, enrollment) {
-                                var card = $('<div class="card">');
-                                card.append('<p> Training Name : ' + enrollment.TrainingName + '</p>');
-                                card.append('<p> Date Registered : ' + formatDateTime(enrollment.DateRegistered) + '</p>');
-                                if (enrollment.ApprovalDate !== null) {
-                                    card.append('<p> Approval date : ' + enrollment.ApprovalDate + '</p>');
-                                    //later add button to click to expand to see further details about training starting date.
-                                }
-                                card.append('<p> Training Deadline Registration Date : ' + formatDateTime(enrollment.ClosingDate) + '</p>');
-                                card.append('<p> Training Start Date : ' + formatDateTime(enrollment.TrainingStartDate) + '</p>');
-                                card.append('<p> Training Capacity : ' + enrollment.Capacity + '</p>');
-                                card.append('<p> Training Department Favoured : ' + enrollment.DepartmentName + '</p>');
-                                card.append('<p> Manager Approval Status : ' + enrollment.ManagerStatus + '</p>');
-                                card.append('<p> Final Registration Status : ' + enrollment.FinalStatus + '</p>');
-                                card.append('</div>');
-
-                                $("div#selectContentDiv").append(card);
-                            });
+                            $('#EmptyListHeaderdiv').html("").hide();
+                            if ($.fn.DataTable.isDataTable('#myTrainingTable')) {
+                                // DataTable is already initialized, destroy it
+                                $('#myTrainingTable').DataTable().clear().destroy();
+                            }
+                            
+                             $('#myTrainingTable').DataTable({
+                                data: response,
+                                columns: [
+                                    { data: 'TrainingName' },
+                                    {
+                                        data: 'TrainingStartDate',
+                                        render: function (data, type, row) {
+                                            return formatDateTime(data);
+                                        }
+                                    },
+                                    { data: 'Duration' },
+                                    { data: 'ManagerStatus' },
+                                    { data: 'FinalStatus' },
+                                    {
+                                        data: 'EnrollmentID',
+                                        render: function (data, type, row) {
+                                            return '<button id="viewEnrollmentBtn" value="' + data + '">View Enrollment</button>';
+                                        }
+                                    },
+                                ]
+                             });
+                            $('#myTrainingTableDiv').show();
                             resolve();
                         }
                     }
@@ -454,7 +488,7 @@
 
 
         //flow
-        $('#mySelect').trigger('change'); //for display my trainings
+        $('#mySelect').trigger('change');
 
     });
 
@@ -462,22 +496,24 @@
 
 
 
+<!--Mini navbar-->
+<div class="navbar">
+    <input type="radio" id="myTrainings" name="navbarRadio" class="myTrainings" checked>
+    <label class="navLabel" for="myTrainings">My Trainings</label>
+
+    <input type="radio" id="trainingsAvailable" name="navbarRadio" class="trainingsAvailable">
+    <label class="navLabel" for="trainingsAvailable">Trainings Available</label>
+
+    <input type="radio" id="allTrainings" name="navbarRadio" class="allTrainings">
+    <label class="navLabel" for="allTrainings">All Trainings</label>
+</div>
+
+
 <!-- rendered Body -->
 <div id="second-container">
-    <!--Mini navbar-->
-    <div class="navbar">
-        <input type="radio" id="myTrainings" name="navbarRadio" class="myTrainings" checked>
-        <label for="myTrainings">My Trainings</label>
-
-        <input type="radio" id="trainingsAvailable" name="navbarRadio" class="trainingsAvailable">
-        <label for="trainingsAvailable">Trainings Available</label>
-
-        <input type="radio" id="allTrainings" name="navbarRadio" class="allTrainings">
-        <label for="allTrainings">All Trainings</label>
-    </div>
 
     <!--My trainings-->
-    <div id="myTrainingsContent" class="content" style="display: block;">
+    <div id="myTrainingsContent" class="content dropdown" style="display: block;">
         <div style="text-align: right;">
             <label for="mySelect" style="background-color:white;">Select an option:</label>
             <select id="mySelect" class="custom-select" style="display: inline-block; margin-left:10px; ">
@@ -487,11 +523,27 @@
                 <option value="4">Declined Training Requests</option>
             </select>
         </div>
-        <div id="headerSelectDiv">
-
-        </div>
+        <br />
+        <div id="headerSelectDiv"></div>
+        <hr />
         <div id="selectContentDiv">
-
+            <div id="EmptyListHeaderdiv" style="display:none;"></div>
+            <div id="myTrainingTableDiv" class="TableViewsDiv">
+                <table id="myTrainingTable" border="1" class="requestsTable">
+                    <thead>
+                        <tr>
+                            <th>Training Name</th>
+                            <th>Training Start Date</th>
+                            <th>Training Duration(days)</th>
+                            <th>Manager Status</th>
+                            <th>Final Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -500,8 +552,9 @@
         <!-- Content for Trainings Available -->
         <div id="NoAvailableTrainingsForYou" style="display: none;"></div>
         <div id="tableTrainingsAvailable" class="TableViewsDiv">
-            <p>You are elligible to apply for these trainings as you have all the qualifications required</p>
-            <table id="availableTraining" border="1" class="classTrainingTable">
+            <h2>You are elligible to apply for these trainings as you have all the qualifications required</h2>
+            <hr />
+            <table id="availableTraining" border="1" class="requestsTable">
                 <thead>
                     <tr>
                         <th>Training Name</th>
@@ -513,7 +566,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Table body will be populated dynamically -->
                 </tbody>
             </table>
         </div>
@@ -532,7 +584,7 @@
     <!--All trainings-->
     <div id="allTrainingsContent" class="content">
         <div id="divAllTrainingTable" class="TableViewsDiv">
-            <table id="trainingTable" border="1" class="classTrainingTable">
+            <table id="trainingTable" border="1" class="requestsTable">
                 <thead>
                     <tr>
                         <th>Training Name</th>
