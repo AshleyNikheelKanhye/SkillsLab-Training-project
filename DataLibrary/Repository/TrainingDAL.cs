@@ -27,8 +27,8 @@ namespace DataLibrary.Repo
             try
             {
                 List<Training> returnList = new List<Training>();
-                string query = "SELECT TrainingID,TrainingName,Capacity,ClosingDate,TrainingStartDate,t.DepartmentID,d.DepartmentName " +
-                                "FROM Training t INNER JOIN Department d ON t.DepartmentID = d.DepartmentID ";
+                string query = "SELECT TrainingID,TrainingName,Capacity,ClosingDate,TrainingStartDate,t.DepartmentID,d.DepartmentName,t.IsAutomaticProcessed,t.Duration " +
+                                "FROM Training t INNER JOIN Department d ON t.DepartmentID = d.DepartmentID  ORDER BY ClosingDate";
                                 
                 SqlCommand command = new SqlCommand(query,_dbContext.GetConn());
                 SqlDataReader reader = command.ExecuteReader();
@@ -72,7 +72,7 @@ namespace DataLibrary.Repo
             try
             { 
                 List<Training> returnList = new List<Training>();
-                string query = "SELECT t.TrainingID,t.TrainingName,t.Capacity,t.ClosingDate,t.TrainingStartDate,t.DepartmentID,d.DepartmentName " +
+                string query = "SELECT t.TrainingID,t.TrainingName,t.Capacity,t.ClosingDate,t.TrainingStartDate,t.DepartmentID,d.DepartmentName,t.Duration,t.Description " +
                                 "FROM Training t INNER JOIN Department d ON t.DepartmentID = d.DepartmentID " +
                                 "WHERE t.IsActive=1 AND t.ClosingDate>GETDATE() AND t.TrainingID IN" +
                                                                                 " ( SELECT tp.TrainingID " +

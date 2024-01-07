@@ -28,7 +28,7 @@ namespace TestASPWeb.Controllers
         {
             return View();
         }
-        public ActionResult ManageRolesView()
+        public ActionResult AllUsersView()
         {
             return View();
         }

@@ -12175,7 +12175,7 @@
     <Content Include="Views\Admin\ViewTrainingsView.cshtml" />
     <Content Include="Views\Admin\ManageTrainingsView.cshtml" />
     <Content Include="Views\Admin\AutomaticProcessingView.cshtml" />
-    <Content Include="Views\Admin\ManageRolesView.cshtml" />
+    <Content Include="Views\Admin\AllUsersView.cshtml" />
     <Content Include="Views\Admin\AddNewTrainingView.cshtml" />
   </ItemGroup>
   <ItemGroup>

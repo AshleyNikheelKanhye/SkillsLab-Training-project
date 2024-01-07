@@ -5,10 +5,30 @@
 }
 
 <style>
-    .content {
-        display: none; /* Hide all content divs by default */
-        padding: 20px;
+    body {
+        font-family: Arial, sans-serif;
+        background-image: url("../../Images/background.jpg");
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: 100% 100%;
+        margin: 0;
+        padding: 0;
     }
+
+    #second-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 50px;
+    }
+
+    .content {
+        display: none;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 15px;
+    }
+
     .TableViewDiv {
         background-color: #ffffff;
         padding: 10px;
@@ -79,6 +99,10 @@
 
 <script>
     $(document).ready(function () {
+        $('nav .nav-container a').removeClass('active');
+        $('#adminAutomaticProcess').addClass('active');
+
+
         //function to populate table trainings
         function populateTableTrainings() {
             return new Promise((resolve, reject) => {
@@ -151,8 +175,8 @@
                     }
                     else {
                         //edit header accordingly
-                        $('#subpopupHeader').html("<h2>Showing List of Selected and Accepted Employee Application for Training : " + selectedTrainingName + "</h2>")
-                        $('#subpopupHeader').append("<h3>Training Number of seats : " + selectedTrainingNumberOfSeats + " , Number of applications selected : " + listOfAccepted.length + "</h3>");
+                        $('#subpopupHeader').html("<h2>List of Selected and Rejected Employees for " + selectedTrainingName + "</h2> <hr />");
+                        $('#subpopupHeader').append("<h4>Training Number of seats : " + selectedTrainingNumberOfSeats + " , Number of applications selected : " + listOfAccepted.length + "</h4>");
 
                         //populate acceptedTable
                         $.each(listOfAccepted, function (index, application) {
@@ -271,9 +295,9 @@
 
     <!--table of trainings available to trigger automatic processing-->
     <div id="trainingsToBeProcessed" class="content">
-        <h2>Trainings to be processed</h2>
         <div id="emptyListHeader" style="display:none;"></div>
         <div id="trainingsToBeProcessedTableDiv" class="TableViewDiv" style="display:none;">
+            <h2>Trainings to be processed</h2>
             <table id="trainingsToBeProcessedTable" border="1" class="requestsTable">
                 <thead>
                     <tr>
@@ -294,7 +318,7 @@
         <div id="popupStartAutoProcessingDiv" class="content">
             <div id="popupheader">
                 <div id="subpopupHeader"></div>
-                <h6>
+                <h6 style="text-align:justify;">
                     In order to be considered for a Training, the employee's manager need to approve their application.
                     First priority will be given to those within the same department as the department favoured of that training.
                     Then, priority will be given based on the date Registered untill the Training number of seats is filled.
@@ -303,8 +327,8 @@
 
             <!--table for accepted employees-->
             <div id="popupListOfAcceptedTableDiv" class="TableViewDiv">
+                <h3 style="color:green; text-align:left;">Selected Employees For Training</h3>
                 <table id="tableListOfAccepted" border="1" class="requestsTable">
-                    <caption style="color:green;">Selected Employees For Training</caption>
                     <thead>
                         <tr>
                             <th>Employee Name</th>
@@ -318,8 +342,8 @@
 
             <!--table for rejected employees-->
             <div id="popupListOfRejectedTableDiv" class="TableViewDiv">
+                <h3 style="color: indianred; text-align: left;">Rejected Employees For Training</h3>
                 <table id="tableListOfRejected" border="1" class="requestsTable">
-                    <caption style="color:indianred;">Rejected Employees For Training</caption>
                     <thead>
                         <tr>
                             <th>Employee Name</th>

@@ -269,8 +269,10 @@
                                     '<td>' + training.Capacity + '</td>' +
                                     '<td>' + formatDateTime(training.ClosingDate) + '</td>' +
                                     '<td>' + formatDateTime(training.TrainingStartDate) + '</td>' +
+                                    '<td>' + training.Duration + '</td>' +
                                     '<td data-DepartmentID = "' + training.DepartmentID + '">' + training.DepartmentName + '</td>' +
                                     '<td> <button id ="Applybtn" value = "' + training.TrainingID + '" > Apply </button> </td>' +
+                                    '<td hidden>' + training.Description + '</td>' +
                                     '</tr>';
                                 tableBody.append(row);
                             });
@@ -326,7 +328,9 @@
                                             return '<button id="viewEnrollmentBtn" value="' + data + '">View Enrollment</button>';
                                         }
                                     },
-                                ]
+                                 ],
+                                 ordering: false,
+                                 autoWidth: true
                              });
                             $('#myTrainingTableDiv').show();
                             resolve();
@@ -350,18 +354,38 @@
                 var URL = "/Training/getAll";
                 getAJAXCall(URL).then((response) => {
                     if (response) {
-                        var tableBody = $("#trainingTable tbody");
-                        tableBody.empty();
-                        $.each(response, function (index, training) {
-                            var row = '<tr>' +
-                                '<td>' + training.TrainingName + '</td>' +
-                                '<td>' + training.Capacity + '</td>' +
-                                '<td>' + formatDateTime(training.ClosingDate) + '</td>' +
-                                '<td>' + formatDateTime(training.TrainingStartDate) + '</td>' +
-                                '<td data-DepartmentID = "' + training.DepartmentID + '">' + training.DepartmentName + '</td>' +
-                                '<td> <button id ="viewPrerequisites" value = "' + training.TrainingID + '" > View Prerequisites </button> </td>' +
-                                '</tr>';
-                            tableBody.append(row);
+                        if ($.fn.DataTable.isDataTable('#trainingTable')) {
+                            // DataTable is already initialized, destroy it
+                            $('#trainingTable').DataTable().clear().destroy();
+                        }
+                        $('#trainingTable').DataTable({
+                            data: response,
+                            columns: [
+                                { data: 'TrainingName' },
+                                { data: 'Capacity' },
+                                {
+                                    data: 'ClosingDate',
+                                    render: function (data, type, row) {
+                                        return formatDateTime(data);
+                                    }
+                                },
+                                {
+                                    data: 'TrainingStartDate',
+                                    render: function (data, type, row) {
+                                        return formatDateTime(data);
+                                    }
+                                },
+                                { data: 'Duration' },
+                                { data: 'DepartmentName' },
+                                {
+                                    data: 'TrainingID',
+                                    render: function (data, type, row) {
+                                        return '<button id="viewPrerequisites" value="' + data + '">Prerequisites</button> <button id="viewMoreDetails" value="'+data+'">More Details</button>';
+                                    }
+                                },
+                            ],
+                            ordering: false,
+                            autoWidth: true
                         });
                         resolve();
                     }
@@ -384,19 +408,22 @@
                 if (response) {
                     //populate popup
                     response.result.forEach(function (p) {
-                        var paragraph = document.createElement('p');
-                        paragraph.textContent = 'Prerequisites Needed : ' + p.Details;
+                        var paragraph = document.createElement('h6');
+                        paragraph.textContent = ' -   ' + p.Details;
                         $('div#popupText').append(paragraph);
                     });
                     //Access value within the clicked row
                     var clickedTrainingName = row.find("td:eq(0)").text(); ///check table header position in table
-                    $('div#trainingName').text("Training prerequisites for : " + clickedTrainingName);
+                    $('div#trainingName').html("<h2>Training prerequisites for : " + clickedTrainingName+"</h2>");
                     $('div#divAllTrainingTable').fadeOut();
                     $('div#popup').fadeIn(1000);
                 }
                 else {
-                    toastr.error("error loading table");
+                    toastr.error("error");
                 }
+            }).catch((error) => {
+                console.error(error);
+                toastr.error("error");
             });
         });
 
@@ -441,21 +468,28 @@
             var selectedTrainingSeatsAvailable = row.find("td:eq(1)").text();
             var selectedTrainingClosingDate = row.find("td:eq(2)").text();
             var selectedTrainingStartDate = row.find("td:eq(3)").text();
-            var selectedTrainingDepartmentFavoured = row.find("td:eq(4)").text();
-            // TODO : include manager full name and user's current departmentName and total number of applications
+            var selectedTrainingDuration = row.find("td:eq(4)").text();
+            var selectedTrainingDepartmentFavoured = row.find("td:eq(5)").text();
+            var selectedTrainingDescription = row.find("td:eq(7)").text();
+
 
             //modify the popupdiv
             $('#trainingTitleHeader').text("Apply for Training : " + selectedTrainingName);
-            var bodyText = "<h2>You Meet all the Prerequisites to enroll for this Training</h2>" +
-                "<h4>Once you apply, You will need your Manager's Approval before you can be enrolled in the Training</h4>" +
-                "<h4>Your Manager has to approve your request before the Training enrollment deadline : " + selectedTrainingClosingDate + "</h4>" +
-                "<h4>This training favours employees in the " + selectedTrainingDepartmentFavoured + " department</h4>" +
-                "<h6>Training Starting Date : " + selectedTrainingStartDate + "</h6>" +
-                "<h6>Number of seats this training is accepting is : " + selectedTrainingSeatsAvailable + "</h6>" +
+            var bodyText = "<h4>You have all the qualifications to apply for this training</h4>" +
+                "<h6>Once you apply, You will need your Manager's Approval before you can be enrolled in the Training</h6>" +
+                "<h6>Your Manager has to approve your request before the Training enrollment deadline : " + selectedTrainingClosingDate + "</h6>" +
+                "<h6>This training favours employees in the " + selectedTrainingDepartmentFavoured + " department</h6>" +
+                "<hr />" +
+                "<h5>Training Starting Date : " + selectedTrainingStartDate + "</h5>" +
+                "<h5>Number of seats this training is accepting is : " + selectedTrainingSeatsAvailable + "</h5>" +
+                "<h5>Training Duration (days) :" + selectedTrainingDuration + "</h5>" +
+                "<label for='myTextArea'>Training Description : </label>" +
+                "<textarea id='myTextArea'>" + selectedTrainingDescription + "</textarea>" +
+                "<hr />"+
                 "<h3>You will get Emails whenever there are changes on your application</h3>";
             $('div#applyBodyDiv').html(bodyText);
             $('button#finalApplyBtn').attr("value", selectedTrainingID);
-            $('div#tableTrainingsAvailable').fadeOut();
+            $('div#tableTrainingsAvailable').hide();
             $('div#applyPopUp').fadeIn(500);
         });
 
@@ -477,7 +511,7 @@
             $('div#tableTrainingsAvailable').fadeIn(500);
         });
 
-        //I was testing to get all training with their prerequisites
+        //I was testing to get all training with their prerequisites delete that dont need that anymore
         function testFunction() {
             var URL = "/Training/GetAllTrainingWithPrerequisitesAndDepartments";
             getAJAXCall(URL).then((response) => {
@@ -559,10 +593,12 @@
                     <tr>
                         <th>Training Name</th>
                         <th>Seats Available</th>
-                        <th>Closing Date</th>
+                        <th>Deadline Registration Date</th>
                         <th>Training Start Date</th>
+                        <th>Duration(days)</th>
                         <th>Department Favoured</th>
                         <th>Click to Apply for training</th>
+                        <th hidden>Description</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -572,7 +608,9 @@
 
         <div id="applyPopUp" style="display: none;">
             <h2 id="trainingTitleHeader"></h2>
+            <hr />
             <div id="applyBodyDiv"></div>
+            <hr />
             <div id="applyOptionBtnsDiv">
                 <button id="finalApplyBtn">Apply</button>
                 <button id="cancelApplyBtn">Cancel</button>
@@ -584,24 +622,29 @@
     <!--All trainings-->
     <div id="allTrainingsContent" class="content">
         <div id="divAllTrainingTable" class="TableViewsDiv">
+            <h2>All trainings</h2>
+            <hr />
             <table id="trainingTable" border="1" class="requestsTable">
                 <thead>
                     <tr>
                         <th>Training Name</th>
                         <th>Seats Available</th>
-                        <th>Closing Date</th>
-                        <th>Training Start Date</th>
+                        <th>Deadline Registration Date</th>
+                        <th>Start Date</th>
+                        <th>Duration</th>
                         <th>Department Favoured</th>
-                        <th>Prerequisites</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
+
                 </tbody>
             </table>
             <span id="info"></span>
         </div>
         <div id="popup" style="display: none;">
             <div id="trainingName"></div>
+            <hr />
             <div id="popupText"></div>
             <div><button id="closebtn">Close</button></div>
         </div>

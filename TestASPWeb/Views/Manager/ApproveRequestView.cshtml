@@ -4,9 +4,27 @@
 }
 
 <style>
+    body {
+        font-family: Arial, sans-serif;
+        background-image: url("../../Images/background.jpg");
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: 100% 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    #second-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 50px;
+    }
     .content {
         display: none;
         padding: 20px;
+        background-color: #ffffff;
+        border-radius: 15px;
     }
 
     .TableViewDiv {
@@ -81,6 +99,8 @@
 
 <script>
     $(document).ready(function () {
+        $('nav .nav-container a').removeClass('active');
+        $('#approveRequests').addClass('active');
 
         //dropdown to select options
         $('#mySelect').change(function () {
@@ -410,24 +430,25 @@
 
 
 
-<div id="second-container">
 
-    <!--dropdownlist DIV-->
-    <div style="text-align:right; padding:10px;">
-        <label for="mySelect" style="background-color:white;">Select an option:</label>
-        <select id="mySelect" class="custom-select" style="display: inline-block; margin-left:10px; ">
+<!--dropdownlist DIV-->
+<span style="text-align: right; padding: 10px; border-bottom-right-radius: 20px; background-color: #89bdd3; ">
+    <span><label for="mySelect" style="background-color: #89bdd3;">Select an option:</label></span>
+    <span>
+        <select id="mySelect" style=" margin-left: 10px; background-color: #3882d1;color:#ffffff; border-color: #ffffff; outline: none; border-radius: 10px; ">
             <option value="1" selected>Pending Requests</option>
             <option value="2">Approved Requests</option>
             <option value="3">Declined Requests</option>
         </select>
-    </div>
+    </span>
+</span>
 
-
+<div id="second-container">
     <!--Pending Request-->
     <div id="pendingRequestDIV" class="content">
-        <div id="headerPendingRequestDiv"> Pending Training Applications</div>
         <div id="EmptyListHeaderDiv" style="display:none;"></div>
         <div id="pendingTableDIV" class="TableViewDiv" style="display:none;">
+            <div id="headerPendingRequestDiv"><h2>Pending Training Applications</h2></div>
             <table id="pendingRequestTable" border="1" class="requestsTable">
                 <thead>
                     <tr>
@@ -479,7 +500,7 @@
 
     <!--Approved Request-->
     <div id="approvedRequestDIV" class="content">
-        <div id="headerApprovedRequestDiv">Approved Training Applications</div>
+        <div id="headerApprovedRequestDiv"><h2>Approved Training Applications</h2></div>
         <div id="approvedEmptyListDiv" style="display:none;"></div>
         <div id="approvedTableDiv" class="TableViewDiv" style="display:none;">
             <table id="approvedRequestTable" border="1" class="requestsTable">
@@ -503,7 +524,7 @@
 
     <!--Declined Request-->
     <div id="declinedRequestDIV" class="content">
-        <div id="headerDeclinedRequestDiv">Declined Training Applications</div>
+        <div id="headerDeclinedRequestDiv"><h2>Declined Training Applications</h2></div>
         <div id="declinedEmptyListDiv" style="display:none;"></div>
         <div id="declinedTableDiv" class="TableViewDiv" style="display:none;">
             <table id="declinedRequestTable" border="1" class="requestsTable">

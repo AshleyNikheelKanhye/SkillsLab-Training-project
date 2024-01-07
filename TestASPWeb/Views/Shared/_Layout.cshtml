@@ -36,17 +36,16 @@
             }
             else if (currentUserRoleString == "Manager")
             {
-                <a href="@Url.Action("ManagerView","Manager")">Home</a>
-                <a href="@Url.Action("ApproveRequestView","Manager")">Approve Training Requests</a>
+                <a id="managerHome" href="@Url.Action("ManagerView","Manager")">Home</a>
+                <a id="approveRequests" href="@Url.Action("ApproveRequestView","Manager")">Approve Training Requests</a>
             }
             else
             {
-                <a href="@Url.Action("AdminView","Admin")">Home</a>
-                <a href="@Url.Action("ViewTrainingsView","Admin")">View Trainings</a>
-                <a href="@Url.Action("ManageTrainingsView","Admin")">Manage Trainings</a>
-                <a href="@Url.Action("AddNewTrainingView","Admin")">Add New Training</a>
-                <a href="@Url.Action("AutomaticProcessingView","Admin")">Automatic Processing</a>
-                <a href="@Url.Action("ManageRolesView","Admin")">Manage Roles</a>
+                <a id="adminHome" href="@Url.Action("AdminView","Admin")">Home</a>
+                <a id="adminTrainings" href="@Url.Action("ViewTrainingsView","Admin")">View Trainings</a>
+                <a id="adminAddTraining" href="@Url.Action("AddNewTrainingView","Admin")">Add New Training</a>
+                <a id="adminAutomaticProcess" href="@Url.Action("AutomaticProcessingView","Admin")">Automatic Processing</a>
+                <a id="adminViewUsers" href="@Url.Action("AllUsersView","Admin")">View Employees</a>
             }
             
         </div>

@@ -5,16 +5,35 @@
 }
 
 <style>
+
+    body {
+        font-family: Arial, sans-serif;
+        background-image: url("../../Images/background.jpg");
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: 100% 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    #second-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 50px;
+    }
+
     .content {
         display: none;
         padding: 20px;
+        background-color: #ffffff;
+        border-radius: 15px;
     }
 
     #updatePopupDiv {
-        /*display: flex;*/
         justify-content: center;
         align-items: center;
-        height: 100vh;
+        
         padding: 1px;
     }
 
@@ -24,16 +43,16 @@
     }
 
     #form-div {
-        background-color: #3498db;
+        background-color: #3e92cc;
         display: flex;
         align-content: center;
         justify-content: center;
-        padding: 10px;
+        padding: 20px;
         border-radius: 10px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        color: #fff;
-        width: 1000px; /* Adjusted width */
-        margin: 0; /* Removed default margin */
+        width: 1000px;
+        color:#ffffff;
+        margin: 0;
     }
 
     .TableViewDiv {
@@ -71,7 +90,6 @@
         .requestsTable tbody tr:nth-child(odd) {
             background-color: #ffffff;
         }
-
 </style>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
@@ -80,6 +98,8 @@
 
 <script>
     $(document).ready(function () {
+        $('nav .nav-container a').removeClass('active');
+        $('#adminTrainings').addClass('active');
 
         let form = document.querySelector('form');
         form.addEventListener('submit', (e) => {
@@ -96,7 +116,7 @@
                     $('div#allTrainingsDIV').show();
                 });
             }
-            if (selectionOption == "2") { //upcoming trainings, with a future startingDate //need to color scheme green for those who have been automatic processed 
+            if (selectionOption == "2") { //upcoming trainings, with a future startingDate //need to color scheme green for those who have been automatic processed
                 populateTableUpcomingTrainings().then(() => {
                     $('div#upcomingTrainingsDIV').show();
                 });
@@ -124,12 +144,12 @@
                     else {
                         $.each(response, function (index, training) {
                             var row = '<tr>' +
-                                '<td>' + training.TrainingName + '</td>'+
+                                '<td>' + training.TrainingName + '</td>' +
                                 '<td>' + training.DepartmentName + '</td>' +
                                 '<td>' + formatDateTime(training.ClosingDate) + '</td>' +
                                 '<td>' + formatDateTime(training.TrainingStartDate) + '</td>' +
                                 '<td><button id="viewEmployeesBtn" value="' + training.TrainingID + '">View Employees</button></td>' +
-                                '<td><button id="viewTraningPrerequisiteBtn"value="' + training.TrainingID + '">View Training Prerequisites</button></td>' +
+                                '<td><button id="viewTraningPrerequisiteBtn"value="' + training.TrainingID + '">View Prerequisites</button></td>' +
                                 '</tr>';
                             tableBody.append(row);
                         });
@@ -151,7 +171,7 @@
                 var URL = "/Training/getUpcomings";
                 getAJAXCall(URL).then((response) => {
                     if (response) {
-                        var tableBody = $('#UpcomingTrainingTable tbody'); 
+                        var tableBody = $('#UpcomingTrainingTable tbody');
                         tableBody.empty();
                         if (response.length === 0) {
                             $('div#UpcomingTrainingTable').hide();
@@ -168,7 +188,7 @@
                                     '<td>' + formatDateTime(training.TrainingStartDate) + '</td>' +
                                     '<td>' + training.Duration + '</td>' +
                                     '<td><button id="viewEmployeesBtn" value="' + training.TrainingID + '">Application List</button></td>' +
-                                    '<td><button id="viewTraningPrerequisiteBtn" value="' + training.TrainingID + '">View Prerequisites</button></td>' + 
+                                    '<td><button id="viewTraningPrerequisiteBtn" value="' + training.TrainingID + '">View Prerequisites</button></td>' +
                                     '<td>' + returnStatus(training.IsAutomaticProcessed) + '</td>';
                                 if (training.IsAutomaticProcessed == false) {
                                     row = row + '<td><button id="UpdateTrainingBtn" value="' + training.TrainingID + '">Update</button>';
@@ -254,14 +274,14 @@
                     $('.content').hide();
                     $('div#popupTrainingPrerequisiteContentDiv').empty();
                     if (response.result.length === 0) {
-                        $('#headerTrainingPrerequisite').html("<h1>Looks like this training does not have any prerequisites</h1>");
+                        $('#headerTrainingPrerequisite').html("<h2>Looks like this training does not have any prerequisites</h2>");
                         $('#popupViewTrainingPrerequisiteDiv').show();
                     }
                     else {
-                        $('#headerTrainingPrerequisite').html("<h4>Prerequisites For " + selectedTrainingName + "</h4>");
+                        $('#headerTrainingPrerequisite').html("<h2>Prerequisites For " + selectedTrainingName + "</h2>");
                         response.result.forEach(function (p) {
-                            var paragraph = document.createElement('p');
-                            paragraph.textContent = 'Prerequisites Needed : ' + p.Details;
+                            var paragraph = document.createElement('h6');
+                            paragraph.textContent = ' - ' + p.Details;
                             $('div#popupTrainingPrerequisiteContentDiv').append(paragraph);
                         });
                         $('#popupViewTrainingPrerequisiteDiv').show();
@@ -299,7 +319,7 @@
             });
         });
 
-        //when clicking on delete training 
+        //when clicking on delete training
         $('.requestsTable tbody').on('click', '#DeleteTrainingBtn', function () {
             var selectedTrainingID = $(this).val();
             Swal.fire({
@@ -332,7 +352,7 @@
                         }
                     }).catch((error) => {
                         toastr.error("Error, Training Could not be deleted");
-                    });  
+                    });
                 } else if (result.dismiss === Swal.DismissReason.cancel) {
                     Swal.close();
                 }
@@ -406,7 +426,7 @@
             }
         }
         //flow
-        $('#mySelect').trigger('change'); 
+        $('#mySelect').trigger('change');
 
     });
 
@@ -417,7 +437,7 @@
 
     function validateForm() {
         var trainingName = document.getElementById('TrainingName').value;
-        var trainingCapacity = document.getElementById('TrainingCapacity').value; 
+        var trainingCapacity = document.getElementById('TrainingCapacity').value;
         var deadlineRegistration = document.getElementById('DeadlineRegistration').value;
         var startingDate = document.getElementById('StartingDate').value;
         var trainingDuration = document.getElementById('TrainingDuration').value;
@@ -507,22 +527,24 @@
 
 </script>
 
-<!--rendered body-->
-<div id="second-container">
-    <!--Dropdonwlist DIV-->
-    <div style="text-align:right; padding:10px;">
-        <label for="mySelect" style="background-color:white;">Select an option:</label>
-        <select id="mySelect" class="custom-select" style="display: inline-block; margin-left:10px; ">
+
+<!--Dropdonwlist DIV-->
+<div style="text-align:right; padding:10px;">
+    <span>
+        <select id="mySelect" class="custom-select" style="display: inline; margin-left:10px; font-size:20px; ">
             <option value="1" selected> All Trainings</option>
             <option value="2">Upcoming Trainings</option>
             <option value="3">Completed Trainings</option>
             <option value="4">Deleted Trainings</option>
         </select>
-    </div>
+    </span>
+</div>
+
+<div id="second-container">
 
     <!--All trainings-->
     <div id="allTrainingsDIV" class="content">
-        <div id="headerAllTrainingDiv">All Trainings</div>
+        <div id="headerAllTrainingDiv"><h2>All Trainings</h2></div>
         <div id="emptyListHeaderDiv" style="display:none;"></div>
         <div id="AllTrainingTableDIV" class="TableViewDiv" style="display:none;">
             <table id="AllTrainingTable" border="1" class="requestsTable">
@@ -533,7 +555,7 @@
                         <th>Training Registration Deadline</th>
                         <th>Training Start Date</th>
                         <th>Employees enrolled</th>
-                        <th>View Training Prerequisites</th>
+                        <th>Prerequisites</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -583,7 +605,7 @@
     <!--popup view Employees-->
     <div id="employeesInTrainingPopUp" class="content">
         <div id="popupHeaderDiv"></div>
-        <div id="employeesTableDiv" style="display:none;">
+        <div id="employeesTableDiv" class="TableView" style="display:none;">
             <hr />
             <table id="employeeTable" border="1" class="requestsTable">
                 <thead>
@@ -596,10 +618,10 @@
                     </tr>
                 </thead>
                 <tbody>
-
                 </tbody>
             </table>
         </div>
+        <hr />
         <div id="closeBtnDiv">
             <button id="closePopUpEmployeeBtn">Close</button>
         </div>
@@ -609,7 +631,9 @@
     <!--popup view training prerequisite-->
     <div id="popupViewTrainingPrerequisiteDiv" class="content">
         <div id="headerTrainingPrerequisite"></div>
+        <hr />
         <div id="popupTrainingPrerequisiteContentDiv"></div>
+        <hr />
         <div><button id="closePopupTrainingPrerequisiteBtn">Close</button></div>
     </div>
 
@@ -625,7 +649,7 @@
 
                 <label for="TrainingCapacity">Training Capacity:</label>
                 <input type="number" id="TrainingCapacity" name="TrainingCapacity" required>
-                <br />
+                <br /><br />
 
                 <label for="DeadlineRegistration">Deadline Registration:</label>
                 <input type="datetime-local" id="DeadlineRegistration" name="DeadlineRegistration" required>

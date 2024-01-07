@@ -5,9 +5,28 @@
 }
 
 <style>
+    body {
+        font-family: Arial, sans-serif;
+        background-image: url("../../Images/background.jpg");
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: 100% 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    #second-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 50px;
+    }
+
     .content {
         display: none;
         padding: 20px;
+        background-color: #ffffff;
+        border-radius: 15px;
     }
 
     .TableViewDiv {
@@ -64,6 +83,8 @@
 
 <script>
     $(document).ready(function () {
+        $('nav .nav-container a').removeClass('active');
+        $('#adminViewUsers').addClass('active');
 
         $.ajax({
             url: '/Admin/GetAllUsers',
@@ -89,13 +110,8 @@
                                 return '<button id="viewEmployeeDetailsBtn" value="'+data+'">More Details</button>';
                             }
                         },
-                        {
-                            data: 'UserID',
-                            render: function (data, type, row) {
-                                return '<button id="UpdateEmployeeRoleBtn" value="' + data + '">Update Roles</button>';
-                            }
-                        },
-                    ]
+                    ],
+                    ordering:false
                 })
             },
             error: function (error) {
@@ -145,11 +161,11 @@
                     qualificationHeader.empty();
                     qualificationTbody.empty();
                     if (response.listOfQualifications.length === 0) {
-                        qualificationHeader.html(selectedEmployeeName + " has no qualification uploaded");
+                        qualificationHeader.html("<h3>"+selectedEmployeeName + " has no qualification uploaded</h3>");
                         $('#userQualificationTableDiv').hide();
                     }
                     else {
-                        qualificationHeader.html(selectedEmployeeName + " Qualifications");
+                        qualificationHeader.html("<h3>"+selectedEmployeeName + " Qualifications</h3>");
                         $.each(response.listOfQualifications, function (index, qualification) {
                             var row = '<tr>' +
                                 '<td>' + qualification.Details + '</td>' +
@@ -169,11 +185,11 @@
                     enrollmentHeader.empty();
                     enrollmentTbody.empty();
                     if (response.listOfTrainingEnrolled.length === 0) {
-                        enrollmentHeader.html(selectedEmployeeName + " has not enrolled in any training");
+                        enrollmentHeader.html("<h3>"+selectedEmployeeName + " has not enrolled in any training</h3>");
                         $('#userEnrollmentTableDiv').hide();
                     }
                     else {
-                        enrollmentHeader.html(selectedEmployeeName + " Enrollments");
+                        enrollmentHeader.html("<h3>"+selectedEmployeeName + " Enrollments</h3>");
                         $.each(response.listOfTrainingEnrolled, function (index, enrollment) {
                             var row = '<tr>' +
                                 '<td>' + enrollment.TrainingName + '</td>' +
@@ -227,10 +243,10 @@
                         <th>Phone No</th>
                         <th>Department</th>
                         <th>View More Details</th>
-                        <th>Update Role</th>
                     </tr>
                 </thead>
                 <tbody>
+
                 </tbody>
             </table>
         </div>
@@ -247,6 +263,7 @@
 
             <!--for displaying the roles the user has -->
             <div id="userRolesContentDiv">
+                <h3>User Roles</h3>
                 <div id="userRolesTableDiv" class="TableViewDiv">
                     <table id="userRolesTable" border="1" class="requestsTable">
                         <thead>
