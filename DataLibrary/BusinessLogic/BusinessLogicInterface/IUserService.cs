@@ -13,13 +13,13 @@ namespace DataLibrary.BusinessLogic.BusinessLogicInterface
     {
         Task<IEnumerable<IUser>> GetAll();
         Task<IUser> GetById(int userID);
-        void Add(IUser user);
+        void Add(RegisterEmployeeViewModel user);
         void Update(IUser user);
         void Delete(int userID);
         IUser Authenticate(LoginUserViewModel loginUserViewModel);
         IEnumerable<ListOfManagersModel> GetAllManagers();
         bool CheckUserExist(CheckUserExistViewModel checkUserExistViewModel);
-        IUser Register(User user);
+        IUser Register(RegisterEmployeeViewModel user);
         List<int> GetRoleList(int userId);
         Task<int> GetTotalNumberOfUserRecords();
     }

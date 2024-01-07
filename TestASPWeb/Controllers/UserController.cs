@@ -128,7 +128,7 @@ namespace TestASPWeb.Controllers
 
 
         [HttpPost]
-        public JsonResult Register(User user)
+        public JsonResult Register(RegisterEmployeeViewModel user)
         {
             //since only employee can register
             IUser registeredUser = _userService.Register(user);

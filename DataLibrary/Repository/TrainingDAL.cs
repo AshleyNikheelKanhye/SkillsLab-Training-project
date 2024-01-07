@@ -67,6 +67,48 @@ namespace DataLibrary.Repo
             catch { throw; }
         }
 
+        public async Task<IEnumerable<ITraining>> GetCompletedTrainings()
+        {
+            try 
+            { 
+                List<Training> returnList = new List<Training>();
+                string selectQuery = @" SELECT TrainingID,TrainingName,TrainingStartDate,Duration
+                                         FROM Training 
+                                         WHERE IsAutomaticProcessed=1
+                                            ORDER BY TrainingStartDate DESC";
+                SqlCommand command = new SqlCommand( selectQuery,_dbContext.GetConn());
+                SqlDataReader reader = await command.ExecuteReaderAsync();
+                if (reader.HasRows)
+                {
+                    returnList = DataBaseHelper.ReturnAllRowsFromDB<Training>(reader);
+                }
+                reader.Close();
+                return returnList;
+            }
+            catch { throw; }
+        }
+
+        public async Task<IEnumerable<ITraining>> GetDeletedTrainings()
+        {
+            try
+            {
+                List<Training> returnList = new List<Training>();
+                string selectQuery = @" SELECT TrainingID,TrainingName,TrainingStartDate,Duration
+                                         FROM Training 
+                                         WHERE IsActive=0
+                                            ORDER BY TrainingStartDate DESC";
+                SqlCommand command = new SqlCommand(selectQuery, _dbContext.GetConn());
+                SqlDataReader reader = await command.ExecuteReaderAsync();
+                if (reader.HasRows)
+                {
+                    returnList = DataBaseHelper.ReturnAllRowsFromDB<Training>(reader);
+                }
+                reader.Close();
+                return returnList;
+            }
+            catch { throw; }
+        }
+
         public IEnumerable<ITraining> GetAllElligible(int UserID)
         {
             try

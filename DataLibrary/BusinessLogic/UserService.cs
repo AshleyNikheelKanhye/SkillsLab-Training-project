@@ -1,4 +1,5 @@
 ﻿using DataLibrary.BusinessLogic.BusinessLogicInterface;
+using DataLibrary.BusinessLogic.Hashing;
 using DataLibrary.BusinessLogic.Logger;
 using DataLibrary.Entities;
 using DataLibrary.Entities.EntitiesInterface;
@@ -26,7 +27,7 @@ namespace DataLibrary.Services
             this._prerequisiteDAL = prerequisiteDAl;
             this._enrollmentDAL = enrollmentDAL;
         }
-        public void Add(IUser user)
+        public void Add(RegisterEmployeeViewModel user)
         {
             _userRepo.Add(user);
         }
@@ -37,11 +38,13 @@ namespace DataLibrary.Services
             {
                 return null;
             }
-            //TODO : Add hashing for passwords
+            
             String givenPwd = loginUserViewModel.Password;
             String obtainedPwd = user.Password;
 
-            if (givenPwd.Equals(obtainedPwd))
+            bool result = PasswordHasher.VerifySHA256Hash(givenPwd, obtainedPwd);
+
+            if (result)
             {
                 return user;
             }
@@ -67,8 +70,12 @@ namespace DataLibrary.Services
         {
             return _userRepo.CheckUserExists(checkUserExistViewModel.Email, checkUserExistViewModel.NIC, checkUserExistViewModel.PhoneNo);
         }
-        public IUser Register(User user)
+        public IUser Register(RegisterEmployeeViewModel user)
         {
+            //need to hash password
+            string unhashedPassword = user.Password;
+            string hashedPassword = PasswordHasher.GenerateSHA256Hash(unhashedPassword);
+            user.Password= hashedPassword;
             return _userRepo.Add(user); 
         }
 

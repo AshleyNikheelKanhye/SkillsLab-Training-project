@@ -23,6 +23,8 @@ namespace DataLibrary.BusinessLogic.BusinessLogicInterface
         Task<ITraining> GetTrainingToUpdateDetails(int trainingID);
         Task<bool> Update(UpdateTrainingViewModel updateTrainingViewModel);
         Task<bool> Delete(int trainingID);
+        Task<IEnumerable<ITraining>> GetCompletedTrainings();
+        Task<IEnumerable<ITraining>> GetDeletedTrainings();
 
 
     }

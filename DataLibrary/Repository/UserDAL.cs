@@ -22,7 +22,7 @@ namespace DataLibrary.Repo
             _dbContext = dbContext;
         }
 
-        public IUser Add(IUser user)
+        public IUser Add(RegisterEmployeeViewModel user)
         {
             string insertQuery = "INSERT INTO [dbo].[UserTable] (FirstName,LastName,Password,Email,NIC,PhoneNo,DepartmentID,ManagerID) VALUES " +
                                 "(@FirstName,@LastName,@Password,@Email,@NIC,@PhoneNo,@DepartmentID,@ManagerID);";
@@ -49,7 +49,7 @@ namespace DataLibrary.Repo
                 else { return null; }
 
             }
-            catch (Exception ex) { return null; }
+            catch { return null; }
         }
 
         public bool AssignRoleToUser(int userID,int RoleID)
@@ -64,7 +64,7 @@ namespace DataLibrary.Repo
                 if (rowsAffected > 0) { return true; }
                 return false;
 
-            }catch (Exception ex) { return false; } 
+            }catch { return false; } 
         }
 
         public bool CheckUserExists(string Email, string NIC, int PhoneNo)
@@ -80,7 +80,7 @@ namespace DataLibrary.Repo
                 if (rowCount > 0) { return true; }
                 else { return false; }
             }
-            catch (Exception ex) { return false; }
+            catch { return false; }
         }
 
         public IUser Find(string email)
@@ -101,7 +101,7 @@ namespace DataLibrary.Repo
                 reader.Close();
                 return null;
             }
-            catch (Exception ex) { return null; }
+            catch { return null; }
         }
 
         public IEnumerable<ListOfManagersModel> GetAllManagers()
@@ -129,7 +129,7 @@ namespace DataLibrary.Repo
                 reader.Close();
                 return list;
             }
-            catch (Exception ex) { return null; }
+            catch { return null; }
         }
 
         public List<int> GetRoleList(int userID)

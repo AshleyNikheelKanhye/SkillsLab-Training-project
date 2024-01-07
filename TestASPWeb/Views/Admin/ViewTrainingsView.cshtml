@@ -122,10 +122,14 @@
                 });
             }
             if (selectionOption == "3") {//trainings with startingDate in the past
-                $('div#completedTrainingsDIV').show();
+                populateTableCompletedTrainings().then(() => {
+                    $('div#completedTrainingsDIV').show();
+                });
             }
             if (selectionOption == "4") {//deleted trainings
-                $('div#deletedTrainingsDIV').show();
+                populateTableDeletedTrainings().then(() => {
+                    $('div#deletedTrainingsDIV').show();
+                });
             }
         });
 
@@ -218,6 +222,80 @@
             })
         }
 
+        //populate table completed Trainings
+        function populateTableCompletedTrainings() {
+            return new Promise((resolve, reject) => {
+                var URL = "/Training/GetCompletedTrainings";
+                getAJAXCall(URL).then((response) => {
+                    if (response) {
+                        var tableBody = $('#completedTrainingTable tbody');
+                        tableBody.empty();
+                        if (response.length === 0) {
+                            $("#completedTrainingTableDiv").hide();
+                            $("#completedTrainingEmptyListHeader").html("<h2>Looks like there are no Training that has been completed (Automtic processed)</h2>").show();
+                            resolve();
+                        } else {
+                            $.each(response, function (index, training) {
+                                var row = '<tr>' +
+                                    '<td>' + training.TrainingName + '</td>' +
+                                    '<td>' + formatDateTime(training.TrainingStartDate) + '</td>' +
+                                    '<td>' + training.Duration + '</td>' +
+                                    '<td><button id="viewMoreDetailsBtn" value="' + training.TrainingID + '">View Details</button></td>' +
+                                    '</tr>';
+                                tableBody.append(row);
+                            });
+                            $('div#completedTrainingEmptyListHeader').empty().hide();
+                            $('div#completedTrainingTableDiv').show();
+                            resolve();
+                        }
+                    }
+                    else {
+                        toastr.error("error");
+                    }
+                }).catch((error) => {
+                    console.error(error);
+                    toastr.error("error on loading completed Trainigns");
+                    reject();
+                });
+            });
+        }
+
+
+        //populate table Deleted Trainings
+        function populateTableDeletedTrainings() {
+            return new Promise((resolve, reject) => {
+                var URL = "/Training/GetDeletedTrainings";
+                getAJAXCall(URL).then((response) => {
+                    if (response) {
+                        var tableBody = $('#deletedTrainingTable tbody');
+                        tableBody.empty();
+                        if (response.length === 0) {
+                            $('#deletedTrainingTableDiv').hide();
+                            $('#deletedTrainingEmptyListHeader').html("<h2>There are not Trainings that have been deleted</h2>").show();
+                            resolve();
+                        } else {
+                            $.each(response, function (index, training) {
+                                var row = '<tr>' +
+                                    '<td>' + training.TrainingName + '</td>' +
+                                    '<td>' + training.Capacity + '</td>' +
+                                    '</tr>';
+                                tableBody.append(row);
+                            });
+                            $('div#deletedTrainingEmptyListHeader').empty().hide();
+                            $('#deletedTrainingTableDiv').show();
+                            resolve();
+                        }
+                    } else {
+                        toastr.error("error");
+                        reject();
+                    }
+                }).catch((error) => {
+                    console.error(error);
+                    toastr.error("error on loading Deleted trainings");
+                    reject();
+                });
+            });
+        }
 
         //When clicking on view employees btn
         $('.requestsTable tbody').on("click", "#viewEmployeesBtn", function () {
@@ -593,12 +671,44 @@
 
     <!--completed Trainings-->
     <div id="completedTrainingsDIV" class="content">
-        completed trainings
+        <h2>Completed Trainings</h2>
+        <div id="completedTrainingEmptyListHeader" style="display:none;"></div>
+        <div id="completedTrainingTableDiv" class="TableView" style="display:none;">
+            <table id="completedTrainingTable" border="1" class="requestsTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Start Date</th>
+                        <th>Duration(days)</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <!--deleted trainings-->
     <div id="deletedTrainingsDIV" class="content">
-        deleted trainings
+        <h2>Deleted Trainings</h2>
+        <div id="deletedTrainingEmptyListHeader" style="display:none;"></div>
+        <div id="deletedTrainingTableDiv" class="TableView" style="display:none;">
+            <h5>A deleted Training does not have any employee application</h5>
+            <hr />
+            <table id="deletedTrainingTable" border="1" class="requestsTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Training Seats</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
     </div>
 
 

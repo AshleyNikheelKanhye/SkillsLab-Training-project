@@ -118,6 +118,31 @@ namespace DataLibrary.BusinessLogic
             }
         }
 
+        public async Task<IEnumerable<ITraining>> GetCompletedTrainings()
+        {
+            try
+            {
+                return await _trainingRepo.GetCompletedTrainings();
+            }
+            catch(Exception ex)
+            {
+                this._logger.LogError(ex);
+                return null;
+            }
+        }
+
+        public async Task<IEnumerable<ITraining>> GetDeletedTrainings()
+        {
+            try
+            {
+                return await _trainingRepo.GetDeletedTrainings();
+            }catch(Exception ex)
+            {
+                this._logger.LogError(ex);
+                return null;
+            }
+        }
+
         public async Task<ITraining> GetTrainingToUpdateDetails(int trainingID)
         {
             try

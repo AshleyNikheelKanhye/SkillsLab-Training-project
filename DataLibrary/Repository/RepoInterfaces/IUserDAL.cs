@@ -14,7 +14,7 @@ namespace DataLibrary.Repository.RepoInterfaces
         Task<IEnumerable<IUser>> GetAll();
         IEnumerable<ListOfManagersModel> GetAllManagers();
         Task<IUser> GetById(int userID);
-        IUser Add(IUser user);
+        IUser Add(RegisterEmployeeViewModel user);
         void Update(IUser user);
         void Delete(int userID);
         IUser Find(string email);

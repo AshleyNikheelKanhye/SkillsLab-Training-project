@@ -20,7 +20,7 @@ FETCH FROM DATABASE TO GET THE Profile Details
         $('nav .nav-container a').removeClass('active');
         $('#profile').addClass('active');
 
-        $('button#testbtn').click(function () {
+/*        $('button#testbtn').click(function () {
             var testTrainingID = 1;
             var trainingObj = { trainingID: testTrainingID };
             var URL = "/Enrollment/TestingEmailService"
@@ -36,7 +36,7 @@ FETCH FROM DATABASE TO GET THE Profile Details
             });
         });
         $('button#testHangfire').click(function () {
-       
+
             var URL = "/Enrollment/TestingHanfireService"
             var serverCall = new ServerCall(({ url: URL, callMethod: "POST" }));
             serverCall.fetchApiCall().then((response) => {
@@ -48,12 +48,93 @@ FETCH FROM DATABASE TO GET THE Profile Details
                     toastr.error("an error occured");
                 }
             });
+        });*/
+
+
+
+        $("#downloadBtn").click(function () {
+            // Make an AJAX call to fetch JSON data
+            
+            var URL = "/Training/getUpcomings";
+            
+            
+            var serverCall = new ServerCall({ url: URL,callMethod: "GET" });
+            serverCall.fetchApiCall().then((response) => {
+                // Convert JSON to CSV
+                const csvData = convertJSONToCSV(response);
+
+                // Create a Blob object containing the CSV data
+                const blob = new Blob([csvData], { type: "text/csv" });
+
+                // Create a download link
+                const link = document.createElement("a");
+                link.href = window.URL.createObjectURL(blob);
+                link.download = "data.csv";
+
+                // Append the link to the document
+                document.body.appendChild(link);
+
+                // Trigger the click event on the link
+                link.click();
+
+                // Remove the link from the document
+                document.body.removeChild(link);
+
+
+            });
+
+
+
+
         });
+
+        function convertJSONToCSV(jsonData) {
+            if (!Array.isArray(jsonData) || jsonData.length === 0) {
+                console.error("JSON data is not an array or is empty.");
+                return '';
+            }
+
+            const csvRows = [];
+            const headers = Object.keys(jsonData[0]);
+
+            if (headers.length === 0) {
+                console.error("JSON data does not contain any objects with properties.");
+                return '';
+            }
+
+            // Add headers to CSV
+            csvRows.push(headers.join(','));
+
+            // Add data rows to CSV
+            jsonData.forEach((item) => {
+                if (typeof item !== 'object' || item === null) {
+                    console.error("Invalid data found. Each element in the JSON array should be an object.");
+                    return;
+                }
+
+                const values = headers.map(header => {
+                    // Convert null values to empty strings
+                    return (item[header] === null) ? '' : item[header];
+                });
+                csvRows.push(values.join(','));
+            });
+
+            // Join rows with newline character
+            return csvRows.join('\n');
+        }
+
+
+
 
     });
 </script>
-<button id="testbtn">Click me to test if my manager get an application mail</button>
+@*<button id="testbtn">Click me to test if my manager get an application mail</button>
 <button id="testHangfire">click me to test hangfire to test if lordnk7@gmail.com gets an email</button>
 
 <br />
 this will trigger an async email.
+*@
+<br />
+<br />
+<br />
+<button id="downloadBtn">Download CSV for dummy training id</button>

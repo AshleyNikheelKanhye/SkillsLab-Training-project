@@ -82,6 +82,22 @@ namespace TestASPWeb.Controllers
         }
 
         //admin only
+        [HttpGet]
+        public async Task<JsonResult> GetCompletedTrainings()
+        {
+            var list = await _trainingService.GetCompletedTrainings();
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
+        //admin only
+        [HttpGet]
+        public async Task<JsonResult> GetDeletedTrainings()
+        {
+            var list = await _trainingService.GetDeletedTrainings();
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
+        //admin only
         [HttpPost]
         public async Task<JsonResult> GenerateFinalListOfSelectedEmployees(int trainingId)
         {
@@ -129,6 +145,8 @@ namespace TestASPWeb.Controllers
             bool deleteStatus = await _trainingService.Delete(trainingID);
             return Json(deleteStatus, JsonRequestBehavior.AllowGet);
         }
+
+
 
     }
 }
