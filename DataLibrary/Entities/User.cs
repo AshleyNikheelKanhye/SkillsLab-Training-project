@@ -20,6 +20,7 @@ namespace DataLibrary.Entities
         public List<Role> listOfRoles {  get; set; }
         public IEnumerable<EmployeeQualificationDetailsViewModel> listOfQualifications { get; set; }
         public IEnumerable<IEnrollment> listOfTrainingEnrolled { get; set; }
+        
 
 
     }

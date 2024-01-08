@@ -57,7 +57,6 @@ FETCH FROM DATABASE TO GET THE Profile Details
             
             var URL = "/Training/getUpcomings";
             
-            
             var serverCall = new ServerCall({ url: URL,callMethod: "GET" });
             serverCall.fetchApiCall().then((response) => {
                 // Convert JSON to CSV

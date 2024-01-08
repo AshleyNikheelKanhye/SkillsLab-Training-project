@@ -99,6 +99,14 @@ namespace TestASPWeb.Controllers
 
         //admin only
         [HttpPost]
+        public async Task<JsonResult> GetSelectedEmployees(int TrainingID)
+        {
+            var list = await _trainingService.GetSelectedEmployees(TrainingID);
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
+        //admin only
+        [HttpPost]
         public async Task<JsonResult> GenerateFinalListOfSelectedEmployees(int trainingId)
         {
             var obj = await _trainingService.GenerateFinalListOfSelectedEmployees(trainingId);

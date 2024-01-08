@@ -121,7 +121,7 @@
                     $('div#upcomingTrainingsDIV').show();
                 });
             }
-            if (selectionOption == "3") {//trainings with startingDate in the past
+            if (selectionOption == "3") {//processed Trainings , training that has been automatically processed
                 populateTableCompletedTrainings().then(() => {
                     $('div#completedTrainingsDIV').show();
                 });
@@ -222,7 +222,7 @@
             })
         }
 
-        //populate table completed Trainings
+        //populate table completed Trainings(AKA processed Training)
         function populateTableCompletedTrainings() {
             return new Promise((resolve, reject) => {
                 var URL = "/Training/GetCompletedTrainings";
@@ -371,10 +371,75 @@
             });
         });
 
+        //when clicking on view selected employees Details btn
+        $('.requestsTable tbody').on('click', '#viewMoreDetailsBtn', function () {
+            var tableBody = $('#selectedEmployeeTable tbody');
+            var selectedTrainingID = $(this).val();
+            var URL = "/Training/GetSelectedEmployees";
+            var row = $(this).closest("tr");
+            var selectedTrainingName = row.find("td:eq(0)").text();
+            var selectedTrainingStartingDate = row.find("td:eq(1)").text();
+            var selectedTrainingDuration = row.find("td:eq(2)").text();
+            var trainingIdObj = { trainingId: selectedTrainingID };
+            var serverCall = new ServerCall({ url: URL, parameters: trainingIdObj, callMethod: "POST" });
+            serverCall.fetchApiCall().then((response) => {
+                if (response) {
+                    $('.content').hide();
+                    $('#trainingDetailsHeader').html("<h2>List of accepted employees for " + selectedTrainingName + "<h2> <h5>Starting Date : " + selectedTrainingStartingDate + "</h5><h5>Duration(days) : " + selectedTrainingDuration + "</h5>").show();
+                    $.each(response, function (index, employee) {
+                        var row = '<tr>' +
+                            '<td>' + employee.FirstName + ' ' + employee.LastName + '</td>' +
+                            '<td>' + employee.Email + '</td>' +
+                            '<td>' + employee.PhoneNo + '</td>' +
+                            '<td>' + employee.NIC + '</td>' +
+                            '<td>' + employee.ManagerFirstName + ' ' + employee.ManagerLastName + '</td>' +
+                            '<td>' + employee.ManagerEmail + '</td>' +
+                            '<tr>';
+                        tableBody.append(row);
+                    });
+                    $('button#exportToCvsBtn').attr("value", selectedTrainingID).attr("name", selectedTrainingName);
+                    $('div#selectedEmployeesTableDiv').show();
+                    $('div#trainingDetailsDiv').show();
+                } else {
+                    toastr.error("Error");
+                }
+            });
+        });
+
+
+        //when clicking download csv
+        $(document).on("click", "#exportToCvsBtn", function () {
+            var URL = "/Training/GetSelectedEmployees";
+            var selectedTrainingID = $(this).val();
+            var selectedTrainingName = $(this).attr('name');
+            var trainingIdobj = { trainingId: selectedTrainingID };
+
+            var serverCall = new ServerCall({ url: URL, parameters: trainingIdobj, callMethod: "POST" });
+            serverCall.fetchApiCall().then((response) => {
+                // Convert JSON to CSV
+                const csvData = convertJSONToCSV(response);
+
+                // Create a Blob object containing the CSV data
+                const blob = new Blob([csvData], { type: "text/csv" });
+
+                // Create a download link
+                const link = document.createElement("a");
+                link.href = window.URL.createObjectURL(blob);
+                link.download = "Selected Employees of " + selectedTrainingName + ".csv";
+
+                // Append the link to the document
+                document.body.appendChild(link);
+
+                // Trigger the click event on the link
+                link.click();
+
+                // Remove the link from the document
+                document.body.removeChild(link);
+            });
+        });
 
         //when clicking on Update Training
         $('.requestsTable tbody').on('click', "#UpdateTrainingBtn", function () {
-            //need to populate form with selected training details
             var URL = "/Training/GetTrainingToUpdateDetails";
             var selectedTrainingID = $(this).val();
             var trainingIDObj = { trainingID: selectedTrainingID };
@@ -603,6 +668,41 @@
 
     }
 
+    function convertJSONToCSV(jsonData) {
+        if (!Array.isArray(jsonData) || jsonData.length === 0) {
+            console.error("JSON data is not an array or is empty.");
+            return '';
+        }
+
+        const csvRows = [];
+        const headers = Object.keys(jsonData[0]);
+
+        if (headers.length === 0) {
+            console.error("JSON data does not contain any objects with properties.");
+            return '';
+        }
+
+        // Add headers to CSV
+        csvRows.push(headers.join(','));
+
+        // Add data rows to CSV
+        jsonData.forEach((item) => {
+            if (typeof item !== 'object' || item === null) {
+                console.error("Invalid data found. Each element in the JSON array should be an object.");
+                return;
+            }
+            const values = headers.map(header => {
+                // Convert null values to empty strings
+                return (item[header] === null) ? '' : item[header];
+            });
+            csvRows.push(values.join(','));
+        });
+        // Join rows with newline character
+        return csvRows.join('\n');
+    }
+
+
+
 </script>
 
 
@@ -612,7 +712,7 @@
         <select id="mySelect" class="custom-select" style="display: inline; margin-left:10px; font-size:20px; ">
             <option value="1" selected> All Trainings</option>
             <option value="2">Upcoming Trainings</option>
-            <option value="3">Completed Trainings</option>
+            <option value="3">Processed Trainings</option>
             <option value="4">Deleted Trainings</option>
         </select>
     </span>
@@ -669,9 +769,9 @@
         </div>
     </div>
 
-    <!--completed Trainings-->
+    <!--completed Trainings (Processed Trainings)-->
     <div id="completedTrainingsDIV" class="content">
-        <h2>Completed Trainings</h2>
+        <h2>Processed Trainings</h2>
         <div id="completedTrainingEmptyListHeader" style="display:none;"></div>
         <div id="completedTrainingTableDiv" class="TableView" style="display:none;">
             <table id="completedTrainingTable" border="1" class="requestsTable">
@@ -737,6 +837,32 @@
         </div>
     </div>
 
+    <!--popup to view selected employees Details-->
+    <div id="trainingDetailsDiv" class="content">
+        <div id="trainingDetailsHeader"></div>
+        <div id="selectedEmployeesTableDiv" class="TableView" style="display:none;">
+            <hr />
+            <table id="selectedEmployeeTable" border="1" class="requestsTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>PhoneNo</th>
+                        <th>NIC</th>
+                        <th>Manager Name</th>
+                        <th>Manager Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <hr />
+        <div id="actionButtonDivs">
+            <button id="exportToCvsBtn">Download in CVS</button>
+            <button id="closeBtn">Close</button>
+        </div>
+    </div>
 
     <!--popup view training prerequisite-->
     <div id="popupViewTrainingPrerequisiteDiv" class="content">

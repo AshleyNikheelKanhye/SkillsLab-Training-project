@@ -88,6 +88,32 @@ namespace DataLibrary.Repo
             catch { throw; }
         }
 
+        public async Task<IEnumerable<SelectedEmployeeViewModel>> GetSelectedEmployees(int trainingID)
+        {
+            try
+            {
+                List<SelectedEmployeeViewModel> list = new List<SelectedEmployeeViewModel>();
+                string selectQuery = @"  Select ut1.FirstName,ut1.LastName,ut1.Email,ut1.NIC,ut1.PhoneNo,ut2.FirstName AS 'ManagerFirstName' , ut2.LastName AS 'ManagerLastName',ut2.Email AS 'ManagerEmail'
+                                         FROM UserTable ut1 LEFT JOIN UserTable ut2 ON ut1.ManagerID=ut2.UserID
+                                         WHERE ut1.UserID IN (SELECT UserID 
+						                                        FROM Enrollment
+						                                        WHERE TrainingID = @trainingID AND FinalStatus='Approved') ";
+                SqlCommand command = new SqlCommand(selectQuery, _dbContext.GetConn());
+                command.Parameters.AddWithValue("trainingID", trainingID);
+                SqlDataReader reader = await command.ExecuteReaderAsync();
+                if (reader.HasRows)
+                {
+                    list = DataBaseHelper.ReturnAllRowsFromDB<SelectedEmployeeViewModel>(reader);
+                }
+                reader.Close();
+                return list;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         public async Task<IEnumerable<ITraining>> GetDeletedTrainings()
         {
             try

@@ -28,5 +28,6 @@ namespace DataLibrary.Repository.RepoInterfaces
         Task<bool> Delete(int trainingID);
         Task<IEnumerable<ITraining>> GetCompletedTrainings();
         Task<IEnumerable<ITraining>> GetDeletedTrainings();
+        Task<IEnumerable<SelectedEmployeeViewModel>> GetSelectedEmployees(int trainingID);
     }
 }
