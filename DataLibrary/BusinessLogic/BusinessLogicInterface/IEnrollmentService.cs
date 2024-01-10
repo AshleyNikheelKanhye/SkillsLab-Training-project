@@ -12,6 +12,7 @@ namespace DataLibrary.BusinessLogic.BusinessLogicInterface
     public interface IEnrollmentService
     {
         bool AddEnrollment(int UserID, int TrainingID);
+        IEnumerable<IEnrollment> GetDeclinedEnrollments(int userID);
         IEnumerable<IEnrollment> GetEnrollments(int UserID,Status FinalStatus, Status ManagerStatus);
         IEnumerable<EnrollmentViewModel> GetPendingEnrollments(int ManagerID);
         Task<bool> EmployeeSendMailToManagerForApplication(int userID, int trainingID);

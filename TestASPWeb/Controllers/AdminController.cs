@@ -70,5 +70,9 @@ namespace TestASPWeb.Controllers
             return Json(UserDetails, JsonRequestBehavior.AllowGet);
 
         }
+
+
+
+
     }
 }

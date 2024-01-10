@@ -180,6 +180,21 @@ namespace DataLibrary.BusinessLogic
             }
         }
 
+
+        public async Task<string> GetTrainingDescription(int trainingID)
+        {
+            try
+            {
+                return await _trainingRepo.GetTrainingDescription(trainingID);
+            }
+            catch(Exception ex)
+            {
+                this._logger.LogError(ex);
+                return null;
+            }
+        }
+
+
         public async Task<AutomaticProcessingViewModel> GenerateFinalListOfSelectedEmployees(int trainingID)
         {
             try
@@ -187,6 +202,7 @@ namespace DataLibrary.BusinessLogic
                 List<EmployeeApplicationViewModel> acceptedList = new List<EmployeeApplicationViewModel>();
                 List<EmployeeApplicationViewModel> rejectedList = new List<EmployeeApplicationViewModel>();
                 AutomaticProcessingViewModel automaticProcessing = new AutomaticProcessingViewModel();
+
                 //get the required training details
                 ITraining selectedTraining = await _trainingRepo.GetTraining(trainingID);
 
@@ -200,6 +216,7 @@ namespace DataLibrary.BusinessLogic
                     {
                         acceptedList.AddRange(applicationList);
                         automaticProcessing.listOfAcceptedEmployees = acceptedList;
+                        automaticProcessing.listOfRejectedEmployees = rejectedList; //send empty list
                         return automaticProcessing;
                     }
                     else
@@ -244,6 +261,7 @@ namespace DataLibrary.BusinessLogic
                     bool UpdateSucess = await _trainingRepo.ConfirmAutomaticSelection(TrainingSelectionResult, trainingID);
                     if (UpdateSucess)
                     {
+                        //send emails
                         await sendEmployeeEmailForSucessEnrollment(TrainingSelectionResult.listOfAcceptedEmployees);
                         await sendEmployeeEmailForFailureEnrollment(TrainingSelectionResult.listOfRejectedEmployees);
                     }
@@ -317,5 +335,25 @@ namespace DataLibrary.BusinessLogic
             }
             return true;
         }
+
+        public async Task<bool> QuartzAutomaticProcessing()
+        {
+            try
+            {
+                //Get all the list of trainings trainingIds that are past due deadline and has not been processed yet
+                IEnumerable<int> listOfTrainingIDsToBeProcessed = await _trainingRepo.GetListOfUnprocessedTrainingsWithPastDeadline();
+                foreach(int trainingID in listOfTrainingIDsToBeProcessed)
+                {
+                    await ConfirmAutomaticSelection(trainingID);
+                }
+                return true;
+            }
+            catch(Exception ex)
+            {
+                this._logger.LogError(ex);
+                return false;
+            }
+        }  
+
     }
 }

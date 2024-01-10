@@ -268,6 +268,26 @@ namespace DataLibrary.Repo
             }
         }
 
+        public async Task<IEnumerable<IUser>> GetEmployeesUnderManager(int managerId)
+        {
+            try
+            {
+                List<User> list = new List<User>();
+                string selectQuery = @"SELECT FirstName , LastName, Email,PhoneNo FROM UserTable WHERE ManagerID=@managerID ";
+                SqlCommand command = new SqlCommand(selectQuery,_dbContext.GetConn());
+                command.Parameters.AddWithValue("@managerID", managerId);
+
+                SqlDataReader reader = await command.ExecuteReaderAsync();
+                if (reader.HasRows)
+                {
+                    list = DataBaseHelper.ReturnAllRowsFromDB<User>(reader);
+                }
+                reader.Close();
+                return list;
+            }
+            catch { throw; }
+        }
+
         public void Update(IUser user)
         {
             throw new NotImplementedException();

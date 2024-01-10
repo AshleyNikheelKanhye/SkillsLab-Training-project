@@ -155,6 +155,15 @@ namespace TestASPWeb.Controllers
         }
 
 
+        //can be used by all
+        [HttpPost]
+        public async Task<JsonResult> GetTrainingDescription(int trainingID)
+        {
+            var desc = await _trainingService.GetTrainingDescription(trainingID);
+            return Json(desc , JsonRequestBehavior.AllowGet);
+        }
+
+
 
     }
 }

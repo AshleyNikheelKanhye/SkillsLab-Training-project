@@ -19,6 +19,7 @@ namespace DataLibrary.Repository.RepoInterfaces
         IEnumerable<EnrollmentViewModel> GetManagerApproveAndDisapproved(string choice, int ManagerID);
         Task<IEnumerable<EnrollmentViewModel>> GetEmployeesAppliedForTraining(int trainingID);
         Task<IEnumerable<IEnrollment>> GetUserEnrollments(int userid);
+        IEnumerable<IEnrollment> GetDeclinedEnrollments(int userId);
 
     }
 }

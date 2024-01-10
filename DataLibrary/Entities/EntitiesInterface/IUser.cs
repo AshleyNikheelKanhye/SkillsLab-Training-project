@@ -20,8 +20,8 @@ namespace DataLibrary.Entities.EntitiesInterface
         int? DepartmentID { get; set; }
         int? ManagerID { get; set; }
         int RoleID { get; set; }
-
-         List<Role> listOfRoles { get; set; }
+         int IsActive { get; set; }
+        List<Role> listOfRoles { get; set; }
          IEnumerable<EmployeeQualificationDetailsViewModel> listOfQualifications { get; set; }
         IEnumerable<IEnrollment> listOfTrainingEnrolled { get; set; }
 

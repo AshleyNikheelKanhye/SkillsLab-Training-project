@@ -101,7 +101,7 @@ namespace TestASPWeb.Controllers
         public JsonResult GetDeclinedTrainings()
         {
             int userID = GetUserID();
-            var list = _enrollmentService.GetEnrollments(userID, DataLibrary.Enum.Status.Disapproved, DataLibrary.Enum.Status.Disapproved);  //(FinalStatus, ManagerStatus)
+            var list = _enrollmentService.GetDeclinedEnrollments(userID);  
             return Json(list,JsonRequestBehavior.AllowGet);
         }
 

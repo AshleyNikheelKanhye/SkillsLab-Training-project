@@ -19,7 +19,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 50px;
+        padding: 80px;
     }
 
     .content {
@@ -183,6 +183,7 @@
                             var row = '<tr>' +
                                 '<td>' + application.FirstName + ' ' + application.LastName + '</td>' +
                                 '<td>' + application.Email + '</td>' +
+                                '<td>' +  formatDateTime(application.DateRegistered) + '</td>' +
                                 '</tr>';
                             tableBodyAccepted.append(row);
                         });
@@ -193,17 +194,22 @@
                                 var row = '<tr>' +
                                     '<td>' + application.FirstName + ' ' + application.LastName + '</td>' +
                                     '<td>' + application.Email + '</td>' +
+                                    '<td>' + formatDateTime(application.DateRegistered) + '</td>' +
                                     '</tr>';
                                 tableBodyRejected.append(row);
-                                          
+
                             });
+                            $('#tableListOfRejected').show();
                             $('div#popupListOfRejectedTableDiv').show();
+                        } else {
+                            $('#EmptyRejectedListHeader').html("No Applied Employees are rejected");
+                            $('#tableListOfRejected').hide();
                         }
                         //need to show and hide appropriate divs
                         $('div#popupStartAutoProcessingDiv').show();
                         $('div#popupListOfAcceptedTableDiv').show();
+                        $('div#popupListOfRejectedTableDiv').show();
                         $('button#confirmAutomaticProcessing').attr("value", selectedTrainingID).show();
-                        
                     }
                 }
                 else {
@@ -252,6 +258,7 @@
 
         //function for close popup button
         $(document).on("click", "button#cancelBtn", function () {
+            $('#EmptyRejectedListHeader').html("");
             $('button#confirmAutomaticProcessing').attr("value", "");
             $('div#popupStartAutoProcessingDiv').hide();
             $('div#trainingsToBeProcessedTableDiv').show();
@@ -333,6 +340,7 @@
                         <tr>
                             <th>Employee Name</th>
                             <th>Employee Email</th>
+                            <th>Date Applied</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -344,11 +352,13 @@
             <!--table for rejected employees-->
             <div id="popupListOfRejectedTableDiv" class="TableViewDiv">
                 <h3 style="color: indianred; text-align: left;">Rejected Employees For Training</h3>
+                <h3 id="EmptyRejectedListHeader"></h3>
                 <table id="tableListOfRejected" border="1" class="requestsTable">
                     <thead>
                         <tr>
                             <th>Employee Name</th>
                             <th>Employee Email</th>
+                            <th>Date Applied</th>
                         </tr>
                     </thead>
                     <tbody>

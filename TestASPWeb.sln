@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestASPWeb", "TestASPWeb\Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLibrary", "DataLibrary\DataLibrary.csproj", "{DC457745-90CF-4530-9E57-507B7C24B272}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test", "test\test.csproj", "{9EDA9216-A002-4463-B70D-9D43B8F62E29}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{DC457745-90CF-4530-9E57-507B7C24B272}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DC457745-90CF-4530-9E57-507B7C24B272}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DC457745-90CF-4530-9E57-507B7C24B272}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9EDA9216-A002-4463-B70D-9D43B8F62E29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EDA9216-A002-4463-B70D-9D43B8F62E29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9EDA9216-A002-4463-B70D-9D43B8F62E29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9EDA9216-A002-4463-B70D-9D43B8F62E29}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

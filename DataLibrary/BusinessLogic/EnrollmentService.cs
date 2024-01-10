@@ -58,9 +58,24 @@ namespace DataLibrary.BusinessLogic
             }
         }
 
+        
+
         public IEnumerable<IEnrollment> GetEnrollments(int UserID, Status FinalStatus,Status ManagerStatus)
         {
             return _enrollmentDAL.GetEnrollments(UserID,FinalStatus, ManagerStatus);
+        }
+
+        public IEnumerable<IEnrollment> GetDeclinedEnrollments(int userID)
+        {
+            try
+            {
+                return _enrollmentDAL.GetDeclinedEnrollments(userID);
+            }
+            catch(Exception ex)
+            {
+                this._logger.LogError(ex);
+                return null;
+            }
         }
 
         public IEnumerable<EnrollmentViewModel> GetPendingEnrollments(int ManagerID)
@@ -118,51 +133,51 @@ namespace DataLibrary.BusinessLogic
 
         public async Task<bool> ManagerSendMailToEmployee(int EnrollmentID , int ManagerID,string DisapprovalMessage)
         {
-            string htmlBody , subject;
-            string ManagerName = _userDAL.GetFullName(ManagerID);
-            EnrollmentEmailViewModel model = _enrollmentDAL.GetEnrollmentEmailViewModel(EnrollmentID);
-
-            if (DisapprovalMessage == "") //meaning approval
-            {
-                 htmlBody = $@"
-                <html>
-                <head>
-                    <title>Manager Approval</title>
-                </head>
-                <body>
-                    <p>Hello {model.FirstName + " " + model.LastName}</p>
-                    <p>Manager <strong>{ManagerName}</strong> has approved you request for Training <strong>{model.TrainingName}</strong></p>
-                    <br/>
-                </body>
-                </html>
-                ";
-
-                 subject = $"{ManagerName} approved your request for {model.TrainingName}";
-            }
-            else //meaning disaproval
-            {
-                 htmlBody = $@"
-                <html>
-                <head>
-                    <title>Manager Disapproval</title>
-                </head>
-                <body>
-                    <p>Hello {model.FirstName + " " + model.LastName}</p>
-                    <p>Manager <strong>{ManagerName}</strong> has Disapproved you request for Training <strong>{model.TrainingName}</strong></p>
-                    <p>Reason : {DisapprovalMessage}</p>
-                    <br/>
-                </body>
-                </html>
-                ";
-
-                 subject = $"{ManagerName} Disaproved your request for {model.TrainingName}";
-            }
-
             try
             {
-                await EmailSender.SendEmail(subject, htmlBody, model.Email);
-                return true;
-            }
+                string htmlBody , subject;
+                string ManagerName = _userDAL.GetFullName(ManagerID);
+                EnrollmentEmailViewModel model = _enrollmentDAL.GetEnrollmentEmailViewModel(EnrollmentID);
+
+                if (DisapprovalMessage == "") //meaning approval
+                {
+                     htmlBody = $@"
+                    <html>
+                    <head>
+                        <title>Manager Approval</title>
+                    </head>
+                    <body>
+                        <p>Hello {model.FirstName + " " + model.LastName}</p>
+                        <p>Manager <strong>{ManagerName}</strong> has approved you request for Training <strong>{model.TrainingName}</strong></p>
+                        <br/>
+                    </body>
+                    </html>
+                    ";
+
+                     subject = $"{ManagerName} approved your request for {model.TrainingName}";
+                }
+                else //meaning disaproval
+                {
+                     htmlBody = $@"
+                    <html>
+                    <head>
+                        <title>Manager Disapproval</title>
+                    </head>
+                    <body>
+                        <p>Hello {model.FirstName + " " + model.LastName}</p>
+                        <p>Manager <strong>{ManagerName}</strong> has Disapproved you request for Training <strong>{model.TrainingName}</strong></p>
+                        <p>Reason : {DisapprovalMessage}</p>
+                        <br/>
+                    </body>
+                    </html>
+                    ";
+
+                     subject = $"{ManagerName} Disaproved your request for {model.TrainingName}";
+                }
+
+                    await EmailSender.SendEmail(subject, htmlBody, model.Email);
+                    return true;
+                }
             catch (Exception ex)
             {
                 this._logger.LogError(ex);
@@ -170,8 +185,6 @@ namespace DataLibrary.BusinessLogic
             }
 
         }
-
-
 
 
         public async Task<bool> SendTestMail()

@@ -59,7 +59,18 @@ namespace DataLibrary.Services
             return _userRepo.GetRoleList(userId);
         }
 
-
+        public async Task<IEnumerable<IUser>> GetEmployeesUnderManager(int managerID)
+        {
+            try
+            {
+                return await _userRepo.GetEmployeesUnderManager(managerID);
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(ex);
+                return null;
+            }
+        }
 
         public IEnumerable<ListOfManagersModel> GetAllManagers()
         {

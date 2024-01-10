@@ -20,7 +20,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 50px;
+        padding: 60px;
     }
 
     .content {
@@ -30,10 +30,21 @@
         border-radius: 15px;
     }
 
+    button {
+        background-color: #e0f2f1;
+        border-radius: 10px;
+    }
+
+        button:hover {
+            transition: 0.25s;
+            background: rgb(56,130,209);
+            color: #fff;
+        }
+
+
     #updatePopupDiv {
         justify-content: center;
         align-items: center;
-        
         padding: 1px;
     }
 
@@ -51,7 +62,7 @@
         border-radius: 10px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         width: 1000px;
-        color:#ffffff;
+        color: #ffffff;
         margin: 0;
     }
 
@@ -84,7 +95,7 @@
     }
 
         .requestsTable tbody tr:nth-child(even) {
-            background-color: #ccffff;
+            background-color: #ffffff;
         }
 
         .requestsTable tbody tr:nth-child(odd) {
@@ -95,6 +106,8 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
 
 <script>
     $(document).ready(function () {
@@ -138,29 +151,44 @@
             return new Promise((resolve, reject) => {
                 var URL = "/Training/getAll";
                 getAJAXCall(URL).then((response) => {
-                    var tableBody = $('#AllTrainingTable tbody');
-                    tableBody.empty();
-                    if (response.length === 0) {
-                        $('div#AllTrainingTableDIV').hide();
-                        $('div#emptyListHeaderDiv').html("<h2>Seems there are no Trainings Yet.</h2>").show();
-                        resolve();
+                    if ($.fn.DataTable.isDataTable('#AllTrainingTable')) {
+                        $('#AllTrainingTable').DataTable().clear().destroy();
                     }
-                    else {
-                        $.each(response, function (index, training) {
-                            var row = '<tr>' +
-                                '<td>' + training.TrainingName + '</td>' +
-                                '<td>' + training.DepartmentName + '</td>' +
-                                '<td>' + formatDateTime(training.ClosingDate) + '</td>' +
-                                '<td>' + formatDateTime(training.TrainingStartDate) + '</td>' +
-                                '<td><button id="viewEmployeesBtn" value="' + training.TrainingID + '">View Employees</button></td>' +
-                                '<td><button id="viewTraningPrerequisiteBtn"value="' + training.TrainingID + '">View Prerequisites</button></td>' +
-                                '</tr>';
-                            tableBody.append(row);
-                        });
-                        $('div#emptyListHeaderDiv').empty().hide();
-                        $('div#AllTrainingTableDIV').show();
-                        resolve();
-                    }
+                    $('#AllTrainingTable').DataTable({
+                        data: response,
+                        columns: [
+                            { data: 'TrainingName' },
+                            { data: 'DepartmentName' },
+                            {
+                                data: 'ClosingDate',
+                                render: function (data, type, row) {
+                                    return formatDateTime(data);
+                                }
+                            },
+                            {
+                                data: 'TrainingStartDate',
+                                render: function (data, type, row) {
+                                    return formatDateTime(data);
+                                }
+                            },
+                            {
+                                data: 'TrainingID',
+                                render: function (data, type, row) {
+                                    return '<button id="viewEmployeesBtn" value="' + data + '">View Employees</button>'
+                                }
+                            },
+                            {
+                                data: 'TrainingID',
+                                render: function (data, type, row) {
+                                    return '<button id="viewTraningPrerequisiteBtn"value="' + data + '">View Prerequisites</button>'
+                                }
+                            },
+                        ],
+                        ordering:false
+                    });
+                    $('div#emptyListHeaderDiv').empty().hide();
+                    $('div#AllTrainingTableDIV').show();
+                    resolve();
                 }).catch((error) => {
                     console.error(error);
                     toastr.error("Error on loading Trainings table");
@@ -168,6 +196,7 @@
                 });
             });
         }
+
 
         //populate table upcoming Trainings
         function populateTableUpcomingTrainings() {
@@ -385,6 +414,7 @@
             serverCall.fetchApiCall().then((response) => {
                 if (response) {
                     $('.content').hide();
+                    tableBody.empty();
                     $('#trainingDetailsHeader').html("<h2>List of accepted employees for " + selectedTrainingName + "<h2> <h5>Starting Date : " + selectedTrainingStartingDate + "</h5><h5>Duration(days) : " + selectedTrainingDuration + "</h5>").show();
                     $.each(response, function (index, employee) {
                         var row = '<tr>' +
@@ -506,7 +536,14 @@
         $(document).on("click", "button#cancelUpdateBtn", function () {
             $('.content').hide();
             $("div#upcomingTrainingsDIV").show();
-        })
+        });
+
+        //close button for popup selected employees
+        $(document).on("click", "button#closeBtnSelectedEmployees", function () {
+
+            $('.content').hide();
+            $('div#completedTrainingsDIV').show();
+        });
 
         //close button for popup employees
         $(document).on("click", "button#closePopUpEmployeeBtn", function () {
@@ -784,7 +821,6 @@
                     </tr>
                 </thead>
                 <tbody>
-
                 </tbody>
             </table>
         </div>
@@ -805,7 +841,6 @@
                     </tr>
                 </thead>
                 <tbody>
-
                 </tbody>
             </table>
         </div>
@@ -859,8 +894,8 @@
         </div>
         <hr />
         <div id="actionButtonDivs">
+            <button id="closeBtnSelectedEmployees">Close</button>
             <button id="exportToCvsBtn">Download in CVS</button>
-            <button id="closeBtn">Close</button>
         </div>
     </div>
 

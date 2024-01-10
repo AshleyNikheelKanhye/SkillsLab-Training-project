@@ -2,21 +2,27 @@
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    padding-top:10px;
     background-color: #f0f5f9;
     color: #333;
 }
 
-header {
+/*header {
     background-color: #3e92cc;
     color: #fff;
-    padding: 20px;
+    padding: 5px;
     text-align: center;
+    position:fixed;
 }
-
+*/
 nav {
     background-color: #89bdd3;
     padding: 22px;
     color: #fff;
+    position:sticky;
+    top:0;
+    width:100%;
+    z-index:100;
 }
 
     nav nav-container {
@@ -25,6 +31,7 @@ nav {
         padding: 5px;
         border-radius: 22px;
         box-shadow: 2px 2px 20px rgba(0,0,0,0.3);
+        
     }
 
     nav a {
@@ -41,6 +48,13 @@ nav {
             color: #fff;
         }
 
+
+.sticky {
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
 section {
     padding: 20px;
     margin: 20px;
@@ -49,7 +63,7 @@ section {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-footer {
+/*footer {
     text-align: center;
     padding: 10px;
     background-color: #3e92cc;
@@ -57,7 +71,7 @@ footer {
     position: absolute;
     bottom: 0;
     width: 100%;
-}
+}*/
 
 .error-message-container p {
     color: red;

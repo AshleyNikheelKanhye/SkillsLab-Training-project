@@ -11,6 +11,7 @@ using System.Data.SqlClient;
 using System.Reflection.Emit;
 using System.Threading.Tasks;
 using System.Web.UI.WebControls;
+using System.Web.WebSockets;
 
 namespace DataLibrary.Repo
 {
@@ -27,7 +28,7 @@ namespace DataLibrary.Repo
             try
             {
                 List<Training> returnList = new List<Training>();
-                string query = "SELECT TrainingID,TrainingName,Capacity,ClosingDate,TrainingStartDate,t.DepartmentID,d.DepartmentName,t.IsAutomaticProcessed,t.Duration " +
+                string query = "SELECT TrainingID,TrainingName,Capacity,ClosingDate,TrainingStartDate,t.DepartmentID,d.DepartmentName,t.IsAutomaticProcessed,t.Duration,t.Description " +
                                 "FROM Training t INNER JOIN Department d ON t.DepartmentID = d.DepartmentID  ORDER BY ClosingDate";
                                 
                 SqlCommand command = new SqlCommand(query,_dbContext.GetConn());
@@ -190,6 +191,26 @@ namespace DataLibrary.Repo
             catch (Exception ex) { throw ex; }
         }
 
+        public async Task<string> GetTrainingDescription(int trainingID)
+        {
+            try
+            {
+                string desc = "";
+                string selectQuery = @"SELECT Description FROM Training WHERE TrainingID = @trainingID";
+                SqlCommand command = new SqlCommand(selectQuery, _dbContext.GetConn());
+                command.Parameters.AddWithValue("@trainingID",trainingID);
+                SqlDataReader reader = await command.ExecuteReaderAsync();
+                if (reader.Read())
+                {
+                    desc = (string)reader["Description"];
+                }
+                reader.Close();
+                return desc;
+
+            }
+            catch { throw; }
+        }
+
         public async Task<bool> Add(AddTrainingViewModel addTrainingViewModel)
         {
             SqlTransaction transaction = _dbContext.GetConn().BeginTransaction();
@@ -236,7 +257,19 @@ namespace DataLibrary.Repo
             }
         }
 
-
+        public async Task<IEnumerable<int>> GetListOfUnprocessedTrainingsWithPastDeadline()
+        {
+            List<int> listOfTrainingIDs = new List<int>();
+            string selectQuery = "";
+            SqlCommand command = new SqlCommand(selectQuery, _dbContext.GetConn());
+            SqlDataReader reader = await command.ExecuteReaderAsync();
+            while (reader.Read())
+            {
+                listOfTrainingIDs.Add((int)reader["TrainingID"]);
+            }
+            reader.Close();
+            return listOfTrainingIDs;
+        }
 
         public async Task<IEnumerable<ITraining>> GetUnprocessedTrainings()
         {
@@ -363,7 +396,6 @@ namespace DataLibrary.Repo
                 string updateQueryDisapprove = "UPDATE Enrollment SET FinalStatus = '" + Status.Disapproved.ToString() + "' WHERE EnrollmentID=@EnrollmentIDDisapprove";
 
                 //approved Enrollments
-
                 foreach (EmployeeApplicationViewModel application in listAccepted)
                 {
                     using (SqlCommand approveCommand = new SqlCommand(updateQueryApprove, _dbContext.GetConn(), transaction))

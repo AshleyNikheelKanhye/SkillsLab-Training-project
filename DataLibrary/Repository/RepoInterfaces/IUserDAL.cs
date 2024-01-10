@@ -24,6 +24,7 @@ namespace DataLibrary.Repository.RepoInterfaces
         string GetFullName(int userID);
         Task<int> GetTotalNumberOfUserRecords();
         List<Role> GetRoles(int userID);
+        Task<IEnumerable<IUser>> GetEmployeesUnderManager(int managerId);
 
 
     }

@@ -18,6 +18,7 @@ namespace DataLibrary.Entities
         public string DepartmentName { get; set; }
         public int RoleID {get; set; }
         public List<Role> listOfRoles {  get; set; }
+        public int IsActive { get; set; }
         public IEnumerable<EmployeeQualificationDetailsViewModel> listOfQualifications { get; set; }
         public IEnumerable<IEnrollment> listOfTrainingEnrolled { get; set; }
         

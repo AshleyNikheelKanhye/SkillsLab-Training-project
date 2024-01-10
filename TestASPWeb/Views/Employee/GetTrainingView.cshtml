@@ -6,6 +6,9 @@
 }
 
 <style>
+
+
+
     body {
         font-family: Arial, sans-serif;
         background-image: url("../../Images/background.jpg");
@@ -155,6 +158,16 @@
             transform: rotate(360deg);
         }
     }
+
+    .infoBtn {
+        background-color: white;
+        border: none;
+        color: black;
+        padding: 5px;
+        font-size: 30px;
+        cursor: pointer;
+    }
+
 </style>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
@@ -163,6 +176,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
 
 <script>
@@ -201,7 +216,7 @@
             var URL = "";
             if (selectedOption == "1") {
                 URL = "/Enrollment/GetFinalApprovedTrainings";
-                $('div#headerSelectDiv').html('<h2>Registered Trainings</h2>');
+                $('div#headerSelectDiv').html('<h2>Registered Trainings </h2>');
             }
             if (selectedOption == "2") {
                 URL = "/Enrollment/GetManagerApprovedTrainings";
@@ -212,7 +227,7 @@
                 $('div#headerSelectDiv').html('<h2>Trainings pending to be Approved by Manager</h2>');
             }
             if (selectedOption == "4") {
-                URL = "/Enrollment/GetDeclinedTrainings"; // TODO : need to use another method to deals with getDeclinedTrainints, having ambiguity between finalStatus disapproved when managerStatus==approved.
+                URL = "/Enrollment/GetDeclinedTrainings"; 
                 $('div#headerSelectDiv').html('<h2>Trainings Declined by Manager or Automatic selection</h2>');
             }
             populateMyTrainingDiv(URL).then(() => {
@@ -291,7 +306,7 @@
         }
 
 
-        //function to populate MyTrainings card divs
+        //function to populate MyTrainings 
         function populateMyTrainingDiv(URL) {
             return new Promise((resolve, reject) => {
                 getAJAXCall(URL).then((response) => {
@@ -305,7 +320,6 @@
                         else {
                             $('#EmptyListHeaderdiv').html("").hide();
                             if ($.fn.DataTable.isDataTable('#myTrainingTable')) {
-                                // DataTable is already initialized, destroy it
                                 $('#myTrainingTable').DataTable().clear().destroy();
                             }
                             
@@ -320,12 +334,20 @@
                                         }
                                     },
                                     { data: 'Duration' },
-                                    { data: 'ManagerStatus' },
-                                    { data: 'FinalStatus' },
                                     {
-                                        data: 'EnrollmentID',
+                                        data: 'ManagerStatus',
                                         render: function (data, type, row) {
-                                            return '<button id="viewEnrollmentBtn" value="' + data + '">View Enrollment</button>';
+                                            if (data == 'Approved') { return '<strong style="color:green;">' + data + '</strong>'; }
+                                            if (data == 'Disapproved') { return '<strong style="color:red;">' + data + '</strong>'; }
+                                            else { return '<strong style="color:orange;">' + data + '</strong>'; }
+                                        }
+                                    },
+                                    {
+                                        data: 'FinalStatus',
+                                        render: function (data, type, row) {
+                                            if (data == 'Approved') { return '<strong style="color:green;">' + data + '</strong>'; }
+                                            if (data == 'Disapproved') { return '<strong style="color:red;">' + data + '</strong>'; }
+                                            else { return '<strong style="color:orange;">' + data + '</strong>'; }
                                         }
                                     },
                                  ],
@@ -380,7 +402,7 @@
                                 {
                                     data: 'TrainingID',
                                     render: function (data, type, row) {
-                                        return '<button id="viewPrerequisites" value="' + data + '">Prerequisites</button> <button id="viewMoreDetails" value="'+data+'">More Details</button>';
+                                        return `<button id="viewPrerequisites" value= ${data}>Details</button>`;
                                     }
                                 },
                             ],
@@ -401,8 +423,10 @@
         $("#trainingTable tbody").on("click", "#viewPrerequisites", function () {
             var URL = "/Training/GetPrerequisites";
             var row = $(this).closest("tr");
+            var clickedTrainingName = row.find("td:eq(0)").text(); 
             var trainingID = $(this).val();
             var trainingobj = { trainingID: trainingID }
+            var descriptionURL = "/Training/GetTrainingDescription";
             var serverCall = new ServerCall({ url: URL, parameters: trainingobj, callMethod: "POST" });
             serverCall.fetchApiCall().then((response) => {
                 if (response) {
@@ -412,8 +436,7 @@
                         paragraph.textContent = ' -   ' + p.Details;
                         $('div#popupText').append(paragraph);
                     });
-                    //Access value within the clicked row
-                    var clickedTrainingName = row.find("td:eq(0)").text(); ///check table header position in table
+                    
                     $('div#trainingName').html("<h2>Training prerequisites for : " + clickedTrainingName+"</h2>");
                     $('div#divAllTrainingTable').fadeOut();
                     $('div#popup').fadeIn(1000);
@@ -424,6 +447,16 @@
             }).catch((error) => {
                 console.error(error);
                 toastr.error("error");
+            });
+
+            var serverCallDescription = new ServerCall({ url: descriptionURL, parameters: trainingobj, callMethod: "POST" });
+            serverCallDescription.fetchApiCall().then((response) => {
+                if (response) {
+                    console.log(response);
+                    $('div#trainingDescription').html(response);
+                } else {
+                    $('div#trainingDescription').html("could not load training description");
+                }
             });
         });
 
@@ -476,15 +509,14 @@
             //modify the popupdiv
             $('#trainingTitleHeader').text("Apply for Training : " + selectedTrainingName);
             var bodyText = "<h4>You have all the qualifications to apply for this training</h4>" +
-                "<h6>Once you apply, You will need your Manager's Approval before you can be enrolled in the Training</h6>" +
-                "<h6>Your Manager has to approve your request before the Training enrollment deadline : " + selectedTrainingClosingDate + "</h6>" +
-                "<h6>This training favours employees in the " + selectedTrainingDepartmentFavoured + " department</h6>" +
+                "<h6>Once you apply, You will need your Manager's Approval before you can be selected for the Training.</h6>" +
+                "<h6>Your Manager will need to approve your request before the Training Enrollment Deadline: <strong>" + selectedTrainingClosingDate + "</strong></h6>" +
+                "<h6>This Training favours <strong>" + selectedTrainingDepartmentFavoured + "</strong> Employees</h6>" +
                 "<hr />" +
-                "<h5>Training Starting Date : " + selectedTrainingStartDate + "</h5>" +
-                "<h5>Number of seats this training is accepting is : " + selectedTrainingSeatsAvailable + "</h5>" +
-                "<h5>Training Duration (days) :" + selectedTrainingDuration + "</h5>" +
-                "<label for='myTextArea'>Training Description : </label>" +
-                "<textarea id='myTextArea'>" + selectedTrainingDescription + "</textarea>" +
+                "<h5>Training Starting Date : <strong>" + selectedTrainingStartDate + "</strong></h5>" +
+                "<h5>Number of Seats available : <strong>" + selectedTrainingSeatsAvailable + "</strong></h5>" +
+                "<h5>Training Duration (days) :<strong>" + selectedTrainingDuration + "</strong></h5>" +
+                "<div>Training Description : <br/> "+selectedTrainingDescription+"</div>"+
                 "<hr />"+
                 "<h3>You will get Emails whenever there are changes on your application</h3>";
             $('div#applyBodyDiv').html(bodyText);
@@ -521,6 +553,11 @@
         }
 
 
+        //modal
+        $(document).on("click", "#registeredInfobtn", function () {
+            document.getElementById('id01').style.display = 'block';
+        });
+
         //flow
         $('#mySelect').trigger('change');
 
@@ -556,6 +593,7 @@
                 <option value="3">Pending Training Requests</option>
                 <option value="4">Declined Training Requests</option>
             </select>
+            <button class="infoBtn" id="registeredInfobtn"><i class="fa fa-question-circle" aria-hidden="true"></i></button>
         </div>
         <br />
         <div id="headerSelectDiv"></div>
@@ -571,7 +609,6 @@
                             <th>Training Duration(days)</th>
                             <th>Manager Status</th>
                             <th>Final Status</th>
-                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -598,7 +635,6 @@
                         <th>Duration(days)</th>
                         <th>Department Favoured</th>
                         <th>Click to Apply for training</th>
-                        <th hidden>Description</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -612,7 +648,7 @@
             <div id="applyBodyDiv"></div>
             <hr />
             <div id="applyOptionBtnsDiv">
-                <button id="finalApplyBtn">Apply</button>
+                <button id="finalApplyBtn">Apply For Training</button>
                 <button id="cancelApplyBtn">Cancel</button>
             </div>
         </div>
@@ -631,13 +667,12 @@
                         <th>Seats Available</th>
                         <th>Deadline Registration Date</th>
                         <th>Start Date</th>
-                        <th>Duration</th>
+                        <th>Duration(days)</th>
                         <th>Department Favoured</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-
                 </tbody>
             </table>
             <span id="info"></span>
@@ -646,8 +681,35 @@
             <div id="trainingName"></div>
             <hr />
             <div id="popupText"></div>
+            <hr />
+            <div>
+                <h3>Training Description</h3>
+                <div id="trainingDescription"></div>
+            </div>
+            <br />
+            <hr />
             <div><button id="closebtn">Close</button></div>
         </div>
     </div>
 
+    <!--modal-->
+    <div id="id01" class="w3-modal">
+        <div class="w3-modal-content w3-animate-top w3-card-4">
+            <header class="w3-container w3-blue">
+                <span onclick="document.getElementById('id01').style.display='none'"
+                      class="w3-button w3-display-topright">&times;</span>
+                <h2>My Trainings</h2>
+            </header>
+            <div class="w3-container">
+                <h3>Options</h3>
+                <hr />
+                <ul>
+                    <li><strong>Registered Trainings :</strong> Trainings you have been successfuly registered </li>
+                    <li><strong>Manager Approved Request :</strong> Trainings Approved by your Manager but not yet approved by Admin: </li>
+                    <li><strong>Pending Training Request :</strong> Trainings Not yet Approved by your Manager</li>
+                    <li><strong>Declined Training Request:</strong> Trainings Declined by your Manager or by the Admin(in Automatic Processing)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </div>
