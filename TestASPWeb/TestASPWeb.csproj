@@ -12177,6 +12177,7 @@
     <Content Include="Views\Admin\AutomaticProcessingView.cshtml" />
     <Content Include="Views\Admin\AllUsersView.cshtml" />
     <Content Include="Views\Admin\AddNewTrainingView.cshtml" />
+    <Content Include="Views\Employee\InboxView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

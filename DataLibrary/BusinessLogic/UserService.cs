@@ -83,7 +83,7 @@ namespace DataLibrary.Services
         }
         public IUser Register(RegisterEmployeeViewModel user)
         {
-            //need to hash password
+            
             string unhashedPassword = user.Password;
             string hashedPassword = PasswordHasher.GenerateSHA256Hash(unhashedPassword);
             user.Password= hashedPassword;

@@ -26,6 +26,7 @@ namespace DataLibrary.BusinessLogic.Notification
                 Body = Body,
                 IsBodyHtml = true
             };
+
             try
             {
                 await smtpClient.SendMailAsync(mailMessage);
@@ -34,7 +35,7 @@ namespace DataLibrary.BusinessLogic.Notification
             catch (Exception ex)
             {
                 return false;
-                
+
             }
         }
     }

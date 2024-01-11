@@ -97,7 +97,7 @@ namespace DataLibrary.BusinessLogic
         }
 
 
-        public async Task<bool> EmployeeSendMailToManagerForApplication(int userID, int trainingID)
+        public async Task EmployeeSendMailToManagerForApplication(int userID, int trainingID)
         {
             string managerEmail = _userDAL.GetManagerEmailOfEmployee(userID);
             string employeeName = _userDAL.GetFullName(userID);
@@ -122,16 +122,16 @@ namespace DataLibrary.BusinessLogic
             try
             {
                 await EmailSender.SendEmail(subject, htmlBody, managerEmail);
-                return true;
+                return ;
             }
             catch (Exception ex) 
             {
                 this._logger.LogError(ex);
-                return false;
+                return ;
             }
         }
 
-        public async Task<bool> ManagerSendMailToEmployee(int EnrollmentID , int ManagerID,string DisapprovalMessage)
+        public async Task ManagerSendMailToEmployee(int EnrollmentID , int ManagerID,string DisapprovalMessage)
         {
             try
             {
@@ -176,20 +176,20 @@ namespace DataLibrary.BusinessLogic
                 }
 
                     await EmailSender.SendEmail(subject, htmlBody, model.Email);
-                    return true;
+                    return ;
                 }
             catch (Exception ex)
             {
                 this._logger.LogError(ex);
-                return false;
+                return ;
             }
 
         }
 
 
-        public async Task<bool> SendTestMail()
+        public async Task SendTestMail()
         {
-            string managerEmail = "lornk7@gmail.com";
+            string managerEmail = "ashley.kanhye@ceridian.com";
             string htmlBody = $@"
                 <html>
                 <head>
@@ -204,13 +204,13 @@ namespace DataLibrary.BusinessLogic
             string subject = "this is a test email";
             try
             {
-               bool emailResult = await EmailSender.SendEmail(subject, htmlBody, managerEmail);
-               return true;
+               bool emailresult  = await EmailSender.SendEmail(subject, htmlBody, managerEmail);
+               return ;
             }
             catch (Exception ex) 
             {
                 this._logger.LogError(ex);
-                return false;
+                return  ;
             }
         }
 

@@ -279,7 +279,7 @@ namespace DataLibrary.BusinessLogic
             }
         }
 
-        public async Task<bool> sendEmployeeEmailForSucessEnrollment(List<EmployeeApplicationViewModel> listOfSucessApplication)
+        public async Task sendEmployeeEmailForSucessEnrollment(List<EmployeeApplicationViewModel> listOfSucessApplication)
         {
             foreach (EmployeeApplicationViewModel application in listOfSucessApplication)
             {
@@ -306,9 +306,9 @@ namespace DataLibrary.BusinessLogic
                     this._logger.LogError(ex);
                 }
             }
-            return true;
+            return ;
         }
-        public async Task<bool> sendEmployeeEmailForFailureEnrollment(List<EmployeeApplicationViewModel> listOfFailureApplication)
+        public async Task sendEmployeeEmailForFailureEnrollment(List<EmployeeApplicationViewModel> listOfFailureApplication)
         {
             foreach (EmployeeApplicationViewModel application in listOfFailureApplication)
             {
@@ -333,10 +333,10 @@ namespace DataLibrary.BusinessLogic
                     this._logger.LogError(ex);
                 }
             }
-            return true;
+            return;
         }
 
-        public async Task<bool> QuartzAutomaticProcessing()
+        public async Task QuartzAutomaticProcessing()
         {
             try
             {
@@ -346,12 +346,12 @@ namespace DataLibrary.BusinessLogic
                 {
                     await ConfirmAutomaticSelection(trainingID);
                 }
-                return true;
+                return ;
             }
             catch(Exception ex)
             {
                 this._logger.LogError(ex);
-                return false;
+                return ;
             }
         }  
 

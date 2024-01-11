@@ -206,3 +206,59 @@ Stack Trace:    at System.Data.SqlClient.SqlConnection.OnError(SqlException exce
    at DataLibrary.Repo.EnrollmentDAL.GetDeclinedEnrollments(Int32 userId)
    at DataLibrary.BusinessLogic.EnrollmentService.GetDeclinedEnrollments(Int32 userID)
 --------------------------------------------------
+--------------------------------------------------
+Timestamp: 1/11/2024 1:50:44 PM
+Exception Type: DataLibrary.BusinessLogic.Logger.Logger
+Message: No mapping exists from object type System.Data.SqlClient.SqlConnection to a known managed provider native type.
+Inner Exception: 
+Stack Trace:    at System.Data.SqlClient.MetaType.GetMetaTypeFromValue(Type dataType, Object value, Boolean inferLen, Boolean streamAllowed)
+   at System.Data.SqlClient.SqlParameter.GetMetaTypeOnly()
+   at System.Data.SqlClient.SqlParameter.Validate(Int32 index, Boolean isCommandProc)
+   at System.Data.SqlClient.SqlCommand.BuildParamList(TdsParser parser, SqlParameterCollection parameters, Boolean includeReturnValue)
+   at System.Data.SqlClient.SqlCommand.BuildExecuteSql(CommandBehavior behavior, String commandText, SqlParameterCollection parameters, _SqlRPC& rpc)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   at System.Data.SqlClient.SqlCommand.BeginExecuteReaderInternal(CommandBehavior behavior, AsyncCallback callback, Object stateObject, Int32 timeout, Boolean inRetry, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.BeginExecuteReaderAsync(CommandBehavior behavior, AsyncCallback callback, Object stateObject)
+   at System.Threading.Tasks.TaskFactory`1.FromAsyncImpl[TArg1](Func`4 beginMethod, Func`2 endFunction, Action`1 endAction, TArg1 arg1, Object state, TaskCreationOptions creationOptions)
+   at System.Threading.Tasks.TaskFactory`1.FromAsync[TArg1](Func`4 beginMethod, Func`2 endMethod, TArg1 arg1, Object state)
+   at System.Data.SqlClient.SqlCommand.ExecuteReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at DataLibrary.Repo.UserNotificationDAL.<GetUserNotifications>d__2.MoveNext() in C:\Users\P12ADC6\source\repos\TestASPWeb\DataLibrary\Repository\UserNotificationDAL.cs:line 34
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at DataLibrary.BusinessLogic.UserNotificationService.<GetUserNotifications>d__3.MoveNext() in C:\Users\P12ADC6\source\repos\TestASPWeb\DataLibrary\BusinessLogic\UserNotificationService.cs:line 29
+--------------------------------------------------
+--------------------------------------------------
+Timestamp: 1/11/2024 1:52:25 PM
+Exception Type: DataLibrary.BusinessLogic.Logger.Logger
+Message: No mapping exists from object type System.Data.SqlClient.SqlConnection to a known managed provider native type.
+Inner Exception: 
+Stack Trace:    at System.Data.SqlClient.MetaType.GetMetaTypeFromValue(Type dataType, Object value, Boolean inferLen, Boolean streamAllowed)
+   at System.Data.SqlClient.SqlParameter.GetMetaTypeOnly()
+   at System.Data.SqlClient.SqlParameter.Validate(Int32 index, Boolean isCommandProc)
+   at System.Data.SqlClient.SqlCommand.BuildParamList(TdsParser parser, SqlParameterCollection parameters, Boolean includeReturnValue)
+   at System.Data.SqlClient.SqlCommand.BuildExecuteSql(CommandBehavior behavior, String commandText, SqlParameterCollection parameters, _SqlRPC& rpc)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   at System.Data.SqlClient.SqlCommand.BeginExecuteReaderInternal(CommandBehavior behavior, AsyncCallback callback, Object stateObject, Int32 timeout, Boolean inRetry, Boolean asyncWrite)
+   at System.Data.SqlClient.SqlCommand.BeginExecuteReaderAsync(CommandBehavior behavior, AsyncCallback callback, Object stateObject)
+   at System.Threading.Tasks.TaskFactory`1.FromAsyncImpl[TArg1](Func`4 beginMethod, Func`2 endFunction, Action`1 endAction, TArg1 arg1, Object state, TaskCreationOptions creationOptions)
+   at System.Threading.Tasks.TaskFactory`1.FromAsync[TArg1](Func`4 beginMethod, Func`2 endMethod, TArg1 arg1, Object state)
+   at System.Data.SqlClient.SqlCommand.ExecuteReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at DataLibrary.Repo.UserNotificationDAL.<GetUserNotifications>d__2.MoveNext() in C:\Users\P12ADC6\source\repos\TestASPWeb\DataLibrary\Repository\UserNotificationDAL.cs:line 34
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at DataLibrary.BusinessLogic.UserNotificationService.<GetUserNotifications>d__3.MoveNext() in C:\Users\P12ADC6\source\repos\TestASPWeb\DataLibrary\BusinessLogic\UserNotificationService.cs:line 29
+--------------------------------------------------

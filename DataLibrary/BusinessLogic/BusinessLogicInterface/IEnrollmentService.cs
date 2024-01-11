@@ -15,10 +15,10 @@ namespace DataLibrary.BusinessLogic.BusinessLogicInterface
         IEnumerable<IEnrollment> GetDeclinedEnrollments(int userID);
         IEnumerable<IEnrollment> GetEnrollments(int UserID,Status FinalStatus, Status ManagerStatus);
         IEnumerable<EnrollmentViewModel> GetPendingEnrollments(int ManagerID);
-        Task<bool> EmployeeSendMailToManagerForApplication(int userID, int trainingID);
+        Task EmployeeSendMailToManagerForApplication(int userID, int trainingID);
         bool ManagerUpdatesEnrollment(int EnrollmentID,string ManagerResult);
-        Task<bool> SendTestMail();
-        Task<bool> ManagerSendMailToEmployee(int EnrollmentID, int ManagerID,string DisapproveMessage);
+        Task SendTestMail();
+        Task ManagerSendMailToEmployee(int EnrollmentID, int ManagerID,string DisapproveMessage);
         IEnumerable<EnrollmentViewModel> GetManagerApproveAndDisapproved(string Choice, int ManagerID);
         Task<IEnumerable<EnrollmentViewModel>> GetEmployeesAppliedForTraining(int trainingID);
     }

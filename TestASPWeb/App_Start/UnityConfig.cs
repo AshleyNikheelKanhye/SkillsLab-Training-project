@@ -86,6 +86,11 @@ namespace TestASPWeb
             //role
             container.RegisterType<IRole, Role>(new PerRequestLifetimeManager());
 
+            //UserNotification
+            container.RegisterType<IUserNotification, UserNotification>(new PerRequestLifetimeManager());
+            container.RegisterType<IUserNotificationDAL, UserNotificationDAL>(new PerRequestLifetimeManager());
+            container.RegisterType<IUserNotificationService, UserNotificationService>(new PerRequestLifetimeManager());
+
         }
     }
 }

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using TestASPWeb.Custom;
@@ -16,11 +17,14 @@ namespace TestASPWeb.Controllers
     public class EmployeeController : Controller
     {
         private readonly IPrerequisiteService _prerequisiteService;
+        private readonly IUserNotificationService _userNotificationService;
 
 
-        public EmployeeController(IPrerequisiteService prerequisiteService)
+
+        public EmployeeController(IPrerequisiteService prerequisiteService,IUserNotificationService userNotificationService)
         {
             this._prerequisiteService = prerequisiteService;
+            this._userNotificationService = userNotificationService;
         }
 
 
@@ -104,6 +108,15 @@ namespace TestASPWeb.Controllers
         }
 
 
+        //employee
+        [HttpPost]
+        public async Task<JsonResult> GetUserNotifications(int userID)
+        {
+            var list = await _userNotificationService.GetUserNotifications(userID);
+            return Json(list,JsonRequestBehavior.AllowGet);
+        }
+
+
 
 
         public ActionResult EmployeeView()
@@ -125,6 +138,10 @@ namespace TestASPWeb.Controllers
             return View();
         }
 
+        public ActionResult InboxView()
+        {
+            return View();
+        }
 
 
     }

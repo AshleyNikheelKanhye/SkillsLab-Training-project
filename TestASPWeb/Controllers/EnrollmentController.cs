@@ -35,7 +35,7 @@ namespace TestASPWeb.Controllers
             if (status)
             {
                 //i have disactivated email service  (uncomment to turn on)
-                //bool emailResult = await _enrollmentService.ManagerSendMailToEmployee(enrollmentID,GetUserID(),DisapproveMessage); 
+                await _enrollmentService.ManagerSendMailToEmployee(enrollmentID,GetUserID(),DisapproveMessage); 
                 return Json(new { result = status }, JsonRequestBehavior.AllowGet);
             }
             else
@@ -55,7 +55,7 @@ namespace TestASPWeb.Controllers
             {
                 //i want to implement fire and forget here
                 //i have disactivated email service (uncomment to turn on)
-                //bool emailResult = await _enrollmentService.EmployeeSendMailToManagerForApplication(userID, trainingID);
+                await _enrollmentService.EmployeeSendMailToManagerForApplication(userID, trainingID);
                 return Json(new { result = status}, JsonRequestBehavior.AllowGet); //TODO : Decide on what to do with the emailStatus
             }
             else
@@ -68,8 +68,8 @@ namespace TestASPWeb.Controllers
         public async Task<JsonResult> TestingEmailService(int trainingID) //test function to test if manager gets email.
         {
             int userID = GetUserID();
-            bool emailResult =await _enrollmentService.SendTestMail();
-            return Json(new {result = "ok" , emailStatus = emailResult}, JsonRequestBehavior.AllowGet);
+            await _enrollmentService.SendTestMail();
+            return Json(new {result = "ok"}, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]

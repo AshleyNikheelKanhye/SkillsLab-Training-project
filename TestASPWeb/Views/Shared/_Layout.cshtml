@@ -37,11 +37,13 @@
                 <a id="profile" href="@Url.Action("GetProfile", "Employee")">Profile</a>
                 <a id="Training" href="@Url.Action("GetTrainingView", "Employee")">Training</a>
                 <a id="Qualifications" href="@Url.Action("QualificationsView", "Employee")">My Qualifications</a>
+                <a id="Qualifications" href="@Url.Action("InboxView", "Employee")">Inbox</a>
             }
             else if (currentUserRoleString == "Manager")
             {
                 <a id="managerHome" href="@Url.Action("ManagerView","Manager")">Home</a>
                 <a id="approveRequests" href="@Url.Action("ApproveRequestView","Manager")">Approve Training Requests</a>
+                <a id="Qualifications" href="@Url.Action("InboxView", "Manager")">Inbox</a>
             }
             else
             {
@@ -51,6 +53,7 @@
                 <a id="adminAutomaticProcess" href="@Url.Action("AutomaticProcessingView","Admin")">Automatic Processing</a>
                 <a id="adminViewUsers" href="@Url.Action("AllUsersView","Admin")">View Employees</a>
             }
+
             <a href="@Url.Action("Logout","User")">Logout</a>
         </div>
     </nav>

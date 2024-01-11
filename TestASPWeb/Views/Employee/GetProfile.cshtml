@@ -20,7 +20,7 @@ FETCH FROM DATABASE TO GET THE Profile Details
         $('nav .nav-container a').removeClass('active');
         $('#profile').addClass('active');
 
-/*        $('button#testbtn').click(function () {
+        $('button#testbtn').click(function () {
             var testTrainingID = 1;
             var trainingObj = { trainingID: testTrainingID };
             var URL = "/Enrollment/TestingEmailService"
@@ -35,6 +35,7 @@ FETCH FROM DATABASE TO GET THE Profile Details
                 }
             });
         });
+        /*
         $('button#testHangfire').click(function () {
 
             var URL = "/Enrollment/TestingHanfireService"
@@ -54,10 +55,10 @@ FETCH FROM DATABASE TO GET THE Profile Details
 
         $("#downloadBtn").click(function () {
             // Make an AJAX call to fetch JSON data
-            
+
             var URL = "/Training/getUpcomings";
-            
-            var serverCall = new ServerCall({ url: URL,callMethod: "GET" });
+
+            var serverCall = new ServerCall({ url: URL, callMethod: "GET" });
             serverCall.fetchApiCall().then((response) => {
                 // Convert JSON to CSV
                 const csvData = convertJSONToCSV(response);
@@ -127,11 +128,12 @@ FETCH FROM DATABASE TO GET THE Profile Details
 
     });
 </script>
-@*<button id="testbtn">Click me to test if my manager get an application mail</button>
-<button id="testHangfire">click me to test hangfire to test if lordnk7@gmail.com gets an email</button>
+<button id="testbtn">Click me to test if my manager get an application mail</button>
+    <br />
+    this will trigger an async email.
+@*
+    <button id="testHangfire">click me to test hangfire to test if lordnk7@gmail.com gets an email</button>
 
-<br />
-this will trigger an async email.
 *@
 <br />
 <br />

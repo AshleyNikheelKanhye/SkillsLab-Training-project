@@ -83,6 +83,7 @@
     <Compile Include="BusinessLogic\BusinessLogicInterface\IEnrollmentService.cs" />
     <Compile Include="BusinessLogic\BusinessLogicInterface\IPrerequisiteService.cs" />
     <Compile Include="BusinessLogic\BusinessLogicInterface\ITrainingService.cs" />
+    <Compile Include="BusinessLogic\BusinessLogicInterface\IUserNotificationService.cs" />
     <Compile Include="BusinessLogic\BusinessLogicInterface\IUserService.cs" />
     <Compile Include="BusinessLogic\DepartmentService.cs" />
     <Compile Include="BusinessLogic\EnrollmentService.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="BusinessLogic\Notification\EmailSender.cs" />
     <Compile Include="BusinessLogic\PrerequisiteService.cs" />
     <Compile Include="BusinessLogic\TrainingService.cs" />
+    <Compile Include="BusinessLogic\UserNotificationService.cs" />
     <Compile Include="DBContext.cs" />
     <Compile Include="Entities\Department.cs" />
     <Compile Include="Entities\EmployeeQualification.cs" />
@@ -102,10 +104,12 @@
     <Compile Include="Entities\EntitiesInterface\IRole.cs" />
     <Compile Include="Entities\EntitiesInterface\ITraining.cs" />
     <Compile Include="Entities\EntitiesInterface\IUser.cs" />
+    <Compile Include="Entities\EntitiesInterface\IUserNotification.cs" />
     <Compile Include="Entities\Prerequisite.cs" />
     <Compile Include="Entities\Role.cs" />
     <Compile Include="Entities\Training.cs" />
     <Compile Include="Entities\User.cs" />
+    <Compile Include="Entities\UserNotification.cs" />
     <Compile Include="Enum\Status.cs" />
     <Compile Include="Enum\UserRole.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -118,9 +122,11 @@
     <Compile Include="Repository\RepoInterfaces\IPrerequisiteDAL.cs" />
     <Compile Include="Repository\RepoInterfaces\ITrainingDAL.cs" />
     <Compile Include="Repository\RepoInterfaces\IUserDAL.cs" />
+    <Compile Include="Repository\RepoInterfaces\IUserNotificationDAL.cs" />
     <Compile Include="Repository\TrainingDAL.cs" />
     <Compile Include="Repository\UserDAL.cs" />
     <Compile Include="BusinessLogic\UserService.cs" />
+    <Compile Include="Repository\UserNotificationDAL.cs" />
     <Compile Include="ViewModels\AddTrainingViewModel.cs" />
     <Compile Include="ViewModels\AutomaticProcessingViewModel.cs" />
     <Compile Include="ViewModels\CheckUserExistViewModel.cs" />
