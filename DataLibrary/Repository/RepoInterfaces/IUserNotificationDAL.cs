@@ -11,6 +11,7 @@ namespace DataLibrary.Repository.RepoInterfaces
     {
         
         Task<IEnumerable<IUserNotification>> GetUserNotifications(int userID);
+        Task InsertDummyNotification();
 
     }
 }

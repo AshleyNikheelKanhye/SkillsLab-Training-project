@@ -4,12 +4,14 @@ using DataLibrary;
 using DataLibrary.BusinessLogic;
 using DataLibrary.BusinessLogic.BusinessLogicInterface;
 using DataLibrary.BusinessLogic.Logger;
+using DataLibrary.BusinessLogic.Quartz;
 using DataLibrary.Entities;
 using DataLibrary.Entities.EntitiesInterface;
 using DataLibrary.Repo;
 using DataLibrary.Repository;
 using DataLibrary.Repository.RepoInterfaces;
 using DataLibrary.Services;
+using Quartz;
 using Unity;
 using Unity.AspNet.Mvc;
 using Unity.Injection;
@@ -87,10 +89,12 @@ namespace TestASPWeb
             container.RegisterType<IRole, Role>(new PerRequestLifetimeManager());
 
             //UserNotification
-            container.RegisterType<IUserNotification, UserNotification>(new PerRequestLifetimeManager());
-            container.RegisterType<IUserNotificationDAL, UserNotificationDAL>(new PerRequestLifetimeManager());
+            container.RegisterType<IUserNotification, UserNotification>();
+            container.RegisterType<IUserNotificationDAL, UserNotificationDAL>();
             container.RegisterType<IUserNotificationService, UserNotificationService>(new PerRequestLifetimeManager());
 
+            //background job
+            container.RegisterType<IJob, BackgroundJobs>();
         }
     }
 }

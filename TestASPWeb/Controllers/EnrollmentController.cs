@@ -53,10 +53,9 @@ namespace TestASPWeb.Controllers
             bool status = _enrollmentService.AddEnrollment(userID, trainingID);
             if (status)
             {
-                //i want to implement fire and forget here
-                //i have disactivated email service (uncomment to turn on)
+                //await to insert notification to the manager of the user that the user has applied for this training.
                 await _enrollmentService.EmployeeSendMailToManagerForApplication(userID, trainingID);
-                return Json(new { result = status}, JsonRequestBehavior.AllowGet); //TODO : Decide on what to do with the emailStatus
+                return Json(new { result = status}, JsonRequestBehavior.AllowGet); 
             }
             else
             {

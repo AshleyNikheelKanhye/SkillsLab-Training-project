@@ -1,4 +1,5 @@
 ﻿using DataLibrary.BusinessLogic.Logger;
+using DataLibrary.BusinessLogic.Quartz;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,9 @@ namespace TestASPWeb
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            //quartz
+            //JobScheduler.Start();
         }
 
         protected void Application_BeginRequest()

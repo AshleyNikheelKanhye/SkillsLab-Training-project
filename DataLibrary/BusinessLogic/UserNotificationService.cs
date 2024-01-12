@@ -12,12 +12,12 @@ namespace DataLibrary.BusinessLogic
 {
     public class UserNotificationService : IUserNotificationService
     {
-        ILogger _logger;
+        
         IUserNotificationDAL _userNotificaitonDal;
         public UserNotificationService( IUserNotificationDAL userNotificaitonDal, ILogger logger)
         {
             this._userNotificaitonDal = userNotificaitonDal;
-            this._logger = logger;
+            
         }
         
 
@@ -29,9 +29,14 @@ namespace DataLibrary.BusinessLogic
                 return await _userNotificaitonDal.GetUserNotifications(userID);
             }catch (Exception ex)
             {
-                this._logger.LogError(ex);
+                
                 return null;
             }
+        }
+
+        public async Task InsertDummyNotification()
+        {
+            await _userNotificaitonDal.InsertDummyNotification();
         }
     }
 }

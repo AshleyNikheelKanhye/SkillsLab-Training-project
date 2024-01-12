@@ -40,6 +40,21 @@ namespace DataLibrary.Repo
             return list;
         }
 
+        public async Task InsertDummyNotification()
+        {
+            try
+            {
+                string insertQuery = "INSERT INTO UserNotification(UserID,Title,MessageBody) VALUES(1006,'QUARTZ','this is a test QUARTZ')";
+                SqlCommand command = new SqlCommand(insertQuery, _dbContext.GetConn());
+                await command.ExecuteNonQueryAsync();
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
 
     }
 }

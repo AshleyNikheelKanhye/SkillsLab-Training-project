@@ -10,5 +10,6 @@ namespace DataLibrary.BusinessLogic.BusinessLogicInterface
     public interface IUserNotificationService
     {
         Task<IEnumerable<IUserNotification>> GetUserNotifications(int userID);
+        Task InsertDummyNotification();
     }
 }

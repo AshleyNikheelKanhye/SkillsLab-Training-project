@@ -98,3 +98,16 @@ C:\Users\P12ADC6\source\repos\TestASPWeb\TestASPWeb\bin\System.Net.Http.Formatti
 C:\Users\P12ADC6\source\repos\TestASPWeb\TestASPWeb\bin\System.Web.Http.xml
 C:\Users\P12ADC6\source\repos\TestASPWeb\TestASPWeb\bin\System.Web.Http.WebHost.xml
 C:\Users\P12ADC6\source\repos\TestASPWeb\TestASPWeb\bin\Owin.dll
+C:\Users\P12ADC6\source\repos\TestASPWeb\TestASPWeb\bin\Quartz.dll
+C:\Users\P12ADC6\source\repos\TestASPWeb\TestASPWeb\bin\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\P12ADC6\source\repos\TestASPWeb\TestASPWeb\bin\System.Diagnostics.DiagnosticSource.dll
+C:\Users\P12ADC6\source\repos\TestASPWeb\TestASPWeb\bin\System.Memory.dll
+C:\Users\P12ADC6\source\repos\TestASPWeb\TestASPWeb\bin\System.Numerics.Vectors.dll
+C:\Users\P12ADC6\source\repos\TestASPWeb\TestASPWeb\bin\System.Buffers.dll
+C:\Users\P12ADC6\source\repos\TestASPWeb\TestASPWeb\bin\DataLibrary.dll.config
+C:\Users\P12ADC6\source\repos\TestASPWeb\TestASPWeb\bin\Quartz.xml
+C:\Users\P12ADC6\source\repos\TestASPWeb\TestASPWeb\bin\Microsoft.Extensions.Logging.Abstractions.xml
+C:\Users\P12ADC6\source\repos\TestASPWeb\TestASPWeb\bin\System.Diagnostics.DiagnosticSource.xml
+C:\Users\P12ADC6\source\repos\TestASPWeb\TestASPWeb\bin\System.Memory.xml
+C:\Users\P12ADC6\source\repos\TestASPWeb\TestASPWeb\bin\System.Numerics.Vectors.xml
+C:\Users\P12ADC6\source\repos\TestASPWeb\TestASPWeb\bin\System.Buffers.xml
