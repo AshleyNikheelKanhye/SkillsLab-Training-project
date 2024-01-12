@@ -108,13 +108,6 @@ namespace TestASPWeb.Controllers
         }
 
 
-        //employee
-        [HttpPost]
-        public async Task<JsonResult> GetUserNotifications(int userID)
-        {
-            var list = await _userNotificationService.GetUserNotifications(userID);
-            return Json(list,JsonRequestBehavior.AllowGet);
-        }
 
 
 

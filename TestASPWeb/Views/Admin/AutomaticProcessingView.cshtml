@@ -109,7 +109,6 @@
                 var URL = "/Training/GetUnprocessedTrainings";
                 getAJAXCall(URL).then((response) => {
                     if (response) {
-                        console.log(response);
                         var tableBody = $('#trainingsToBeProcessedTable tbody');
                         tableBody.empty();
                         if (response.length === 0) {

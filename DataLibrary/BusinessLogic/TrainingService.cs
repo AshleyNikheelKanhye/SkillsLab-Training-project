@@ -1,6 +1,7 @@
 ﻿using DataLibrary.BusinessLogic.BusinessLogicInterface;
 using DataLibrary.BusinessLogic.Logger;
 using DataLibrary.BusinessLogic.Notification;
+using DataLibrary.Entities;
 using DataLibrary.Entities.EntitiesInterface;
 using DataLibrary.Repository.RepoInterfaces;
 using DataLibrary.ViewModels;
@@ -17,12 +18,14 @@ namespace DataLibrary.BusinessLogic
         IPrerequisiteDAL _prerequisiteDAL;
         IDepartmentDAL _departmentDAL;
         ILogger _logger;
-        public TrainingService(ITrainingDAL trainingRepo, IPrerequisiteDAL prerequisiteRepo, IDepartmentDAL departmentRepo, ILogger logger)
+        IUserNotificationDAL _userNotificationDAL;
+        public TrainingService(ITrainingDAL trainingRepo, IPrerequisiteDAL prerequisiteRepo, IDepartmentDAL departmentRepo, ILogger logger,IUserNotificationDAL userNotificationDAL)
         {
             this._trainingRepo = trainingRepo;
             this._prerequisiteDAL = prerequisiteRepo;
             this._departmentDAL = departmentRepo;
             this._logger = logger;
+            this._userNotificationDAL = userNotificationDAL;
         }
         public IEnumerable<ITraining> GetAll()
         {
@@ -261,6 +264,9 @@ namespace DataLibrary.BusinessLogic
                     bool UpdateSucess = await _trainingRepo.ConfirmAutomaticSelection(TrainingSelectionResult, trainingID);
                     if (UpdateSucess)
                     {
+                        //send inbox notification
+                         SendNotificationToEmployeeForFinalStatus(TrainingSelectionResult);
+
                         //send emails
                         await sendEmployeeEmailForSucessEnrollment(TrainingSelectionResult.listOfAcceptedEmployees);
                         await sendEmployeeEmailForFailureEnrollment(TrainingSelectionResult.listOfRejectedEmployees);
@@ -304,6 +310,7 @@ namespace DataLibrary.BusinessLogic
                 catch (Exception ex)
                 {
                     this._logger.LogError(ex);
+                    return;
                 }
             }
             return ;
@@ -331,6 +338,7 @@ namespace DataLibrary.BusinessLogic
                 catch (Exception ex)
                 {
                     this._logger.LogError(ex);
+                    return;
                 }
             }
             return;
@@ -354,6 +362,42 @@ namespace DataLibrary.BusinessLogic
                 return ;
             }
         }  
+
+
+        public void SendNotificationToEmployeeForFinalStatus(AutomaticProcessingViewModel automaticProcessingModel)
+        {
+            try
+            {
+                //selected employees
+                foreach(var notification in automaticProcessingModel.listOfAcceptedEmployees)
+                {
+                    UserNotification model = new UserNotification()
+                    {
+                        UserID=notification.UserID,
+                        Title=$"{notification.TrainingName} Enrollment Success",
+                        MessageBody=$"Congrats {notification.FirstName} {notification.LastName} !!! You have been selected for the training {notification.TrainingName}. See you on {notification.TrainingStartDate}",
+                    };
+                    _userNotificationDAL.InsertNotification(model);
+                }
+
+                //rejected employees
+                foreach(var notification in automaticProcessingModel.listOfRejectedEmployees)
+                {
+                    UserNotification model = new UserNotification()
+                    {
+                        UserID = notification.UserID,
+                        Title = $"{notification.TrainingName} Enrollment Unsuccessful",
+                        MessageBody = $"Unfortunately , You were not selected for the {notification.TrainingName}. We have Limited Seats and other employees were given priority.",
+                    };
+                    _userNotificationDAL.InsertNotification(model);
+                }
+
+            }catch(Exception ex)
+            {
+                this._logger.LogError(ex);
+                return;
+            }
+        }
 
     }
 }

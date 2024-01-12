@@ -34,7 +34,6 @@ namespace TestASPWeb.Controllers
             bool status = _enrollmentService.ManagerUpdatesEnrollment(enrollmentID, ManagerResult);
             if (status)
             {
-                //i have disactivated email service  (uncomment to turn on)
                 await _enrollmentService.ManagerSendMailToEmployee(enrollmentID,GetUserID(),DisapproveMessage); 
                 return Json(new { result = status }, JsonRequestBehavior.AllowGet);
             }
@@ -46,20 +45,22 @@ namespace TestASPWeb.Controllers
 
 
 
+
+
         [HttpPost]
         public async Task<JsonResult> AddEnrollment(int trainingID)
         {
             int userID = GetUserID();
-            bool status = _enrollmentService.AddEnrollment(userID, trainingID);
-            if (status)
+            bool addEnrollmentStatus = _enrollmentService.AddEnrollment(userID, trainingID);
+            if (addEnrollmentStatus)
             {
                 //await to insert notification to the manager of the user that the user has applied for this training.
                 await _enrollmentService.EmployeeSendMailToManagerForApplication(userID, trainingID);
-                return Json(new { result = status}, JsonRequestBehavior.AllowGet); 
+                return Json(new { result = addEnrollmentStatus}, JsonRequestBehavior.AllowGet); 
             }
             else
             {
-                return Json(new { result = status },JsonRequestBehavior.AllowGet);
+                return Json(new { result = addEnrollmentStatus },JsonRequestBehavior.AllowGet);
             }
         }
 

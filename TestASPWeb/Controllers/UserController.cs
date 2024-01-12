@@ -21,15 +21,18 @@ namespace TestASPWeb.Controllers
     {
         private readonly IUserService _userService;
         private readonly DepartmentService _departmentService;
+        private readonly IUserNotificationService _userNotificationService;
 
-        public UserController(IUserService userService,DepartmentService departmentService)
+        public UserController(IUserService userService,DepartmentService departmentService, IUserNotificationService userNotificationService)
         {
             _userService = userService;
             _departmentService = departmentService;
+            _userNotificationService = userNotificationService;
         }
 
         public ActionResult Login() => View();
         public ActionResult Register() => View();
+        public ActionResult InboxView() => View();
         public ActionResult SelectLoginRole(String roles)
         {
             List<int> rolesList = roles.Split(',').Select(int.Parse).ToList();
@@ -145,11 +148,23 @@ namespace TestASPWeb.Controllers
             }
         }
 
+
+        //employee
+        [HttpPost]
+        public async Task<JsonResult> GetUserNotifications()
+        {
+            var list = await _userNotificationService.GetUserNotifications((int)this.Session["CurrentUserID"]);
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
+
+
         public ActionResult Index()
         {
             return View();
         }
 
+        
 
 
     }

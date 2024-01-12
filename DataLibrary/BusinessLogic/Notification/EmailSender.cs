@@ -29,7 +29,7 @@ namespace DataLibrary.BusinessLogic.Notification
 
             try
             {
-                await smtpClient.SendMailAsync(mailMessage);
+                Task.Run(async () => { smtpClient.SendMailAsync(mailMessage); });
                 return true;
             }
             catch (Exception ex)

@@ -1,6 +1,7 @@
 ﻿using DataLibrary.BusinessLogic.BusinessLogicInterface;
 using DataLibrary.BusinessLogic.Logger;
 using DataLibrary.BusinessLogic.Notification;
+using DataLibrary.Entities;
 using DataLibrary.Entities.EntitiesInterface;
 using DataLibrary.Enum;
 using DataLibrary.Repository.RepoInterfaces;
@@ -8,6 +9,7 @@ using DataLibrary.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,24 +21,65 @@ namespace DataLibrary.BusinessLogic
         IUserDAL _userDAL;
         ITrainingDAL _trainingDAL;
         ILogger _logger;
-        public EnrollmentService(IEnrollmentDAL enrollmentDAL,IUserDAL userDAL, ITrainingDAL trainingDAL,ILogger logger)
+        IUserNotificationDAL _userNotificationDAL;
+        public EnrollmentService(IEnrollmentDAL enrollmentDAL,IUserDAL userDAL, ITrainingDAL trainingDAL,ILogger logger,IUserNotificationDAL userNotificationDAL)
         {
             this._enrollmentDAL = enrollmentDAL;
             this._userDAL = userDAL;
             this._trainingDAL = trainingDAL;
             this._logger = logger;
+            this._userNotificationDAL = userNotificationDAL;
         }
 
         public bool AddEnrollment(int UserID, int TrainingID)
         {
-            return _enrollmentDAL.AddEnrollment(UserID, TrainingID);
+            try
+            {
+                _enrollmentDAL.AddEnrollment(UserID, TrainingID);
+                InsertNotificationManagerForEmployeeApplication(UserID, TrainingID);
+                return true;
+
+            }catch (Exception ex)
+            {
+                this._logger.LogError(ex);
+                return false;
+            }
         }
+
+
+        public void InsertNotificationManagerForEmployeeApplication(int UserID,int TrainingID)
+        {
+            try
+            {
+                int managerID = _userDAL.GetManagerIDOfEmployee(UserID);
+                string trainingName = _trainingDAL.GetTrainingName(TrainingID);
+                string nameOfEmployee = _userDAL.GetFullName(UserID);
+
+                UserNotification notification = new UserNotification()
+                {
+                    UserID = managerID,
+                    Title = "Employee Application For Training",
+                    MessageBody = $"{nameOfEmployee} has applied for Training : {trainingName}. Please Make a Decision Before the Training Deadline.",
+                };
+
+                _userNotificationDAL.InsertNotification(notification);
+
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(ex);
+                return;
+            }
+        }
+
 
         public bool ManagerUpdatesEnrollment(int EnrollmentID,string ManagerResult)
         {
             try
             {
-                return _enrollmentDAL.ManagerUpdatesEnrollment(EnrollmentID, ManagerResult);
+                _enrollmentDAL.ManagerUpdatesEnrollment(EnrollmentID, ManagerResult);
+                InsertNotificationEmployeeForManagerDecision(EnrollmentID, ManagerResult);
+                return true;
             }
             catch (Exception ex) 
             {
@@ -44,6 +87,28 @@ namespace DataLibrary.BusinessLogic
                 return false;
             }
         }
+
+        public void InsertNotificationEmployeeForManagerDecision(int EnrollmentID, string ManagerResult)
+        {
+            try
+            {
+                EnrollmentEmailViewModel model = _enrollmentDAL.GetEnrollmentEmailViewModel(EnrollmentID);
+                UserNotification notification = new UserNotification()
+                {
+                    UserID = model.UserID,
+                    Title = $"Manager Decision For {model.TrainingName}",
+                    MessageBody = $"Your Manager has {ManagerResult} your Application for Training {model.TrainingName}",
+                };
+                _userNotificationDAL.InsertNotification(notification);
+            }
+            catch(Exception ex)
+            {
+                this._logger.LogError(ex);
+                return;
+            }
+        }
+
+
 
         public async Task<IEnumerable<EnrollmentViewModel>> GetEmployeesAppliedForTraining(int trainingID)
         {

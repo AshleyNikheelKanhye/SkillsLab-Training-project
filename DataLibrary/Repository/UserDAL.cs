@@ -191,6 +191,24 @@ namespace DataLibrary.Repo
             } catch (Exception ex) { throw ex; }
         }
 
+        public int GetManagerIDOfEmployee(int userID)
+        {
+            try
+            {
+                int managerID = -1;
+                string selectQuery = "SELECT ManagerID FROM UserTable WHERE UserID = @userid";
+                SqlCommand command = new SqlCommand(selectQuery, _dbContext.GetConn());
+                command.Parameters.AddWithValue("@userid", userID);
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.Read())
+                {
+                    managerID = (Int32)reader["ManagerID"];
+                }
+                reader.Close();
+                return managerID;
+            }catch { throw; }
+        }
+
         public string GetFullName(int userID)
         {
             try

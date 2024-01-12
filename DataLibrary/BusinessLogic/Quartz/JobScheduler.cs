@@ -22,12 +22,13 @@ namespace DataLibrary.BusinessLogic.Quartz
             IJobDetail job = JobBuilder.Create<BackgroundJobs>().Build();
 
             ITrigger trigger = TriggerBuilder.Create()
-                .WithIdentity("trigger", "sqlGroup")
-                 .StartNow()
-                .WithDailyTimeIntervalSchedule(x => x
-                .WithIntervalInSeconds(5)  // Sets the interval to 5 seconds
-                .OnEveryDay())
-                .Build();
+            .WithIdentity("trigger", "sqlGroup")
+             .StartNow()
+            .WithDailyTimeIntervalSchedule(x => x
+            .WithIntervalInHours(24)
+            .OnEveryDay()
+            .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(0, 0)))
+            .Build();
 
 
             await scheduler.ScheduleJob(job, trigger);
@@ -41,10 +42,11 @@ namespace DataLibrary.BusinessLogic.Quartz
                 if (_container == null)
                 {
                     _container = new UnityContainer();
-                    _container.RegisterType<IUserNotificationService, UserNotificationService>();
-                    _container.RegisterType<IUserNotificationDAL, UserNotificationDAL>();
                     _container.RegisterType<DBContext>(new InjectionConstructor(ConfigurationManager.ConnectionStrings["default"].ConnectionString));
                     _container.RegisterType<ILogger, DataLibrary.BusinessLogic.Logger.Logger>();
+                    _container.RegisterType<ITrainingService, DataLibrary.BusinessLogic.TrainingService>();
+                    _container.RegisterType<ITrainingDAL, TrainingDAL>();
+                    
 
                 }
                 return _container;

@@ -55,6 +55,24 @@ namespace DataLibrary.Repo
             }
         }
 
+        public void InsertNotification(UserNotification usernotification)
+        {
+            try
+            {
+                string insertQuery = "INSERT INTO UserNotification(UserID,Title,MessageBody) VALUES(@managerID,@title,@messageBody)";
+                SqlCommand command = new SqlCommand(insertQuery,_dbContext.GetConn());
+                command.Parameters.AddWithValue("@managerID", usernotification.UserID);
+                command.Parameters.AddWithValue("@title", usernotification.Title);
+                command.Parameters.AddWithValue("@messageBody", usernotification.MessageBody);
+                command.ExecuteNonQuery();
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+
 
     }
 }

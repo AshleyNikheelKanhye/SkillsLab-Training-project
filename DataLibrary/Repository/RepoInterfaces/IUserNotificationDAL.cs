@@ -1,4 +1,5 @@
-﻿using DataLibrary.Entities.EntitiesInterface;
+﻿using DataLibrary.Entities;
+using DataLibrary.Entities.EntitiesInterface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace DataLibrary.Repository.RepoInterfaces
         
         Task<IEnumerable<IUserNotification>> GetUserNotifications(int userID);
         Task InsertDummyNotification();
+        void InsertNotification(UserNotification usernotification);
 
     }
 }

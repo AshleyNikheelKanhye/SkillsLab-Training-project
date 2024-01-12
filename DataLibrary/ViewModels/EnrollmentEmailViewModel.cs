@@ -8,6 +8,7 @@ namespace DataLibrary.ViewModels
 {
     public class EnrollmentEmailViewModel
     {
+        public int UserID { get; set; }
         public string Email { get; set; } //user lastname
         public string FirstName { get; set; } //user firstName
         public string LastName { get; set; } 

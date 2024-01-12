@@ -142,7 +142,7 @@ namespace DataLibrary.Repo
             try
             {
                 EnrollmentEmailViewModel enrollmentEmailViewModel = new EnrollmentEmailViewModel();
-                string selectQuery = "SELECT ut.FirstName,ut.LastName,ut.Email,t.TrainingName " +
+                string selectQuery = "SELECT ut.UserID, ut.FirstName,ut.LastName,ut.Email,t.TrainingName " +
                                     "FROM ((Enrollment e INNER JOIN UserTable ut ON e.UserID=ut.UserID) INNER JOIN Training t ON e.TrainingID=t.TrainingID) " +
                                     "WHERE e.IsActive=1 AND e.EnrollmentID=@EnrollmentID;";
                 SqlCommand command = new SqlCommand(selectQuery, _dbContext.GetConn());

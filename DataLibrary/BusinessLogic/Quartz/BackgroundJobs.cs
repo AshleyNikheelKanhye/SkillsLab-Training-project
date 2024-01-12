@@ -12,16 +12,14 @@ namespace DataLibrary.BusinessLogic.Quartz
 {
     public class BackgroundJobs : IJob
     {
-        private readonly IUserNotificationService _userNotificationService;
-        public BackgroundJobs(IUserNotificationService userNotificationService)
+        private readonly ITrainingService _trainingService;
+        public BackgroundJobs(ITrainingService trainingService)
         {
-            _userNotificationService = userNotificationService;
+            _trainingService = trainingService;
         }
         public async Task Execute(IJobExecutionContext context)
         {
-             await _userNotificationService.InsertDummyNotification();
-
-
+             await _trainingService.QuartzAutomaticProcessing();
         }
     }
 }

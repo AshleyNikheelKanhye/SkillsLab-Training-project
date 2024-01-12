@@ -27,6 +27,7 @@ namespace DataLibrary.BusinessLogic.BusinessLogicInterface
         Task<IEnumerable<ITraining>> GetDeletedTrainings();
         Task<IEnumerable<SelectedEmployeeViewModel>> GetSelectedEmployees(int trainingID);
         Task<string> GetTrainingDescription(int trainingID);
+        Task QuartzAutomaticProcessing();
 
 
     }

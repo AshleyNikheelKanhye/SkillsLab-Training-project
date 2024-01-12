@@ -54,8 +54,8 @@
         //Get notifications from inbox database
         function GetUserNotifications() {
             var collapsibleBody = $("#collapsibleSet");
-            var URL = "/Employee/GetUserNotifications";
-            
+            var URL = "/User/GetUserNotifications";
+
             var serverCall = new ServerCall({ url: URL, callMethod: "POST" });
             serverCall.fetchApiCall().then((response) => {
                 if (response) {
@@ -75,8 +75,6 @@
                     toastr.error("could not load notifications");
                 }
             });
-
-
         }
 
 
@@ -103,5 +101,5 @@
 
 
 <div id="collapsibleSet">
-   
+
 </div>
