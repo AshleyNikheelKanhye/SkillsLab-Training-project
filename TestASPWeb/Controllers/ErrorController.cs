@@ -22,6 +22,10 @@ namespace TestASPWeb.Controllers
         {
             return View();
         }
+        public ActionResult InternalError()
+        {
+            return View();
+        }
 
     }
 }

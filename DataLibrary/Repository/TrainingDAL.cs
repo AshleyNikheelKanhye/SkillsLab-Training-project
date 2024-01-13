@@ -260,7 +260,9 @@ namespace DataLibrary.Repo
         public async Task<IEnumerable<int>> GetListOfUnprocessedTrainingsWithPastDeadline()
         {
             List<int> listOfTrainingIDs = new List<int>();
-            string selectQuery = "";
+            string selectQuery = @"SELECT TrainingID
+                                    FROM Training t 
+                                    WHERE IsAutomaticProcessed=0 AND ClosingDate<=GETDATE()";
             SqlCommand command = new SqlCommand(selectQuery, _dbContext.GetConn());
             SqlDataReader reader = await command.ExecuteReaderAsync();
             while (reader.Read())

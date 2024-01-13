@@ -95,6 +95,9 @@ namespace TestASPWeb
 
             //background job
             container.RegisterType<IJob, BackgroundJobs>();
+
+            //quartz job
+            container.RegisterType<IQuartzDAL, QuartzDAL>();
         }
     }
 }

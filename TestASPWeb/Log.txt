@@ -352,3 +352,385 @@ Stack Trace:    at System.Web.Mvc.Controller.HandleUnknownAction(String actionNa
    at System.Web.HttpApplication.ExecuteStepImpl(IExecutionStep step)
    at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
 --------------------------------------------------
+--------------------------------------------------
+Timestamp: 1/13/2024 12:05:59 PM
+Exception Type: DataLibrary.BusinessLogic.Logger.Logger
+Message: An error occurred when trying to create a controller of type 'TestASPWeb.Controllers.TrainingController'. Make sure that the controller has a parameterless public constructor.
+Inner Exception: Unity.ResolutionFailedException: Resolution failed with error: No public constructor is available for type DataLibrary.Repository.RepoInterfaces.IQuartzDAL.
+
+For more detailed information run Unity in debug mode: new UnityContainer().AddExtension(new Diagnostic()) ---> System.InvalidOperationException: No public constructor is available for type DataLibrary.Repository.RepoInterfaces.IQuartzDAL. ---> Unity.Exceptions.InvalidRegistrationException: Exception of type 'Unity.Exceptions.InvalidRegistrationException' was thrown.
+   --- End of inner exception stack trace ---
+   at Unity.Processors.ConstructorProcessor.<>c.<GetResolver>b__15_1(BuilderContext& c) in C:\projects\container\src\Processors\Constructor\ConstructorResolution.cs:line 52
+   at Unity.Processors.MemberProcessor`2.<>c__DisplayClass8_0.<GetResolver>b__0(BuilderContext& c) in C:\projects\container\src\Processors\Abstracts\MemberProcessor.cs:line 162
+   at Unity.Processors.MemberProcessor`2.<>c__DisplayClass8_0.<GetResolver>b__0(BuilderContext& c) in C:\projects\container\src\Processors\Abstracts\MemberProcessor.cs:line 162
+   at Unity.Processors.MemberProcessor`2.<>c__DisplayClass8_0.<GetResolver>b__0(BuilderContext& c) in C:\projects\container\src\Processors\Abstracts\MemberProcessor.cs:line 162
+   at Unity.Strategies.BuildPlanStrategy.PreBuildUp(BuilderContext& context) in C:\projects\container\src\Strategies\BuildPlanStrategy.cs:line 80
+   at Unity.UnityContainer.<>c.<.ctor>b__73_2(BuilderStrategy[] chain, BuilderContext& context) in C:\projects\container\src\UnityContainer.Resolution.cs:line 439
+   at Unity.Builder.BuilderContext.Resolve(Type type, String name, InternalRegistration registration) in C:\projects\container\src\Builder\Context\BuilderContext.cs:line 177
+   at Unity.Builder.BuilderContext.Resolve(Type type, String name) in C:\projects\container\src\Builder\Context\BuilderContext.cs:line 67
+   at Unity.Builder.BuilderContext.Resolve(ParameterInfo parameter, Object value) in C:\projects\container\src\Builder\Context\BuilderContext.cs:line 217
+   at Unity.Processors.ConstructorProcessor.<>c__DisplayClass16_0.<GetResolverDelegate>b__0(BuilderContext& c) in C:\projects\container\src\Processors\Constructor\ConstructorResolution.cs:line 77
+   at Unity.Processors.MemberProcessor`2.<>c__DisplayClass8_0.<GetResolver>b__0(BuilderContext& c) in C:\projects\container\src\Processors\Abstracts\MemberProcessor.cs:line 162
+   at Unity.Processors.MemberProcessor`2.<>c__DisplayClass8_0.<GetResolver>b__0(BuilderContext& c) in C:\projects\container\src\Processors\Abstracts\MemberProcessor.cs:line 162
+   at Unity.Processors.MemberProcessor`2.<>c__DisplayClass8_0.<GetResolver>b__0(BuilderContext& c) in C:\projects\container\src\Processors\Abstracts\MemberProcessor.cs:line 162
+   at Unity.Strategies.BuildPlanStrategy.PreBuildUp(BuilderContext& context) in C:\projects\container\src\Strategies\BuildPlanStrategy.cs:line 80
+   at Unity.UnityContainer.<>c.<.ctor>b__73_2(BuilderStrategy[] chain, BuilderContext& context) in C:\projects\container\src\UnityContainer.Resolution.cs:line 439
+   at Unity.Builder.BuilderContext.Resolve(Type type, String name, InternalRegistration registration) in C:\projects\container\src\Builder\Context\BuilderContext.cs:line 177
+   at Unity.Builder.BuilderContext.Resolve(Type type, String name) in C:\projects\container\src\Builder\Context\BuilderContext.cs:line 67
+   at Unity.Builder.BuilderContext.Resolve(ParameterInfo parameter, Object value) in C:\projects\container\src\Builder\Context\BuilderContext.cs:line 217
+   at Unity.Processors.ConstructorProcessor.<>c__DisplayClass16_0.<GetResolverDelegate>b__0(BuilderContext& c) in C:\projects\container\src\Processors\Constructor\ConstructorResolution.cs:line 77
+   at Unity.Processors.MemberProcessor`2.<>c__DisplayClass8_0.<GetResolver>b__0(BuilderContext& c) in C:\projects\container\src\Processors\Abstracts\MemberProcessor.cs:line 162
+   at Unity.Processors.MemberProcessor`2.<>c__DisplayClass8_0.<GetResolver>b__0(BuilderContext& c) in C:\projects\container\src\Processors\Abstracts\MemberProcessor.cs:line 162
+   at Unity.Processors.MemberProcessor`2.<>c__DisplayClass8_0.<GetResolver>b__0(BuilderContext& c) in C:\projects\container\src\Processors\Abstracts\MemberProcessor.cs:line 162
+   at Unity.Strategies.BuildPlanStrategy.PreBuildUp(BuilderContext& context) in C:\projects\container\src\Strategies\BuildPlanStrategy.cs:line 80
+   at Unity.UnityContainer.<>c.<.ctor>b__73_1(BuilderContext& context) in C:\projects\container\src\UnityContainer.Resolution.cs:line 362
+   --- End of inner exception stack trace ---
+   at Unity.UnityContainer.<>c.<.ctor>b__73_1(BuilderContext& context) in C:\projects\container\src\UnityContainer.Resolution.cs:line 384
+   at Unity.UnityContainer.Unity.IUnityContainer.Resolve(Type type, String name, ResolverOverride[] overrides) in C:\projects\container\src\UnityContainer.IUnityContainer.cs:line 244
+   at System.Web.Mvc.DefaultControllerFactory.DefaultControllerActivator.Create(RequestContext requestContext, Type controllerType)
+Stack Trace:    at System.Web.Mvc.DefaultControllerFactory.DefaultControllerActivator.Create(RequestContext requestContext, Type controllerType)
+   at System.Web.Mvc.MvcHandler.ProcessRequestInit(HttpContextBase httpContext, IController& controller, IControllerFactory& factory)
+   at System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContextBase httpContext, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStepImpl(IExecutionStep step)
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+--------------------------------------------------
+--------------------------------------------------
+Timestamp: 1/13/2024 12:05:59 PM
+Exception Type: DataLibrary.BusinessLogic.Logger.Logger
+Message: A public action method 'InternalError' was not found on controller 'TestASPWeb.Controllers.ErrorController'.
+Inner Exception: 
+Stack Trace:    at System.Web.Mvc.Controller.HandleUnknownAction(String actionName)
+   at System.Web.Mvc.Controller.<>c.<BeginExecuteCore>b__152_1(IAsyncResult asyncResult, ExecuteCoreState innerState)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncVoid`1.CallEndDelegate(IAsyncResult asyncResult)
+   at System.Web.Mvc.Controller.EndExecuteCore(IAsyncResult asyncResult)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncVoid`1.CallEndDelegate(IAsyncResult asyncResult)
+   at System.Web.Mvc.Controller.EndExecute(IAsyncResult asyncResult)
+   at System.Web.Mvc.MvcHandler.<>c.<BeginProcessRequest>b__20_1(IAsyncResult asyncResult, ProcessRequestState innerState)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncVoid`1.CallEndDelegate(IAsyncResult asyncResult)
+   at System.Web.Mvc.MvcHandler.EndProcessRequest(IAsyncResult asyncResult)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStepImpl(IExecutionStep step)
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+--------------------------------------------------
+--------------------------------------------------
+Timestamp: 1/13/2024 12:06:05 PM
+Exception Type: DataLibrary.BusinessLogic.Logger.Logger
+Message: An error occurred when trying to create a controller of type 'TestASPWeb.Controllers.TrainingController'. Make sure that the controller has a parameterless public constructor.
+Inner Exception: Unity.ResolutionFailedException: Resolution failed with error: No public constructor is available for type DataLibrary.Repository.RepoInterfaces.IQuartzDAL.
+
+For more detailed information run Unity in debug mode: new UnityContainer().AddExtension(new Diagnostic()) ---> System.InvalidOperationException: No public constructor is available for type DataLibrary.Repository.RepoInterfaces.IQuartzDAL. ---> Unity.Exceptions.InvalidRegistrationException: Exception of type 'Unity.Exceptions.InvalidRegistrationException' was thrown.
+   --- End of inner exception stack trace ---
+   at Unity.Processors.ConstructorProcessor.<>c.<GetResolver>b__15_1(BuilderContext& c) in C:\projects\container\src\Processors\Constructor\ConstructorResolution.cs:line 52
+   at Unity.Processors.MemberProcessor`2.<>c__DisplayClass8_0.<GetResolver>b__0(BuilderContext& c) in C:\projects\container\src\Processors\Abstracts\MemberProcessor.cs:line 162
+   at Unity.Processors.MemberProcessor`2.<>c__DisplayClass8_0.<GetResolver>b__0(BuilderContext& c) in C:\projects\container\src\Processors\Abstracts\MemberProcessor.cs:line 162
+   at Unity.Processors.MemberProcessor`2.<>c__DisplayClass8_0.<GetResolver>b__0(BuilderContext& c) in C:\projects\container\src\Processors\Abstracts\MemberProcessor.cs:line 162
+   at Unity.Strategies.BuildPlanStrategy.PreBuildUp(BuilderContext& context) in C:\projects\container\src\Strategies\BuildPlanStrategy.cs:line 88
+   at Unity.UnityContainer.<>c.<.ctor>b__73_2(BuilderStrategy[] chain, BuilderContext& context) in C:\projects\container\src\UnityContainer.Resolution.cs:line 439
+   at Unity.Builder.BuilderContext.Resolve(Type type, String name, InternalRegistration registration) in C:\projects\container\src\Builder\Context\BuilderContext.cs:line 177
+   at Unity.Builder.BuilderContext.Resolve(Type type, String name) in C:\projects\container\src\Builder\Context\BuilderContext.cs:line 67
+   at Unity.Builder.BuilderContext.Resolve(ParameterInfo parameter, Object value) in C:\projects\container\src\Builder\Context\BuilderContext.cs:line 217
+   at Unity.Processors.ConstructorProcessor.<>c__DisplayClass16_0.<GetResolverDelegate>b__0(BuilderContext& c) in C:\projects\container\src\Processors\Constructor\ConstructorResolution.cs:line 77
+   at Unity.Processors.MemberProcessor`2.<>c__DisplayClass8_0.<GetResolver>b__0(BuilderContext& c) in C:\projects\container\src\Processors\Abstracts\MemberProcessor.cs:line 162
+   at Unity.Processors.MemberProcessor`2.<>c__DisplayClass8_0.<GetResolver>b__0(BuilderContext& c) in C:\projects\container\src\Processors\Abstracts\MemberProcessor.cs:line 162
+   at Unity.Processors.MemberProcessor`2.<>c__DisplayClass8_0.<GetResolver>b__0(BuilderContext& c) in C:\projects\container\src\Processors\Abstracts\MemberProcessor.cs:line 162
+   at Unity.Strategies.BuildPlanStrategy.PreBuildUp(BuilderContext& context) in C:\projects\container\src\Strategies\BuildPlanStrategy.cs:line 88
+   at Unity.UnityContainer.<>c.<.ctor>b__73_2(BuilderStrategy[] chain, BuilderContext& context) in C:\projects\container\src\UnityContainer.Resolution.cs:line 439
+   at Unity.Builder.BuilderContext.Resolve(Type type, String name, InternalRegistration registration) in C:\projects\container\src\Builder\Context\BuilderContext.cs:line 177
+   at Unity.Builder.BuilderContext.Resolve(Type type, String name) in C:\projects\container\src\Builder\Context\BuilderContext.cs:line 67
+   at Unity.Builder.BuilderContext.Resolve(ParameterInfo parameter, Object value) in C:\projects\container\src\Builder\Context\BuilderContext.cs:line 217
+   at Unity.Processors.ConstructorProcessor.<>c__DisplayClass16_0.<GetResolverDelegate>b__0(BuilderContext& c) in C:\projects\container\src\Processors\Constructor\ConstructorResolution.cs:line 77
+   at Unity.Processors.MemberProcessor`2.<>c__DisplayClass8_0.<GetResolver>b__0(BuilderContext& c) in C:\projects\container\src\Processors\Abstracts\MemberProcessor.cs:line 162
+   at Unity.Processors.MemberProcessor`2.<>c__DisplayClass8_0.<GetResolver>b__0(BuilderContext& c) in C:\projects\container\src\Processors\Abstracts\MemberProcessor.cs:line 162
+   at Unity.Processors.MemberProcessor`2.<>c__DisplayClass8_0.<GetResolver>b__0(BuilderContext& c) in C:\projects\container\src\Processors\Abstracts\MemberProcessor.cs:line 162
+   at Unity.Strategies.BuildPlanStrategy.PreBuildUp(BuilderContext& context) in C:\projects\container\src\Strategies\BuildPlanStrategy.cs:line 88
+   at Unity.UnityContainer.<>c.<.ctor>b__73_1(BuilderContext& context) in C:\projects\container\src\UnityContainer.Resolution.cs:line 362
+   --- End of inner exception stack trace ---
+   at Unity.UnityContainer.<>c.<.ctor>b__73_1(BuilderContext& context) in C:\projects\container\src\UnityContainer.Resolution.cs:line 384
+   at Unity.UnityContainer.Unity.IUnityContainer.Resolve(Type type, String name, ResolverOverride[] overrides) in C:\projects\container\src\UnityContainer.IUnityContainer.cs:line 244
+   at System.Web.Mvc.DefaultControllerFactory.DefaultControllerActivator.Create(RequestContext requestContext, Type controllerType)
+Stack Trace:    at System.Web.Mvc.DefaultControllerFactory.DefaultControllerActivator.Create(RequestContext requestContext, Type controllerType)
+   at System.Web.Mvc.MvcHandler.ProcessRequestInit(HttpContextBase httpContext, IController& controller, IControllerFactory& factory)
+   at System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContextBase httpContext, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStepImpl(IExecutionStep step)
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+--------------------------------------------------
+--------------------------------------------------
+Timestamp: 1/13/2024 12:06:05 PM
+Exception Type: DataLibrary.BusinessLogic.Logger.Logger
+Message: A public action method 'InternalError' was not found on controller 'TestASPWeb.Controllers.ErrorController'.
+Inner Exception: 
+Stack Trace:    at System.Web.Mvc.Controller.HandleUnknownAction(String actionName)
+   at System.Web.Mvc.Controller.<>c.<BeginExecuteCore>b__152_1(IAsyncResult asyncResult, ExecuteCoreState innerState)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncVoid`1.CallEndDelegate(IAsyncResult asyncResult)
+   at System.Web.Mvc.Controller.EndExecuteCore(IAsyncResult asyncResult)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncVoid`1.CallEndDelegate(IAsyncResult asyncResult)
+   at System.Web.Mvc.Controller.EndExecute(IAsyncResult asyncResult)
+   at System.Web.Mvc.MvcHandler.<>c.<BeginProcessRequest>b__20_1(IAsyncResult asyncResult, ProcessRequestState innerState)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncVoid`1.CallEndDelegate(IAsyncResult asyncResult)
+   at System.Web.Mvc.MvcHandler.EndProcessRequest(IAsyncResult asyncResult)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStepImpl(IExecutionStep step)
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+--------------------------------------------------
+--------------------------------------------------
+Timestamp: 1/13/2024 12:06:06 PM
+Exception Type: DataLibrary.BusinessLogic.Logger.Logger
+Message: An error occurred when trying to create a controller of type 'TestASPWeb.Controllers.TrainingController'. Make sure that the controller has a parameterless public constructor.
+Inner Exception: Unity.ResolutionFailedException: Resolution failed with error: No public constructor is available for type DataLibrary.Repository.RepoInterfaces.IQuartzDAL.
+
+For more detailed information run Unity in debug mode: new UnityContainer().AddExtension(new Diagnostic()) ---> System.InvalidOperationException: No public constructor is available for type DataLibrary.Repository.RepoInterfaces.IQuartzDAL. ---> Unity.Exceptions.InvalidRegistrationException: Exception of type 'Unity.Exceptions.InvalidRegistrationException' was thrown.
+   --- End of inner exception stack trace ---
+   at Unity.Processors.ConstructorProcessor.<>c.<GetResolver>b__15_1(BuilderContext& c) in C:\projects\container\src\Processors\Constructor\ConstructorResolution.cs:line 52
+   at Unity.Processors.MemberProcessor`2.<>c__DisplayClass8_0.<GetResolver>b__0(BuilderContext& c) in C:\projects\container\src\Processors\Abstracts\MemberProcessor.cs:line 162
+   at Unity.Processors.MemberProcessor`2.<>c__DisplayClass8_0.<GetResolver>b__0(BuilderContext& c) in C:\projects\container\src\Processors\Abstracts\MemberProcessor.cs:line 162
+   at Unity.Processors.MemberProcessor`2.<>c__DisplayClass8_0.<GetResolver>b__0(BuilderContext& c) in C:\projects\container\src\Processors\Abstracts\MemberProcessor.cs:line 162
+   at Unity.Strategies.BuildPlanStrategy.PreBuildUp(BuilderContext& context) in C:\projects\container\src\Strategies\BuildPlanStrategy.cs:line 88
+   at Unity.UnityContainer.<>c.<.ctor>b__73_2(BuilderStrategy[] chain, BuilderContext& context) in C:\projects\container\src\UnityContainer.Resolution.cs:line 439
+   at Unity.Builder.BuilderContext.Resolve(Type type, String name, InternalRegistration registration) in C:\projects\container\src\Builder\Context\BuilderContext.cs:line 177
+   at Unity.Builder.BuilderContext.Resolve(Type type, String name) in C:\projects\container\src\Builder\Context\BuilderContext.cs:line 67
+   at Unity.Builder.BuilderContext.Resolve(ParameterInfo parameter, Object value) in C:\projects\container\src\Builder\Context\BuilderContext.cs:line 217
+   at Unity.Processors.ConstructorProcessor.<>c__DisplayClass16_0.<GetResolverDelegate>b__0(BuilderContext& c) in C:\projects\container\src\Processors\Constructor\ConstructorResolution.cs:line 77
+   at Unity.Processors.MemberProcessor`2.<>c__DisplayClass8_0.<GetResolver>b__0(BuilderContext& c) in C:\projects\container\src\Processors\Abstracts\MemberProcessor.cs:line 162
+   at Unity.Processors.MemberProcessor`2.<>c__DisplayClass8_0.<GetResolver>b__0(BuilderContext& c) in C:\projects\container\src\Processors\Abstracts\MemberProcessor.cs:line 162
+   at Unity.Processors.MemberProcessor`2.<>c__DisplayClass8_0.<GetResolver>b__0(BuilderContext& c) in C:\projects\container\src\Processors\Abstracts\MemberProcessor.cs:line 162
+   at Unity.Strategies.BuildPlanStrategy.PreBuildUp(BuilderContext& context) in C:\projects\container\src\Strategies\BuildPlanStrategy.cs:line 88
+   at Unity.UnityContainer.<>c.<.ctor>b__73_2(BuilderStrategy[] chain, BuilderContext& context) in C:\projects\container\src\UnityContainer.Resolution.cs:line 439
+   at Unity.Builder.BuilderContext.Resolve(Type type, String name, InternalRegistration registration) in C:\projects\container\src\Builder\Context\BuilderContext.cs:line 177
+   at Unity.Builder.BuilderContext.Resolve(Type type, String name) in C:\projects\container\src\Builder\Context\BuilderContext.cs:line 67
+   at Unity.Builder.BuilderContext.Resolve(ParameterInfo parameter, Object value) in C:\projects\container\src\Builder\Context\BuilderContext.cs:line 217
+   at Unity.Processors.ConstructorProcessor.<>c__DisplayClass16_0.<GetResolverDelegate>b__0(BuilderContext& c) in C:\projects\container\src\Processors\Constructor\ConstructorResolution.cs:line 77
+   at Unity.Processors.MemberProcessor`2.<>c__DisplayClass8_0.<GetResolver>b__0(BuilderContext& c) in C:\projects\container\src\Processors\Abstracts\MemberProcessor.cs:line 162
+   at Unity.Processors.MemberProcessor`2.<>c__DisplayClass8_0.<GetResolver>b__0(BuilderContext& c) in C:\projects\container\src\Processors\Abstracts\MemberProcessor.cs:line 162
+   at Unity.Processors.MemberProcessor`2.<>c__DisplayClass8_0.<GetResolver>b__0(BuilderContext& c) in C:\projects\container\src\Processors\Abstracts\MemberProcessor.cs:line 162
+   at Unity.Strategies.BuildPlanStrategy.PreBuildUp(BuilderContext& context) in C:\projects\container\src\Strategies\BuildPlanStrategy.cs:line 88
+   at Unity.UnityContainer.<>c.<.ctor>b__73_1(BuilderContext& context) in C:\projects\container\src\UnityContainer.Resolution.cs:line 362
+   --- End of inner exception stack trace ---
+   at Unity.UnityContainer.<>c.<.ctor>b__73_1(BuilderContext& context) in C:\projects\container\src\UnityContainer.Resolution.cs:line 384
+   at Unity.UnityContainer.Unity.IUnityContainer.Resolve(Type type, String name, ResolverOverride[] overrides) in C:\projects\container\src\UnityContainer.IUnityContainer.cs:line 244
+   at System.Web.Mvc.DefaultControllerFactory.DefaultControllerActivator.Create(RequestContext requestContext, Type controllerType)
+Stack Trace:    at System.Web.Mvc.DefaultControllerFactory.DefaultControllerActivator.Create(RequestContext requestContext, Type controllerType)
+   at System.Web.Mvc.MvcHandler.ProcessRequestInit(HttpContextBase httpContext, IController& controller, IControllerFactory& factory)
+   at System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContextBase httpContext, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStepImpl(IExecutionStep step)
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+--------------------------------------------------
+--------------------------------------------------
+Timestamp: 1/13/2024 12:06:06 PM
+Exception Type: DataLibrary.BusinessLogic.Logger.Logger
+Message: A public action method 'InternalError' was not found on controller 'TestASPWeb.Controllers.ErrorController'.
+Inner Exception: 
+Stack Trace:    at System.Web.Mvc.Controller.HandleUnknownAction(String actionName)
+   at System.Web.Mvc.Controller.<>c.<BeginExecuteCore>b__152_1(IAsyncResult asyncResult, ExecuteCoreState innerState)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncVoid`1.CallEndDelegate(IAsyncResult asyncResult)
+   at System.Web.Mvc.Controller.EndExecuteCore(IAsyncResult asyncResult)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncVoid`1.CallEndDelegate(IAsyncResult asyncResult)
+   at System.Web.Mvc.Controller.EndExecute(IAsyncResult asyncResult)
+   at System.Web.Mvc.MvcHandler.<>c.<BeginProcessRequest>b__20_1(IAsyncResult asyncResult, ProcessRequestState innerState)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncVoid`1.CallEndDelegate(IAsyncResult asyncResult)
+   at System.Web.Mvc.MvcHandler.EndProcessRequest(IAsyncResult asyncResult)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStepImpl(IExecutionStep step)
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+--------------------------------------------------
+--------------------------------------------------
+Timestamp: 1/13/2024 12:06:09 PM
+Exception Type: DataLibrary.BusinessLogic.Logger.Logger
+Message: An error occurred when trying to create a controller of type 'TestASPWeb.Controllers.TrainingController'. Make sure that the controller has a parameterless public constructor.
+Inner Exception: Unity.ResolutionFailedException: Resolution failed with error: No public constructor is available for type DataLibrary.Repository.RepoInterfaces.IQuartzDAL.
+
+For more detailed information run Unity in debug mode: new UnityContainer().AddExtension(new Diagnostic()) ---> System.InvalidOperationException: No public constructor is available for type DataLibrary.Repository.RepoInterfaces.IQuartzDAL. ---> Unity.Exceptions.InvalidRegistrationException: Exception of type 'Unity.Exceptions.InvalidRegistrationException' was thrown.
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , BuilderContext& )
+   at Unity.Strategies.BuildPlanStrategy.PreBuildUp(BuilderContext& context) in C:\projects\container\src\Strategies\BuildPlanStrategy.cs:line 88
+   at Unity.UnityContainer.<>c.<.ctor>b__73_2(BuilderStrategy[] chain, BuilderContext& context) in C:\projects\container\src\UnityContainer.Resolution.cs:line 439
+   at Unity.Builder.BuilderContext.Resolve(Type type, String name, InternalRegistration registration) in C:\projects\container\src\Builder\Context\BuilderContext.cs:line 177
+   at Unity.Builder.BuilderContext.Resolve(Type type, String name) in C:\projects\container\src\Builder\Context\BuilderContext.cs:line 67
+   at Unity.Builder.BuilderContext.Resolve(ParameterInfo parameter, Object value) in C:\projects\container\src\Builder\Context\BuilderContext.cs:line 217
+   at lambda_method(Closure , BuilderContext& )
+   at Unity.Strategies.BuildPlanStrategy.PreBuildUp(BuilderContext& context) in C:\projects\container\src\Strategies\BuildPlanStrategy.cs:line 88
+   at Unity.UnityContainer.<>c.<.ctor>b__73_2(BuilderStrategy[] chain, BuilderContext& context) in C:\projects\container\src\UnityContainer.Resolution.cs:line 439
+   at Unity.Builder.BuilderContext.Resolve(Type type, String name, InternalRegistration registration) in C:\projects\container\src\Builder\Context\BuilderContext.cs:line 177
+   at Unity.Builder.BuilderContext.Resolve(Type type, String name) in C:\projects\container\src\Builder\Context\BuilderContext.cs:line 67
+   at Unity.Builder.BuilderContext.Resolve(ParameterInfo parameter, Object value) in C:\projects\container\src\Builder\Context\BuilderContext.cs:line 217
+   at lambda_method(Closure , BuilderContext& )
+   at Unity.Strategies.BuildPlanStrategy.PreBuildUp(BuilderContext& context) in C:\projects\container\src\Strategies\BuildPlanStrategy.cs:line 88
+   at Unity.UnityContainer.<>c.<.ctor>b__73_1(BuilderContext& context) in C:\projects\container\src\UnityContainer.Resolution.cs:line 362
+   --- End of inner exception stack trace ---
+   at Unity.UnityContainer.<>c.<.ctor>b__73_1(BuilderContext& context) in C:\projects\container\src\UnityContainer.Resolution.cs:line 384
+   at Unity.UnityContainer.Unity.IUnityContainer.Resolve(Type type, String name, ResolverOverride[] overrides) in C:\projects\container\src\UnityContainer.IUnityContainer.cs:line 244
+   at System.Web.Mvc.DefaultControllerFactory.DefaultControllerActivator.Create(RequestContext requestContext, Type controllerType)
+Stack Trace:    at System.Web.Mvc.DefaultControllerFactory.DefaultControllerActivator.Create(RequestContext requestContext, Type controllerType)
+   at System.Web.Mvc.MvcHandler.ProcessRequestInit(HttpContextBase httpContext, IController& controller, IControllerFactory& factory)
+   at System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContextBase httpContext, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStepImpl(IExecutionStep step)
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+--------------------------------------------------
+--------------------------------------------------
+Timestamp: 1/13/2024 12:06:09 PM
+Exception Type: DataLibrary.BusinessLogic.Logger.Logger
+Message: A public action method 'InternalError' was not found on controller 'TestASPWeb.Controllers.ErrorController'.
+Inner Exception: 
+Stack Trace:    at System.Web.Mvc.Controller.HandleUnknownAction(String actionName)
+   at System.Web.Mvc.Controller.<>c.<BeginExecuteCore>b__152_1(IAsyncResult asyncResult, ExecuteCoreState innerState)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncVoid`1.CallEndDelegate(IAsyncResult asyncResult)
+   at System.Web.Mvc.Controller.EndExecuteCore(IAsyncResult asyncResult)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncVoid`1.CallEndDelegate(IAsyncResult asyncResult)
+   at System.Web.Mvc.Controller.EndExecute(IAsyncResult asyncResult)
+   at System.Web.Mvc.MvcHandler.<>c.<BeginProcessRequest>b__20_1(IAsyncResult asyncResult, ProcessRequestState innerState)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncVoid`1.CallEndDelegate(IAsyncResult asyncResult)
+   at System.Web.Mvc.MvcHandler.EndProcessRequest(IAsyncResult asyncResult)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStepImpl(IExecutionStep step)
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+--------------------------------------------------
+--------------------------------------------------
+Timestamp: 1/13/2024 12:06:13 PM
+Exception Type: DataLibrary.BusinessLogic.Logger.Logger
+Message: An error occurred when trying to create a controller of type 'TestASPWeb.Controllers.TrainingController'. Make sure that the controller has a parameterless public constructor.
+Inner Exception: Unity.ResolutionFailedException: Resolution failed with error: No public constructor is available for type DataLibrary.Repository.RepoInterfaces.IQuartzDAL.
+
+For more detailed information run Unity in debug mode: new UnityContainer().AddExtension(new Diagnostic()) ---> System.InvalidOperationException: No public constructor is available for type DataLibrary.Repository.RepoInterfaces.IQuartzDAL. ---> Unity.Exceptions.InvalidRegistrationException: Exception of type 'Unity.Exceptions.InvalidRegistrationException' was thrown.
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , BuilderContext& )
+   at Unity.Strategies.BuildPlanStrategy.PreBuildUp(BuilderContext& context) in C:\projects\container\src\Strategies\BuildPlanStrategy.cs:line 88
+   at Unity.UnityContainer.<>c.<.ctor>b__73_2(BuilderStrategy[] chain, BuilderContext& context) in C:\projects\container\src\UnityContainer.Resolution.cs:line 439
+   at Unity.Builder.BuilderContext.Resolve(Type type, String name, InternalRegistration registration) in C:\projects\container\src\Builder\Context\BuilderContext.cs:line 177
+   at Unity.Builder.BuilderContext.Resolve(Type type, String name) in C:\projects\container\src\Builder\Context\BuilderContext.cs:line 67
+   at Unity.Builder.BuilderContext.Resolve(ParameterInfo parameter, Object value) in C:\projects\container\src\Builder\Context\BuilderContext.cs:line 217
+   at lambda_method(Closure , BuilderContext& )
+   at Unity.Strategies.BuildPlanStrategy.PreBuildUp(BuilderContext& context) in C:\projects\container\src\Strategies\BuildPlanStrategy.cs:line 88
+   at Unity.UnityContainer.<>c.<.ctor>b__73_2(BuilderStrategy[] chain, BuilderContext& context) in C:\projects\container\src\UnityContainer.Resolution.cs:line 439
+   at Unity.Builder.BuilderContext.Resolve(Type type, String name, InternalRegistration registration) in C:\projects\container\src\Builder\Context\BuilderContext.cs:line 177
+   at Unity.Builder.BuilderContext.Resolve(Type type, String name) in C:\projects\container\src\Builder\Context\BuilderContext.cs:line 67
+   at Unity.Builder.BuilderContext.Resolve(ParameterInfo parameter, Object value) in C:\projects\container\src\Builder\Context\BuilderContext.cs:line 217
+   at lambda_method(Closure , BuilderContext& )
+   at Unity.Strategies.BuildPlanStrategy.PreBuildUp(BuilderContext& context) in C:\projects\container\src\Strategies\BuildPlanStrategy.cs:line 88
+   at Unity.UnityContainer.<>c.<.ctor>b__73_1(BuilderContext& context) in C:\projects\container\src\UnityContainer.Resolution.cs:line 362
+   --- End of inner exception stack trace ---
+   at Unity.UnityContainer.<>c.<.ctor>b__73_1(BuilderContext& context) in C:\projects\container\src\UnityContainer.Resolution.cs:line 384
+   at Unity.UnityContainer.Unity.IUnityContainer.Resolve(Type type, String name, ResolverOverride[] overrides) in C:\projects\container\src\UnityContainer.IUnityContainer.cs:line 244
+   at System.Web.Mvc.DefaultControllerFactory.DefaultControllerActivator.Create(RequestContext requestContext, Type controllerType)
+Stack Trace:    at System.Web.Mvc.DefaultControllerFactory.DefaultControllerActivator.Create(RequestContext requestContext, Type controllerType)
+   at System.Web.Mvc.MvcHandler.ProcessRequestInit(HttpContextBase httpContext, IController& controller, IControllerFactory& factory)
+   at System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContextBase httpContext, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStepImpl(IExecutionStep step)
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+--------------------------------------------------
+--------------------------------------------------
+Timestamp: 1/13/2024 12:06:13 PM
+Exception Type: DataLibrary.BusinessLogic.Logger.Logger
+Message: A public action method 'InternalError' was not found on controller 'TestASPWeb.Controllers.ErrorController'.
+Inner Exception: 
+Stack Trace:    at System.Web.Mvc.Controller.HandleUnknownAction(String actionName)
+   at System.Web.Mvc.Controller.<>c.<BeginExecuteCore>b__152_1(IAsyncResult asyncResult, ExecuteCoreState innerState)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncVoid`1.CallEndDelegate(IAsyncResult asyncResult)
+   at System.Web.Mvc.Controller.EndExecuteCore(IAsyncResult asyncResult)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncVoid`1.CallEndDelegate(IAsyncResult asyncResult)
+   at System.Web.Mvc.Controller.EndExecute(IAsyncResult asyncResult)
+   at System.Web.Mvc.MvcHandler.<>c.<BeginProcessRequest>b__20_1(IAsyncResult asyncResult, ProcessRequestState innerState)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncVoid`1.CallEndDelegate(IAsyncResult asyncResult)
+   at System.Web.Mvc.MvcHandler.EndProcessRequest(IAsyncResult asyncResult)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStepImpl(IExecutionStep step)
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+--------------------------------------------------
+--------------------------------------------------
+Timestamp: 1/13/2024 12:06:15 PM
+Exception Type: DataLibrary.BusinessLogic.Logger.Logger
+Message: An error occurred when trying to create a controller of type 'TestASPWeb.Controllers.TrainingController'. Make sure that the controller has a parameterless public constructor.
+Inner Exception: Unity.ResolutionFailedException: Resolution failed with error: No public constructor is available for type DataLibrary.Repository.RepoInterfaces.IQuartzDAL.
+
+For more detailed information run Unity in debug mode: new UnityContainer().AddExtension(new Diagnostic()) ---> System.InvalidOperationException: No public constructor is available for type DataLibrary.Repository.RepoInterfaces.IQuartzDAL. ---> Unity.Exceptions.InvalidRegistrationException: Exception of type 'Unity.Exceptions.InvalidRegistrationException' was thrown.
+   --- End of inner exception stack trace ---
+   at lambda_method(Closure , BuilderContext& )
+   at Unity.Strategies.BuildPlanStrategy.PreBuildUp(BuilderContext& context) in C:\projects\container\src\Strategies\BuildPlanStrategy.cs:line 88
+   at Unity.UnityContainer.<>c.<.ctor>b__73_2(BuilderStrategy[] chain, BuilderContext& context) in C:\projects\container\src\UnityContainer.Resolution.cs:line 439
+   at Unity.Builder.BuilderContext.Resolve(Type type, String name, InternalRegistration registration) in C:\projects\container\src\Builder\Context\BuilderContext.cs:line 177
+   at Unity.Builder.BuilderContext.Resolve(Type type, String name) in C:\projects\container\src\Builder\Context\BuilderContext.cs:line 67
+   at Unity.Builder.BuilderContext.Resolve(ParameterInfo parameter, Object value) in C:\projects\container\src\Builder\Context\BuilderContext.cs:line 217
+   at lambda_method(Closure , BuilderContext& )
+   at Unity.Strategies.BuildPlanStrategy.PreBuildUp(BuilderContext& context) in C:\projects\container\src\Strategies\BuildPlanStrategy.cs:line 88
+   at Unity.UnityContainer.<>c.<.ctor>b__73_2(BuilderStrategy[] chain, BuilderContext& context) in C:\projects\container\src\UnityContainer.Resolution.cs:line 439
+   at Unity.Builder.BuilderContext.Resolve(Type type, String name, InternalRegistration registration) in C:\projects\container\src\Builder\Context\BuilderContext.cs:line 177
+   at Unity.Builder.BuilderContext.Resolve(Type type, String name) in C:\projects\container\src\Builder\Context\BuilderContext.cs:line 67
+   at Unity.Builder.BuilderContext.Resolve(ParameterInfo parameter, Object value) in C:\projects\container\src\Builder\Context\BuilderContext.cs:line 217
+   at lambda_method(Closure , BuilderContext& )
+   at Unity.Strategies.BuildPlanStrategy.PreBuildUp(BuilderContext& context) in C:\projects\container\src\Strategies\BuildPlanStrategy.cs:line 88
+   at Unity.UnityContainer.<>c.<.ctor>b__73_1(BuilderContext& context) in C:\projects\container\src\UnityContainer.Resolution.cs:line 362
+   --- End of inner exception stack trace ---
+   at Unity.UnityContainer.<>c.<.ctor>b__73_1(BuilderContext& context) in C:\projects\container\src\UnityContainer.Resolution.cs:line 384
+   at Unity.UnityContainer.Unity.IUnityContainer.Resolve(Type type, String name, ResolverOverride[] overrides) in C:\projects\container\src\UnityContainer.IUnityContainer.cs:line 244
+   at System.Web.Mvc.DefaultControllerFactory.DefaultControllerActivator.Create(RequestContext requestContext, Type controllerType)
+Stack Trace:    at System.Web.Mvc.DefaultControllerFactory.DefaultControllerActivator.Create(RequestContext requestContext, Type controllerType)
+   at System.Web.Mvc.MvcHandler.ProcessRequestInit(HttpContextBase httpContext, IController& controller, IControllerFactory& factory)
+   at System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContextBase httpContext, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStepImpl(IExecutionStep step)
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+--------------------------------------------------
+--------------------------------------------------
+Timestamp: 1/13/2024 12:06:15 PM
+Exception Type: DataLibrary.BusinessLogic.Logger.Logger
+Message: A public action method 'InternalError' was not found on controller 'TestASPWeb.Controllers.ErrorController'.
+Inner Exception: 
+Stack Trace:    at System.Web.Mvc.Controller.HandleUnknownAction(String actionName)
+   at System.Web.Mvc.Controller.<>c.<BeginExecuteCore>b__152_1(IAsyncResult asyncResult, ExecuteCoreState innerState)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncVoid`1.CallEndDelegate(IAsyncResult asyncResult)
+   at System.Web.Mvc.Controller.EndExecuteCore(IAsyncResult asyncResult)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncVoid`1.CallEndDelegate(IAsyncResult asyncResult)
+   at System.Web.Mvc.Controller.EndExecute(IAsyncResult asyncResult)
+   at System.Web.Mvc.MvcHandler.<>c.<BeginProcessRequest>b__20_1(IAsyncResult asyncResult, ProcessRequestState innerState)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncVoid`1.CallEndDelegate(IAsyncResult asyncResult)
+   at System.Web.Mvc.MvcHandler.EndProcessRequest(IAsyncResult asyncResult)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStepImpl(IExecutionStep step)
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+--------------------------------------------------
+--------------------------------------------------
+Timestamp: 1/13/2024 12:17:41 PM
+Exception Type: DataLibrary.BusinessLogic.Logger.Logger
+Message: An error occurred when trying to create a controller of type 'TestASPWeb.Controllers.TrainingController'. Make sure that the controller has a parameterless public constructor.
+Inner Exception: Unity.ResolutionFailedException: Resolution failed with error: No public constructor is available for type DataLibrary.Repository.RepoInterfaces.IQuartzDAL.
+
+For more detailed information run Unity in debug mode: new UnityContainer().AddExtension(new Diagnostic()) ---> System.InvalidOperationException: No public constructor is available for type DataLibrary.Repository.RepoInterfaces.IQuartzDAL. ---> Unity.Exceptions.InvalidRegistrationException: Exception of type 'Unity.Exceptions.InvalidRegistrationException' was thrown.
+   --- End of inner exception stack trace ---
+   at Unity.Processors.ConstructorProcessor.<>c.<GetResolver>b__15_1(BuilderContext& c) in C:\projects\container\src\Processors\Constructor\ConstructorResolution.cs:line 52
+   at Unity.Processors.MemberProcessor`2.<>c__DisplayClass8_0.<GetResolver>b__0(BuilderContext& c) in C:\projects\container\src\Processors\Abstracts\MemberProcessor.cs:line 162
+   at Unity.Processors.MemberProcessor`2.<>c__DisplayClass8_0.<GetResolver>b__0(BuilderContext& c) in C:\projects\container\src\Processors\Abstracts\MemberProcessor.cs:line 162
+   at Unity.Processors.MemberProcessor`2.<>c__DisplayClass8_0.<GetResolver>b__0(BuilderContext& c) in C:\projects\container\src\Processors\Abstracts\MemberProcessor.cs:line 162
+   at Unity.Strategies.BuildPlanStrategy.PreBuildUp(BuilderContext& context) in C:\projects\container\src\Strategies\BuildPlanStrategy.cs:line 80
+   at Unity.UnityContainer.<>c.<.ctor>b__73_2(BuilderStrategy[] chain, BuilderContext& context) in C:\projects\container\src\UnityContainer.Resolution.cs:line 439
+   at Unity.Builder.BuilderContext.Resolve(Type type, String name, InternalRegistration registration) in C:\projects\container\src\Builder\Context\BuilderContext.cs:line 177
+   at Unity.Builder.BuilderContext.Resolve(Type type, String name) in C:\projects\container\src\Builder\Context\BuilderContext.cs:line 67
+   at Unity.Builder.BuilderContext.Resolve(ParameterInfo parameter, Object value) in C:\projects\container\src\Builder\Context\BuilderContext.cs:line 217
+   at Unity.Processors.ConstructorProcessor.<>c__DisplayClass16_0.<GetResolverDelegate>b__0(BuilderContext& c) in C:\projects\container\src\Processors\Constructor\ConstructorResolution.cs:line 77
+   at Unity.Processors.MemberProcessor`2.<>c__DisplayClass8_0.<GetResolver>b__0(BuilderContext& c) in C:\projects\container\src\Processors\Abstracts\MemberProcessor.cs:line 162
+   at Unity.Processors.MemberProcessor`2.<>c__DisplayClass8_0.<GetResolver>b__0(BuilderContext& c) in C:\projects\container\src\Processors\Abstracts\MemberProcessor.cs:line 162
+   at Unity.Processors.MemberProcessor`2.<>c__DisplayClass8_0.<GetResolver>b__0(BuilderContext& c) in C:\projects\container\src\Processors\Abstracts\MemberProcessor.cs:line 162
+   at Unity.Strategies.BuildPlanStrategy.PreBuildUp(BuilderContext& context) in C:\projects\container\src\Strategies\BuildPlanStrategy.cs:line 80
+   at Unity.UnityContainer.<>c.<.ctor>b__73_2(BuilderStrategy[] chain, BuilderContext& context) in C:\projects\container\src\UnityContainer.Resolution.cs:line 439
+   at Unity.Builder.BuilderContext.Resolve(Type type, String name, InternalRegistration registration) in C:\projects\container\src\Builder\Context\BuilderContext.cs:line 177
+   at Unity.Builder.BuilderContext.Resolve(Type type, String name) in C:\projects\container\src\Builder\Context\BuilderContext.cs:line 67
+   at Unity.Builder.BuilderContext.Resolve(ParameterInfo parameter, Object value) in C:\projects\container\src\Builder\Context\BuilderContext.cs:line 217
+   at Unity.Processors.ConstructorProcessor.<>c__DisplayClass16_0.<GetResolverDelegate>b__0(BuilderContext& c) in C:\projects\container\src\Processors\Constructor\ConstructorResolution.cs:line 77
+   at Unity.Processors.MemberProcessor`2.<>c__DisplayClass8_0.<GetResolver>b__0(BuilderContext& c) in C:\projects\container\src\Processors\Abstracts\MemberProcessor.cs:line 162
+   at Unity.Processors.MemberProcessor`2.<>c__DisplayClass8_0.<GetResolver>b__0(BuilderContext& c) in C:\projects\container\src\Processors\Abstracts\MemberProcessor.cs:line 162
+   at Unity.Processors.MemberProcessor`2.<>c__DisplayClass8_0.<GetResolver>b__0(BuilderContext& c) in C:\projects\container\src\Processors\Abstracts\MemberProcessor.cs:line 162
+   at Unity.Strategies.BuildPlanStrategy.PreBuildUp(BuilderContext& context) in C:\projects\container\src\Strategies\BuildPlanStrategy.cs:line 80
+   at Unity.UnityContainer.<>c.<.ctor>b__73_1(BuilderContext& context) in C:\projects\container\src\UnityContainer.Resolution.cs:line 362
+   --- End of inner exception stack trace ---
+   at Unity.UnityContainer.<>c.<.ctor>b__73_1(BuilderContext& context) in C:\projects\container\src\UnityContainer.Resolution.cs:line 384
+   at Unity.UnityContainer.Unity.IUnityContainer.Resolve(Type type, String name, ResolverOverride[] overrides) in C:\projects\container\src\UnityContainer.IUnityContainer.cs:line 244
+   at System.Web.Mvc.DefaultControllerFactory.DefaultControllerActivator.Create(RequestContext requestContext, Type controllerType)
+Stack Trace:    at System.Web.Mvc.DefaultControllerFactory.DefaultControllerActivator.Create(RequestContext requestContext, Type controllerType)
+   at System.Web.Mvc.MvcHandler.ProcessRequestInit(HttpContextBase httpContext, IController& controller, IControllerFactory& factory)
+   at System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContextBase httpContext, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStepImpl(IExecutionStep step)
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+--------------------------------------------------

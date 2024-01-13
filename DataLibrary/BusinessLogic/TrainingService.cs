@@ -19,13 +19,15 @@ namespace DataLibrary.BusinessLogic
         IDepartmentDAL _departmentDAL;
         ILogger _logger;
         IUserNotificationDAL _userNotificationDAL;
-        public TrainingService(ITrainingDAL trainingRepo, IPrerequisiteDAL prerequisiteRepo, IDepartmentDAL departmentRepo, ILogger logger,IUserNotificationDAL userNotificationDAL)
+        IQuartzDAL _quartzDAL;
+        public TrainingService(ITrainingDAL trainingRepo, IPrerequisiteDAL prerequisiteRepo, IDepartmentDAL departmentRepo, ILogger logger,IUserNotificationDAL userNotificationDAL, IQuartzDAL quartzDAL)
         {
             this._trainingRepo = trainingRepo;
             this._prerequisiteDAL = prerequisiteRepo;
             this._departmentDAL = departmentRepo;
             this._logger = logger;
             this._userNotificationDAL = userNotificationDAL;
+            this._quartzDAL = quartzDAL;
         }
         public IEnumerable<ITraining> GetAll()
         {
@@ -350,10 +352,14 @@ namespace DataLibrary.BusinessLogic
             {
                 //Get all the list of trainings trainingIds that are past due deadline and has not been processed yet
                 IEnumerable<int> listOfTrainingIDsToBeProcessed = await _trainingRepo.GetListOfUnprocessedTrainingsWithPastDeadline();
-                foreach(int trainingID in listOfTrainingIDsToBeProcessed)
+                if (listOfTrainingIDsToBeProcessed.Any())
                 {
-                    await ConfirmAutomaticSelection(trainingID);
+                    foreach(int trainingID in listOfTrainingIDsToBeProcessed)
+                    {
+                        await ConfirmAutomaticSelection(trainingID);
+                    }
                 }
+                await _quartzDAL.InsertQuartzJobLog("Automatic Selection Process");
                 return ;
             }
             catch(Exception ex)

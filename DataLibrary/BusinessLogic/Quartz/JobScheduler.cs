@@ -25,9 +25,8 @@ namespace DataLibrary.BusinessLogic.Quartz
             .WithIdentity("trigger", "sqlGroup")
              .StartNow()
             .WithDailyTimeIntervalSchedule(x => x
-            .WithIntervalInHours(24)
-            .OnEveryDay()
-            .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(0, 0)))
+                .WithIntervalInSeconds(50)
+                .OnEveryDay())
             .Build();
 
 
@@ -46,7 +45,10 @@ namespace DataLibrary.BusinessLogic.Quartz
                     _container.RegisterType<ILogger, DataLibrary.BusinessLogic.Logger.Logger>();
                     _container.RegisterType<ITrainingService, DataLibrary.BusinessLogic.TrainingService>();
                     _container.RegisterType<ITrainingDAL, TrainingDAL>();
-                    
+                    _container.RegisterType<IUserNotificationDAL, UserNotificationDAL>();
+                    _container.RegisterType<IPrerequisiteDAL, PrerequisiteDAL>();
+                    _container.RegisterType<IDepartmentDAL, DepartmentDAL>();
+                    _container.RegisterType<IQuartzDAL, QuartzDAL>();
 
                 }
                 return _container;

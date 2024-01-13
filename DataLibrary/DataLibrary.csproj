@@ -147,9 +147,11 @@
     <Compile Include="Repository\DepartmentDAL.cs" />
     <Compile Include="Repository\EnrollmentDAL.cs" />
     <Compile Include="Repository\PrerequisiteDAL.cs" />
+    <Compile Include="Repository\QuartzDAL.cs" />
     <Compile Include="Repository\RepoInterfaces\IDepartmentDAL.cs" />
     <Compile Include="Repository\RepoInterfaces\IEnrollmentDAL.cs" />
     <Compile Include="Repository\RepoInterfaces\IPrerequisiteDAL.cs" />
+    <Compile Include="Repository\RepoInterfaces\IQuartzDAL.cs" />
     <Compile Include="Repository\RepoInterfaces\ITrainingDAL.cs" />
     <Compile Include="Repository\RepoInterfaces\IUserDAL.cs" />
     <Compile Include="Repository\RepoInterfaces\IUserNotificationDAL.cs" />

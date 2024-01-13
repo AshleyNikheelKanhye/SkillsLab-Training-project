@@ -21,7 +21,7 @@ namespace TestASPWeb
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             //quartz
-            //JobScheduler.Start();
+            JobScheduler.Start();
         }
 
         protected void Application_BeginRequest()

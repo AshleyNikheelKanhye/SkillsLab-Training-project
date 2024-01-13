@@ -28,7 +28,9 @@ namespace DataLibrary.BusinessLogic.BusinessLogicInterface
         Task<IEnumerable<SelectedEmployeeViewModel>> GetSelectedEmployees(int trainingID);
         Task<string> GetTrainingDescription(int trainingID);
         Task QuartzAutomaticProcessing();
-
+        void SendNotificationToEmployeeForFinalStatus(AutomaticProcessingViewModel automaticProcessingModel);
+        Task sendEmployeeEmailForSucessEnrollment(List<EmployeeApplicationViewModel> listOfSucessApplication);
+        Task sendEmployeeEmailForFailureEnrollment(List<EmployeeApplicationViewModel> listOfFailureApplication);
 
     }
 }
