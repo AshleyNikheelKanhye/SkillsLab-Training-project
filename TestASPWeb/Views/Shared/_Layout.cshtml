@@ -14,27 +14,17 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
-    @*    <header>
-            <h4>Training Management System</h4>
-        </header>*@
     @{
         DataLibrary.Entities.User currentUser = Session["CurrentUser"] as DataLibrary.Entities.User;
         string currentUserRoleString = Session["CurrentRole"] as string;
 
     }
-
-
-
-
-
-
     <nav>
         <div class="nav-container">
             <a href="#">Welcome @currentUser.FirstName </a>
             @if (currentUserRoleString == "Employee")
             {
                 <a id="home" href="@Url.Action("EmployeeView", "Employee")">Home</a>
-                <a id="profile" href="@Url.Action("GetProfile", "Employee")">Profile</a>
                 <a id="Training" href="@Url.Action("GetTrainingView", "Employee")">Training</a>
                 <a id="Qualifications" href="@Url.Action("QualificationsView", "Employee")">My Qualifications</a>
                 <a id="Qualifications" href="@Url.Action("InboxView", "User")">Inbox</a>
@@ -53,33 +43,12 @@
                 <a id="adminAutomaticProcess" href="@Url.Action("AutomaticProcessingView","Admin")">Automatic Processing</a>
                 <a id="adminViewUsers" href="@Url.Action("AllUsersView","Admin")">View Employees</a>
             }
-
             <a href="@Url.Action("Logout","User")">Logout</a>
         </div>
     </nav>
-
     <div>
         @RenderBody()
     </div>
-
-
-
-@*    <script>
-        window.onscroll = function () { myFunction() };
-
-        var navbar = document.querySelector("nav");
-        var sticky = navbar.offsetTop;
-
-        function myFunction() {
-            if (window.pageYOffset >= sticky) {
-                navbar.classList.add("sticky")
-            } else {
-                navbar.classList.remove("sticky");
-            }
-        }
-    </script>*@
-
-
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 </body>

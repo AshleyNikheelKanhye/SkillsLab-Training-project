@@ -1,0 +1,95 @@
+﻿body {
+    font-family: Arial, sans-serif;
+    background-image: url("../../../Images/background.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#second-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 60px;
+}
+
+.content {
+    display: none;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 15px;
+}
+
+button {
+    background-color: #e0f2f1;
+    border-radius: 10px;
+}
+
+    button:hover {
+        transition: 0.25s;
+        background: rgb(56,130,209);
+        color: #fff;
+    }
+
+
+#updatePopupDiv {
+    justify-content: center;
+    align-items: center;
+    padding: 1px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+}
+
+#form-div {
+    background-color: #3e92cc;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 1000px;
+    color: #ffffff;
+    margin: 0;
+}
+
+.TableViewDiv {
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 8px;
+    margin: 20px;
+}
+
+    .TableViewDiv table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+.requestsTable th, .requestsTable td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #b2dfdb;
+    border-radius: 5px;
+}
+
+.requestsTable th {
+    background-color: #e0f2f1;
+    color: #000000;
+}
+
+.requestsTable tbody tr {
+    background-color: #ffffff;
+}
+
+    .requestsTable tbody tr:nth-child(even) {
+        background-color: #ffffff;
+    }
+
+    .requestsTable tbody tr:nth-child(odd) {
+        background-color: #ffffff;
+    }

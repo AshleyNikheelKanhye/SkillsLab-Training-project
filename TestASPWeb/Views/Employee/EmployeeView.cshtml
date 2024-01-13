@@ -6,15 +6,31 @@
 }
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-<h2>EmployeeView</h2>
-Welcome @currentUser.FirstName @currentUser.LastName
-Training Registration Website allows you to apply for trainings available based on your qualifications.
-You will need your Managers approval before having a chance to register for a trainings.
-Seats are limited and some Trainings will favour some employees in specific department.
 
-<script>
-    $(document).ready(function () {
-        $('nav .nav-container a').removeClass('active');
-        $('#home').addClass('active');
-    });
-</script>
+
+<!--page styling-->
+<link rel="stylesheet" href="~/Content/MyContent/EmployeeStyling/EmployeeView.css" />
+
+<!--Script-->
+<script type="text/javascript" src="~/Scripts/MyScripts/EmployeeScripts/EmployeeView.js"></script>
+
+
+
+<div id="second-container">
+    <div class="profileContainer content">
+        <h2>WELCOME : @currentUser.FirstName @currentUser.LastName</h2>
+        <img class="profile-image" src="~/Images/logo2.png" alt="Profile Image" />
+        <div class="user-details">
+            <h5>My Email : @currentUser.Email</h5>
+            <h5>My NIC : @currentUser.NIC</h5>
+            <h5>My Phone Number : @currentUser.PhoneNo</h5>
+        </div>
+    </div>
+    <div class="content">
+        <h2>Training Management Website</h2><br /><hr />
+
+        <p>Training Registration Website allows you to apply for trainings available based on your qualifications.<br />
+        You will need your Managers approval before having a chance to register for a trainings.<br />
+        Seats are limited and some Trainings will favour some employees in specific department.</p>
+    </div>
+</div>

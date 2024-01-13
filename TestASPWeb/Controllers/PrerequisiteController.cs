@@ -23,9 +23,9 @@ namespace TestASPWeb.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetPrerequisitesNotInEmployee(int userID)
+        public JsonResult GetPrerequisitesNotInEmployee()
         {
-            var listPrerequisites = _prerequisiteService.GetPrerequisitesNotInEmployee(userID);
+            var listPrerequisites = _prerequisiteService.GetPrerequisitesNotInEmployee((int)this.Session["CurrentUserID"]);
             if(listPrerequisites != null)
             {
                 return Json(new { listQualifications =listPrerequisites},JsonRequestBehavior.AllowGet);

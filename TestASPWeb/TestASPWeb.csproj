@@ -210,9 +210,19 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="Content\MyContent\AdminStyling\AddNewTraining.css" />
+    <Content Include="Content\MyContent\AdminStyling\AdminView.css" />
+    <Content Include="Content\MyContent\AdminStyling\AllUsers.css" />
+    <Content Include="Content\MyContent\AdminStyling\ViewTraining.css" />
     <Content Include="Content\MyContent\EmployeeHome.css" />
+    <Content Include="Content\MyContent\EmployeeStyling\EmployeeView.css" />
+    <Content Include="Content\MyContent\EmployeeStyling\GetProfile.css" />
+    <Content Include="Content\MyContent\EmployeeStyling\GetTraining.css" />
+    <Content Include="Content\MyContent\EmployeeStyling\Qualification.css" />
     <Content Include="Content\MyContent\Login.css" />
-    <Content Include="Content\MyContent\paginationjs.css" />
+    <Content Include="Content\MyContent\AdminStyling\AutomaticProcessing.css" />
+    <Content Include="Content\MyContent\ManagerStyling\ApproveRequest.css" />
+    <Content Include="Content\MyContent\ManagerStyling\ManagerView.css" />
     <Content Include="Content\MyContent\Register.css" />
     <Content Include="Content\TrainingDetails.css" />
     <Content Include="Content\TrainingLayout.css" />
@@ -12148,9 +12158,20 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\MyScripts\AdminScripts\AddNewTraining.js" />
+    <Content Include="Scripts\MyScripts\AdminScripts\AdminView.js" />
+    <Content Include="Scripts\MyScripts\AdminScripts\AllUsers.js" />
+    <Content Include="Scripts\MyScripts\AdminScripts\ViewTrainings.js" />
     <Content Include="Scripts\MyScripts\EmployeeHomeScript.js" />
+    <Content Include="Scripts\MyScripts\EmployeeScripts\EmployeeView.js" />
+    <Content Include="Scripts\MyScripts\EmployeeScripts\GetProfile.js" />
+    <Content Include="Scripts\MyScripts\EmployeeScripts\GetTraining.js" />
+    <Content Include="Scripts\MyScripts\EmployeeScripts\Qualification.js" />
     <Content Include="Scripts\MyScripts\loginScript.js" />
     <Content Include="Scripts\MyScripts\ManagerHomeScript.js" />
+    <Content Include="Scripts\MyScripts\AdminScripts\AutomaticProcessing.js" />
+    <Content Include="Scripts\MyScripts\ManagerScripts\ApproveRequest.js" />
+    <Content Include="Scripts\MyScripts\ManagerScripts\ManagerView.js" />
     <Content Include="Scripts\MyScripts\NavbarScript.js" />
     <Content Include="Scripts\MyScripts\pagination.js" />
     <Content Include="Scripts\MyScripts\registerScript.js" />
@@ -12173,13 +12194,9 @@
     <Content Include="Views\Home\SignUp.cshtml" />
     <Content Include="Views\User\Login.cshtml" />
     <Content Include="Views\User\Register.cshtml" />
-    <Content Include="Views\Employee\Index.cshtml" />
-    <Content Include="Views\Manager\Index.cshtml" />
     <Content Include="Views\Common\AccessDenied.cshtml" />
     <Content Include="Views\Common\Index.cshtml" />
-    <Content Include="Views\Employee\_trainingPartialView.cshtml" />
     <Content Include="Views\Employee\EmployeeView.cshtml" />
-    <Content Include="Views\Employee\GetProfile.cshtml" />
     <Content Include="Views\Employee\GetTrainingView.cshtml" />
     <Content Include="Views\Employee\QualificationsView.cshtml" />
     <Content Include="tsconfig.json" />
@@ -12193,11 +12210,9 @@
     <Content Include="Views\Error\InternalError.cshtml" />
     <Content Include="Views\Admin\AdminView.cshtml" />
     <Content Include="Views\Admin\ViewTrainingsView.cshtml" />
-    <Content Include="Views\Admin\ManageTrainingsView.cshtml" />
     <Content Include="Views\Admin\AutomaticProcessingView.cshtml" />
     <Content Include="Views\Admin\AllUsersView.cshtml" />
     <Content Include="Views\Admin\AddNewTrainingView.cshtml" />
-    <Content Include="Views\Employee\InboxView.cshtml" />
     <Content Include="Views\User\InboxView.cshtml" />
   </ItemGroup>
   <ItemGroup>

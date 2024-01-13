@@ -1,0 +1,60 @@
+﻿body {
+    font-family: Arial, sans-serif;
+    background-image: url("../../../Images/background.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#second-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 80px;
+}
+
+.content {
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.TableViewDiv {
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 8px;
+    margin: 20px;
+}
+
+    .TableViewDiv table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+.requestsTable th, .requestsTable td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #b2dfdb;
+    border-radius: 5px;
+}
+
+.requestsTable th {
+    background-color: #e0f2f1;
+    color: #000000;
+}
+
+.requestsTable tbody tr {
+    background-color: #ffffff;
+}
+
+    .requestsTable tbody tr:nth-child(even) {
+        background-color: #ccffff;
+    }
+
+    .requestsTable tbody tr:nth-child(odd) {
+        background-color: #ffffff;
+    }

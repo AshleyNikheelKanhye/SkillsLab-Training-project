@@ -41,9 +41,10 @@ namespace TestASPWeb.Controllers
         }
 
         [HttpPost]
-        public JsonResult GetEmployeeQualifications(int userID) 
+        public JsonResult GetEmployeeQualifications() 
         { 
-            var list = _prerequisiteService.GetEmployeeQualifications(userID);
+
+            var list = _prerequisiteService.GetEmployeeQualifications((int)this.Session["CurrentUserID"]);
             if(list != null)
             {
                 return Json(new { result = list }, JsonRequestBehavior.AllowGet);    
@@ -54,9 +55,9 @@ namespace TestASPWeb.Controllers
             }
         }
 
-        public ActionResult DownloadQualification(int userID, int prerequisiteID)
+        public ActionResult DownloadQualification(int prerequisiteID)
         {
-            EmployeeQualification qualification = _prerequisiteService.DownloadQualification(userID,prerequisiteID);
+            EmployeeQualification qualification = _prerequisiteService.DownloadQualification((int)this.Session["CurrentUserID"], prerequisiteID);
             if(qualification != null)
             {
                 return File(qualification.FileContent, "application/pdf", qualification.FileName);

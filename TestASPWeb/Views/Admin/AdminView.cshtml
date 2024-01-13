@@ -1,8 +1,37 @@
 ﻿
 @{
-    ViewBag.Title = "AdminView";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    DataLibrary.Entities.User currentUser = Session["CurrentUser"] as DataLibrary.Entities.User;
 }
 
-<h2>AdminView</h2>
+<!--page styling-->
+<link rel="stylesheet" href="~/Content/MyContent/AdminStyling/AdminView.css" />
+
+<!--Script-->
+<script type="text/javascript" src="~/Scripts/MyScripts/AdminScripts/AdminView.js"></script>
+
+<div id="second-container">
+
+    <div class="profileContainer content">
+        <h2>WELCOME : @currentUser.FirstName @currentUser.LastName</h2>
+        <img class="profile-image" src="~/Images/logo2.png" alt="Profile Image" />
+        <div class="user-details">
+            <h5>My Email : @currentUser.Email</h5>
+            <h5>My NIC : @currentUser.NIC</h5>
+            <h5>My Phone Number : @currentUser.PhoneNo</h5>
+        </div>
+    </div>
+    <div class="content">
+        <h2>Training Management Website</h2><br /><hr />
+
+        <p>
+            Automatic Selection of Selected Employees is Activated by default but you can still start it manually.<br />
+            You can only delete a training which has no Employees enrolled to it.<br />
+            You can update any upcoming trainings deadline and starting Date.<br />
+            You can monitor the progress of every training and User in the system <br />
+        </p>
+    </div>
+
+</div>
+
 

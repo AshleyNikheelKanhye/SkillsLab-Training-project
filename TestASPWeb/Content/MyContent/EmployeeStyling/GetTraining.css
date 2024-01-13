@@ -1,0 +1,158 @@
+﻿body {
+    font-family: Arial, sans-serif;
+    background-image: url("../../../Images/background.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.card {
+    border: 1px solid #3498db;
+    padding: 10px;
+    margin: 10px;
+    width: 500px;
+    display: inline-block;
+}
+
+#second-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px;
+}
+
+.navbar {
+    background-color: #3498db; /* Blue color for the navbar-like div */
+    padding: 10px;
+    border-bottom: 2px solid #2980b9; /* Darker blue color for the border */
+    text-align: center;
+    color: white;
+    display: flex;
+    justify-content: center; /* Center the labels horizontally */
+}
+
+.content {
+    display: none;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 15px;
+}
+
+.myTrainings:checked ~ #myTrainingsContent,
+.trainingsAvailable:checked ~ #trainingsAvailableContent,
+.allTrainings:checked ~ #allTrainingsContent {
+    display: block; /* Show the corresponding content div when the radio button is checked */
+}
+
+label.navLabel {
+    background-color: #2980b9; /* Dark blue color for unselected labels */
+    padding: 10px;
+    border-radius: 4px;
+    display: inline-block; /* Display labels as inline-block elements */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 0 10px; /* Adjust this value to change the spacing between labels */
+}
+
+input[type="radio"] {
+    display: none; /* Hide the actual radio buttons */
+}
+
+    input[type="radio"]:checked + label {
+        background-color: #2c3e50; /* Slightly darker blue for selected labels */
+    }
+
+
+#popUp {
+    padding-block: 10px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ffffff;
+    padding: 20px;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#viewingPrerequisites {
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 8px;
+    margin: 20px;
+}
+
+.TableViewsDiv {
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 8px;
+    margin: 20px;
+}
+
+    .TableViewsDiv table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+.requestsTable th, .requestsTable td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #b2dfdb;
+    border-radius: 5px;
+}
+
+.requestsTable th {
+    background-color: #e0f2f1;
+    color: #000000;
+}
+
+.requestsTable tbody tr {
+    background-color: #ffffff;
+}
+
+    .requestsTable tbody tr:nth-child(even) {
+        background-color: #ccffff;
+    }
+
+    .requestsTable tbody tr:nth-child(odd) {
+        background-color: #ffffff;
+    }
+
+.spinner-container {
+    position: relative;
+}
+
+.spinner {
+    border: 2px solid #000;
+    border-top: 2px solid #fff;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -25px;
+    margin-left: -25px;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.infoBtn {
+    background-color: white;
+    border: none;
+    color: black;
+    padding: 5px;
+    font-size: 30px;
+    cursor: pointer;
+}

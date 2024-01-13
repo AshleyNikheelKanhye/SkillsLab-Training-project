@@ -1,0 +1,83 @@
+﻿body {
+    font-family: Arial, sans-serif;
+    background-image: url("../../../Images/background.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#second-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 70px;
+}
+
+.content {
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 15px;
+}
+
+#insertPopupDiv {
+    justify-content: center;
+    align-items: center;
+    padding: 1px;
+}
+
+
+#form-div {
+    background-color: #3e92cc;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 1000px;
+    color: #ffffff;
+    margin: 0;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+}
+
+input, select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #2980b9;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+    button:hover {
+        background-color: #1a5276;
+    }
+
+.checkbox-group {
+    margin-bottom: 15px;
+    width: 500px;
+    display: grid;
+}
+
+    .checkbox-group label {
+        display: flex;
+        align-items: center;
+        margin-bottom: 5px;
+    }
+
+    .checkbox-group input {
+        margin-right: 8px;
+    }
