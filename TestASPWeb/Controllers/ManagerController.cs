@@ -9,8 +9,8 @@ using TestASPWeb.Custom;
 
 namespace TestASPWeb.Controllers
 {
-    [UserSessionAttribute]
-    [CustomAuthorizationAttribute("Manager")]
+    [UserSession]
+    [CustomAuthorization("Manager")]
     public class ManagerController : Controller
     {
 

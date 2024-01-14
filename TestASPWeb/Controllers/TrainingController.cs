@@ -11,9 +11,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using TestASPWeb.Custom;
 
 namespace TestASPWeb.Controllers
 {
+    [UserSession]
     public class TrainingController : Controller
     {
         private readonly ITrainingService _trainingService;
@@ -26,12 +28,8 @@ namespace TestASPWeb.Controllers
             this._prerequisiteService = prerequisiteService;
         }
 
-        public ActionResult Index()
-        {
-            return View();
-        }
 
-        //admin as well
+        [CustomAuthorization("Employee,Admin")]
         [HttpGet]
         public JsonResult getAll()
         {
@@ -39,6 +37,7 @@ namespace TestASPWeb.Controllers
             return Json(trainingList,JsonRequestBehavior.AllowGet);
         }
 
+        [CustomAuthorization("Employee")]
         [HttpGet]
         public JsonResult GetAllElligilbe()
         {
@@ -48,7 +47,7 @@ namespace TestASPWeb.Controllers
         }
 
 
-        //admin also
+        [CustomAuthorization("Employee,Admin")]
         [HttpPost]
         public JsonResult GetPrerequisites(int trainingID)
         {
@@ -56,6 +55,7 @@ namespace TestASPWeb.Controllers
             return Json(new { result = list },JsonRequestBehavior.AllowGet);
         }
 
+        [CustomAuthorization("Employee")]
         [HttpGet]
         public JsonResult GetAllTrainingWithPrerequisitesAndDepartments()
         {
@@ -65,7 +65,7 @@ namespace TestASPWeb.Controllers
 
 
 
-        //manager only 
+        [CustomAuthorization("Admin")]
         [HttpPost]
         public async Task<JsonResult> AddTraining(AddTrainingViewModel addTrainingViewModel)
         {
@@ -73,7 +73,9 @@ namespace TestASPWeb.Controllers
             return Json(new { result = insertResult },JsonRequestBehavior.AllowGet);
         }
 
-        //admin only
+
+
+        [CustomAuthorization("Admin")]
         [HttpGet]
         public async Task<JsonResult> GetUnprocessedTrainings()
         {
@@ -81,7 +83,8 @@ namespace TestASPWeb.Controllers
             return Json(list ,JsonRequestBehavior.AllowGet);  
         }
 
-        //admin only
+
+        [CustomAuthorization("Admin")]
         [HttpGet]
         public async Task<JsonResult> GetCompletedTrainings()
         {
@@ -89,7 +92,7 @@ namespace TestASPWeb.Controllers
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 
-        //admin only
+        [CustomAuthorization("Admin")]
         [HttpGet]
         public async Task<JsonResult> GetDeletedTrainings()
         {
@@ -97,7 +100,7 @@ namespace TestASPWeb.Controllers
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 
-        //admin only
+        [CustomAuthorization("Admin")]
         [HttpPost]
         public async Task<JsonResult> GetSelectedEmployees(int TrainingID)
         {
@@ -105,7 +108,7 @@ namespace TestASPWeb.Controllers
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 
-        //admin only
+        [CustomAuthorization("Admin")]
         [HttpPost]
         public async Task<JsonResult> GenerateFinalListOfSelectedEmployees(int trainingId)
         {
@@ -113,7 +116,7 @@ namespace TestASPWeb.Controllers
             return Json(obj, JsonRequestBehavior.AllowGet);
         }
 
-        //admin only
+        [CustomAuthorization("Admin")]
         [HttpPost]
         public async Task<JsonResult> ConfirmAutomaticSelection(int trainingId)
         {
@@ -121,7 +124,7 @@ namespace TestASPWeb.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        //admin only
+        [CustomAuthorization("Admin")]
         [HttpGet]
         public async Task<JsonResult> getUpcomings()
         {
@@ -129,7 +132,7 @@ namespace TestASPWeb.Controllers
             return Json(list, JsonRequestBehavior.AllowGet);    
         }
 
-        //admin only
+        [CustomAuthorization("Admin")]
         [HttpPost]
         public async Task<JsonResult> GetTrainingToUpdateDetails(int trainingID)
         {
@@ -138,7 +141,7 @@ namespace TestASPWeb.Controllers
 
         }
 
-        //admin only
+        [CustomAuthorization("Admin")]
         [HttpPost]
         public async Task<JsonResult> UpdateTraining(UpdateTrainingViewModel formUpdateResult)
         {
@@ -146,7 +149,7 @@ namespace TestASPWeb.Controllers
             return Json(new { result = updateStatus }, JsonRequestBehavior.AllowGet);
         }
 
-        //admin only
+        [CustomAuthorization("Admin")]
         [HttpPost]
         public async Task<JsonResult> Delete(int trainingID)
         {

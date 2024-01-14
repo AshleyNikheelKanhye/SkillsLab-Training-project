@@ -9,8 +9,8 @@ using TestASPWeb.Custom;
 
 namespace TestASPWeb.Controllers
 {
-    [UserSessionAttribute]
-    [CustomAuthorizationAttribute("Admin")]//authorization
+    [UserSession]
+    [CustomAuthorization("Admin")]
     public class AdminController : Controller
     {
         private readonly IUserService _userService;

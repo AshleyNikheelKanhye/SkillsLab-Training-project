@@ -8,9 +8,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using TestASPWeb.Custom;
 
 namespace TestASPWeb.Controllers
 {
+    [UserSession]
     public class EnrollmentController : Controller
     {
         private readonly IEnrollmentService _enrollmentService;
@@ -21,13 +23,7 @@ namespace TestASPWeb.Controllers
         
         }
 
-        public ActionResult Index()
-        {
-            return View();
-        }
-
-
-        //managerOnly
+        [CustomAuthorization("Manager")]
         [HttpPost]
         public async Task<JsonResult> ManagerUpdatesEnrollment(int enrollmentID,string ManagerResult,string DisapproveMessage)
         {
@@ -43,10 +39,7 @@ namespace TestASPWeb.Controllers
             }
         }
 
-
-
-
-
+        [CustomAuthorization("Employee")]
         [HttpPost]
         public async Task<JsonResult> AddEnrollment(int trainingID)
         {
@@ -72,6 +65,7 @@ namespace TestASPWeb.Controllers
             return Json(new {result = "ok"}, JsonRequestBehavior.AllowGet);
         }
 
+        [CustomAuthorization("Employee")]
         [HttpGet]
         public JsonResult GetFinalApprovedTrainings()
         {
@@ -80,7 +74,7 @@ namespace TestASPWeb.Controllers
             return Json(list,JsonRequestBehavior.AllowGet);
         }
 
-
+        [CustomAuthorization("Employee")]
         [HttpGet]
         public JsonResult GetManagerApprovedTrainings()
         {
@@ -89,6 +83,8 @@ namespace TestASPWeb.Controllers
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 
+
+        [CustomAuthorization("Employee")]
         [HttpGet]
         public JsonResult GetPendingTrainings()
         {
@@ -97,6 +93,7 @@ namespace TestASPWeb.Controllers
             return Json(list,JsonRequestBehavior.AllowGet);
         }
 
+        [CustomAuthorization("Employee")]
         [HttpGet]
         public JsonResult GetDeclinedTrainings()
         {
@@ -106,7 +103,7 @@ namespace TestASPWeb.Controllers
         }
 
 
-        //manager only
+        [CustomAuthorization("Manager")]
         [HttpGet]
         public JsonResult GetPendingEnrollments()
         {
@@ -115,7 +112,8 @@ namespace TestASPWeb.Controllers
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 
-        //managerOnly
+
+        [CustomAuthorization("Manager")]
         [HttpPost]
         public JsonResult GetManagerApproveAndDisapproved(string Choice)
         {
@@ -124,8 +122,8 @@ namespace TestASPWeb.Controllers
         }
 
 
-
-        //Admin only
+        [CustomAuthorization("Admin")]
+        [HttpPost]
         public async Task<JsonResult> GetEmployeesAppliedForTraining(int trainingID)
         {
             var list = await _enrollmentService.GetEmployeesAppliedForTraining(trainingID);

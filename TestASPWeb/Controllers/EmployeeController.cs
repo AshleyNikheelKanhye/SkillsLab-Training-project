@@ -12,8 +12,8 @@ using TestASPWeb.Custom;
 
 namespace TestASPWeb.Controllers
 {
-    [UserSessionAttribute]
-    [CustomAuthorizationAttribute("Employee")]//authorization
+    [UserSession]
+    [CustomAuthorization("Employee")]
     public class EmployeeController : Controller
     {
         private readonly IPrerequisiteService _prerequisiteService;

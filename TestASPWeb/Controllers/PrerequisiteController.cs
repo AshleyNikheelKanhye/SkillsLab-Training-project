@@ -5,9 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using TestASPWeb.Custom;
 
 namespace TestASPWeb.Controllers
 {
+    [UserSession]
     public class PrerequisiteController : Controller
     {
         private readonly IPrerequisiteService _prerequisiteService;
@@ -17,11 +19,7 @@ namespace TestASPWeb.Controllers
             this._prerequisiteService = prerequisiteService;
         }
 
-        public ActionResult Index()
-        {
-            return View();
-        }
-
+        [CustomAuthorization("Employee")]
         [HttpGet]
         public JsonResult GetPrerequisitesNotInEmployee()
         {
@@ -38,7 +36,7 @@ namespace TestASPWeb.Controllers
 
 
 
-        //admin when inserting a new training
+        [CustomAuthorization("Admin")]
         [HttpGet]
         public JsonResult GetAllPrerequisites()
         {
@@ -53,6 +51,7 @@ namespace TestASPWeb.Controllers
             }
         }
 
+        [CustomAuthorization("Manager")]
         [HttpPost]
         public JsonResult GetUserPrerequisiteForEnrollment(int enrollmentID)
         {
@@ -67,6 +66,7 @@ namespace TestASPWeb.Controllers
             }
         }
 
+        [CustomAuthorization("Manager,Admin")]
         public ActionResult DownloadQualification(int userID,int prerequisiteID)
         {
             EmployeeQualification qualification = _prerequisiteService.DownloadQualification(userID, prerequisiteID);
@@ -79,7 +79,5 @@ namespace TestASPWeb.Controllers
                 return Content("file not found");
             }
         }
-
-        
     }
 }
