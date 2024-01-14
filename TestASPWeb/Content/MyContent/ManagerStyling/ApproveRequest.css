@@ -85,3 +85,14 @@
         transform: rotate(360deg);
     }
 }
+
+button {
+    background-color: #e0f2f1;
+    border-radius: 10px;
+}
+
+    button:hover {
+        transition: 0.25s;
+        background: rgb(56,130,209);
+        color: #fff;
+    }

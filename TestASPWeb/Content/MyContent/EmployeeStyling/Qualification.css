@@ -51,10 +51,13 @@
     background-color: #ffffff;
 }
 
-    .requestsTable tbody tr:nth-child(even) {
-        background-color: #ccffff;
-    }
+button {
+    background-color: #e0f2f1;
+    border-radius: 10px;
+}
 
-    .requestsTable tbody tr:nth-child(odd) {
-        background-color: #ffffff;
+    button:hover {
+        transition: 0.25s;
+        background: rgb(56,130,209);
+        color: #fff;
     }

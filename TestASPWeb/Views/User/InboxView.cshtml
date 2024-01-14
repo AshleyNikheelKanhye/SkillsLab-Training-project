@@ -1,13 +1,20 @@
 ﻿
 @{
-    ViewBag.Title = "InboxView";
     Layout = "~/Views/Shared/_Layout.cshtml";
     DataLibrary.Entities.User currentUser = Session["CurrentUser"] as DataLibrary.Entities.User;
 }
 
-<h2>InboxView</h2>
 
 <style>
+    body {
+        font-family: Arial, sans-serif;
+        background-image: url("../../../Images/background.jpg");
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: 100% 100%;
+        margin: 0;
+        padding: 0;
+    }
 
     .collapsible {
         background-color: #777;
@@ -16,9 +23,13 @@
         padding: 18px;
         width: 100%;
         border: none;
-        text-align: left;
         outline: none;
-        font-size: 15px;
+        margin-bottom: 2px;
+        font-size: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
     }
 
         .active, .collapsible:hover {
@@ -31,13 +42,25 @@
         overflow: hidden;
         transition: max-height 0.2s ease-out;
         background-color: #f1f1f1;
+        font-size:20px;
+    }
+
+    #usernameHeader{
+        padding:10px;
+    }
+    .title {
+        margin-right: auto; /* Pushes the title to the left */
+    }
+
+    .datetime {
+        margin-left: auto; /* Pushes the date to the right */
     }
 </style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 <script>
     $(document).ready(function () {
+        $('nav .nav-container a').removeClass('active');
+        $('#inbox').addClass('active');
 
         //setup function for collapsible
         $(document).on("click", ".collapsible", function () {
@@ -64,7 +87,7 @@
                     } else {
                         $.each(response, function (index, notification) {
                             var notifElement = `
-                                <button class="collapsible">${notification.Title}-----${formatDateTime(notification.MessageDate)}</button>
+                                <button class="collapsible"><p class="title">${notification.Title}</p> <p class="datetime">${formatDateTime(notification.MessageDate)}</p></button>
                                 <div class="content">
                                     <p>${notification.MessageBody}</p>
                                 </div>`;
@@ -93,10 +116,9 @@
 
 </script>
 
-
-<h2>INBOX</h2>
-
-
+<div id="usernameHeader">
+    <h2>@currentUser.FirstName's INBOX</h2>
+</div>
 
 
 

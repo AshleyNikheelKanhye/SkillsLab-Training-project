@@ -8,7 +8,7 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script type="text/javascript" src="~/Scripts/ServerCallScripts/ServerCall.js"></script>
     <script type="text/javascript" src="~/Scripts/MyScripts/NavbarScript.js"></script>
-    <title>@ViewBag.Title - Training Management System</title>
+    <title>Training Management System</title>
 
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
@@ -17,7 +17,10 @@
     @{
         DataLibrary.Entities.User currentUser = Session["CurrentUser"] as DataLibrary.Entities.User;
         string currentUserRoleString = Session["CurrentRole"] as string;
-
+        if(currentUser == null)
+        {
+            Response.Redirect("/User/Login");
+        }
     }
     <nav>
         <div class="nav-container">
@@ -27,13 +30,13 @@
                 <a id="home" href="@Url.Action("EmployeeView", "Employee")">Home</a>
                 <a id="Training" href="@Url.Action("GetTrainingView", "Employee")">Training</a>
                 <a id="Qualifications" href="@Url.Action("QualificationsView", "Employee")">My Qualifications</a>
-                <a id="Qualifications" href="@Url.Action("InboxView", "User")">Inbox</a>
+                <a id="inbox" href="@Url.Action("InboxView", "User")">Inbox</a>
             }
             else if (currentUserRoleString == "Manager")
             {
                 <a id="managerHome" href="@Url.Action("ManagerView","Manager")">Home</a>
                 <a id="approveRequests" href="@Url.Action("ApproveRequestView","Manager")">Approve Training Requests</a>
-                <a id="Qualifications" href="@Url.Action("InboxView", "User")">Inbox</a>
+                <a id="inbox" href="@Url.Action("InboxView", "User")">Inbox</a>
             }
             else
             {

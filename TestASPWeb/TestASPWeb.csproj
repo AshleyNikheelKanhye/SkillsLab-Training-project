@@ -214,9 +214,7 @@
     <Content Include="Content\MyContent\AdminStyling\AdminView.css" />
     <Content Include="Content\MyContent\AdminStyling\AllUsers.css" />
     <Content Include="Content\MyContent\AdminStyling\ViewTraining.css" />
-    <Content Include="Content\MyContent\EmployeeHome.css" />
     <Content Include="Content\MyContent\EmployeeStyling\EmployeeView.css" />
-    <Content Include="Content\MyContent\EmployeeStyling\GetProfile.css" />
     <Content Include="Content\MyContent\EmployeeStyling\GetTraining.css" />
     <Content Include="Content\MyContent\EmployeeStyling\Qualification.css" />
     <Content Include="Content\MyContent\Login.css" />

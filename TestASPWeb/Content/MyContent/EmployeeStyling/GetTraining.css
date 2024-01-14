@@ -16,6 +16,19 @@
     display: inline-block;
 }
 
+button {
+    background-color: #e0f2f1;
+    border-radius: 10px;
+}
+
+    button:hover {
+        transition: 0.25s;
+        background: rgb(56,130,209);
+        color: #fff;
+    }
+
+
+
 #second-container {
     display: flex;
     justify-content: center;
@@ -24,13 +37,13 @@
 }
 
 .navbar {
-    background-color: #3498db; /* Blue color for the navbar-like div */
+    background-color: #3498db; 
     padding: 10px;
-    border-bottom: 2px solid #2980b9; /* Darker blue color for the border */
+    border-bottom: 2px solid #2980b9; 
     text-align: center;
     color: white;
     display: flex;
-    justify-content: center; /* Center the labels horizontally */
+    justify-content: center; 
 }
 
 .content {
@@ -43,25 +56,25 @@
 .myTrainings:checked ~ #myTrainingsContent,
 .trainingsAvailable:checked ~ #trainingsAvailableContent,
 .allTrainings:checked ~ #allTrainingsContent {
-    display: block; /* Show the corresponding content div when the radio button is checked */
+    display: block; 
 }
 
 label.navLabel {
-    background-color: #2980b9; /* Dark blue color for unselected labels */
+    background-color: #2980b9; 
     padding: 10px;
     border-radius: 4px;
-    display: inline-block; /* Display labels as inline-block elements */
+    display: inline-block; 
     cursor: pointer;
     transition: background-color 0.3s ease;
-    margin: 0 10px; /* Adjust this value to change the spacing between labels */
+    margin: 0 10px; 
 }
 
 input[type="radio"] {
-    display: none; /* Hide the actual radio buttons */
+    display: none; 
 }
 
     input[type="radio"]:checked + label {
-        background-color: #2c3e50; /* Slightly darker blue for selected labels */
+        background-color: #2c3e50; 
     }
 
 
@@ -112,13 +125,6 @@ input[type="radio"] {
     background-color: #ffffff;
 }
 
-    .requestsTable tbody tr:nth-child(even) {
-        background-color: #ccffff;
-    }
-
-    .requestsTable tbody tr:nth-child(odd) {
-        background-color: #ffffff;
-    }
 
 .spinner-container {
     position: relative;

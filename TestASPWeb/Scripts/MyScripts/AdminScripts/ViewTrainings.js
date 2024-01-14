@@ -493,6 +493,14 @@
             return 'No date';
         }
     }
+
+
+    //modal
+    $(document).on("click", "#trainingInfoBtn", function () {
+        document.getElementById('id01').style.display = 'block';
+    });
+
+
     //flow
     $('#mySelect').trigger('change');
 

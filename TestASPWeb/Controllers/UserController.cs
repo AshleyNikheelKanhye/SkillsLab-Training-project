@@ -42,12 +42,14 @@ namespace TestASPWeb.Controllers
             return View();
         }
 
+        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
         public ActionResult Logout()
         {
             Session.Clear();
             Session.Abandon();
             return RedirectToAction("Login","User");
         }
+
 
         [HttpPost]
         public JsonResult Authenticate(LoginUserViewModel loginUserViewModel)

@@ -15,6 +15,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
 
 
@@ -27,6 +29,7 @@
             <option value="3">Processed Trainings</option>
             <option value="4">Deleted Trainings</option>
         </select>
+        <button class="infoBtn" id="trainingInfoBtn"><i class="fa fa-question-circle" aria-hidden="true"></i></button>
     </span>
 </div>
 
@@ -164,6 +167,7 @@
                     </tr>
                 </thead>
                 <tbody>
+
                 </tbody>
             </table>
         </div>
@@ -220,30 +224,24 @@
         </div>
     </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    <!--modal-->
+    <div id="id01" class="w3-modal">
+        <div class="w3-modal-content w3-animate-top w3-card-4">
+            <header class="w3-container w3-blue">
+                <span onclick="document.getElementById('id01').style.display='none'"
+                      class="w3-button w3-display-topright">&times;</span>
+                <h2>Display Training Options</h2>
+            </header>
+            <div class="w3-container">
+                <h3>Options</h3>
+                <hr />
+                <ul>
+                    <li><strong>All Trainings :</strong> All Trainings in the system </li>
+                    <li><strong>Upcoming Trainings :</strong> Upcoming Trainings with registration deadlines in the future.</li>
+                    <li><strong>Processed Trainings :</strong> Trainings that have been processed(Final Employees Selected)</li>
+                    <li><strong>Deleted Trainings:</strong> Trainings that have been deleted ( no employees enrolled)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </div>

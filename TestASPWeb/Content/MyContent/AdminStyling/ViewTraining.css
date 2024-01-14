@@ -86,10 +86,11 @@ label {
     background-color: #ffffff;
 }
 
-    .requestsTable tbody tr:nth-child(even) {
-        background-color: #ffffff;
-    }
-
-    .requestsTable tbody tr:nth-child(odd) {
-        background-color: #ffffff;
-    }
+.infoBtn {
+    
+    border: none;
+    color: black;
+    padding: 5px;
+    font-size: 30px;
+    cursor: pointer;
+}

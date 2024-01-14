@@ -360,16 +360,6 @@
         $('div#tableTrainingsAvailable').fadeIn(500);
     });
 
-    //I was testing to get all training with their prerequisites delete that dont need that anymore
-    function testFunction() {
-        var URL = "/Training/GetAllTrainingWithPrerequisitesAndDepartments";
-        getAJAXCall(URL).then((response) => {
-            console.log(response);
-            alert(JSON.stringify(response));
-        });
-    }
-
-
     //modal
     $(document).on("click", "#registeredInfobtn", function () {
         document.getElementById('id01').style.display = 'block';
