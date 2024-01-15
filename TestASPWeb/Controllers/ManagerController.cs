@@ -13,17 +13,12 @@ namespace TestASPWeb.Controllers
     [CustomAuthorization("Manager")]
     public class ManagerController : Controller
     {
-
         private readonly IUserService _userService;
         public ManagerController(IUserService userService)
         {
             _userService = userService;
         }
 
-        public ActionResult Index()
-        {
-            return View();
-        }
         public ActionResult ManagerView()
         {
             return View();
@@ -34,14 +29,10 @@ namespace TestASPWeb.Controllers
             return View();
         }
 
-        //manager only
         public async Task<JsonResult> GetEmployeesUnderManager()
         {
             var list = await _userService.GetEmployeesUnderManager((int)this.Session["CurrentUserID"]);
             return Json(list, JsonRequestBehavior.AllowGet);
         }
-
-
-
     }
 }

@@ -10,30 +10,32 @@ namespace DataLibrary.ViewModels
 {
     public class RegisterEmployeeViewModel 
     {
-        [Required(ErrorMessage = "Email is required")]
-        [EmailAddress(ErrorMessage = "Invalid email address")]
+        [Required]
+        [EmailAddress]
+        [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Last Name is required")]
+        [Required]
         public string LastName { get; set; }
 
-        [Required(ErrorMessage = "First Name is required")]
+        [Required]
         public string FirstName { get; set; }
 
-        [Required(ErrorMessage = "NIC is required")]
+        [Required]
+        [RegularExpression(@"^[A-Z]\d{12}[A-Z]$")]
         public string NIC { get; set; }
 
-        [Required(ErrorMessage = "Phone Number is required")]
-        [RegularExpression(@"^5\d{7}$", ErrorMessage = "Invalid phone number format")]
+        [Required]
+        [RegularExpression(@"^5\d{7}$")]
         public int PhoneNo { get; set; }
 
-        [Required(ErrorMessage = "Password is required")]
+        [Required]
         public string Password { get; set; }
 
-        [Required(ErrorMessage = "Department is required")]
+        [Required]
         public int DepartmentID { get; set; }
 
-        [Required(ErrorMessage = "Manager is required")]
+        [Required]
         public int ManagerID { get; set; }
         public string Role { get; set; }
 

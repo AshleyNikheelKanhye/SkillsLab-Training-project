@@ -61,9 +61,7 @@ namespace DataLibrary.BusinessLogic
                     Title = "Employee Application For Training",
                     MessageBody = $"{nameOfEmployee} has applied for Training : {trainingName}. Please Make a Decision Before the Training Deadline.",
                 };
-
                 _userNotificationDAL.InsertNotification(notification);
-
             }
             catch (Exception ex)
             {
@@ -71,7 +69,6 @@ namespace DataLibrary.BusinessLogic
                 return;
             }
         }
-
 
         public bool ManagerUpdatesEnrollment(int EnrollmentID,string ManagerResult)
         {
@@ -108,8 +105,6 @@ namespace DataLibrary.BusinessLogic
             }
         }
 
-
-
         public async Task<IEnumerable<EnrollmentViewModel>> GetEmployeesAppliedForTraining(int trainingID)
         {
             try
@@ -123,11 +118,17 @@ namespace DataLibrary.BusinessLogic
             }
         }
 
-        
-
         public IEnumerable<IEnrollment> GetEnrollments(int UserID, Status FinalStatus,Status ManagerStatus)
         {
-            return _enrollmentDAL.GetEnrollments(UserID,FinalStatus, ManagerStatus);
+            try
+            {
+                return _enrollmentDAL.GetEnrollments(UserID,FinalStatus, ManagerStatus);
+            }
+            catch(Exception ex)
+            {
+                this._logger.LogError(ex);
+                return null;
+            }
         }
 
         public IEnumerable<IEnrollment> GetDeclinedEnrollments(int userID)
@@ -145,14 +146,9 @@ namespace DataLibrary.BusinessLogic
 
         public IEnumerable<EnrollmentViewModel> GetPendingEnrollments(int ManagerID)
         {
-            return _enrollmentDAL.GetPendingEnrollments(ManagerID);
-        }
-
-        public IEnumerable<EnrollmentViewModel> GetManagerApproveAndDisapproved(string Choice,int ManagerID)
-        {
             try
             {
-                return _enrollmentDAL.GetManagerApproveAndDisapproved(Choice,ManagerID);    
+                return _enrollmentDAL.GetPendingEnrollments(ManagerID);
             }
             catch(Exception ex)
             {
@@ -161,6 +157,18 @@ namespace DataLibrary.BusinessLogic
             }
         }
 
+        public IEnumerable<EnrollmentViewModel> GetManagerApproveAndDisapproved(string Choice,int ManagerID)
+        {
+            try
+            {
+                return _enrollmentDAL.GetManagerApproveAndDisapproved(Choice, ManagerID);
+            }
+            catch(Exception ex)
+            {
+                this._logger.LogError(ex);
+                return null;
+            }
+        }
 
         public async Task EmployeeSendMailToManagerForApplication(int userID, int trainingID)
         {
@@ -168,7 +176,6 @@ namespace DataLibrary.BusinessLogic
             string employeeName = _userDAL.GetFullName(userID);
             string trainingName = _trainingDAL.GetTrainingName(trainingID);
 
-            // build the message body
             string htmlBody = $@"
                 <html>
                 <head>
@@ -239,10 +246,9 @@ namespace DataLibrary.BusinessLogic
 
                      subject = $"{ManagerName} Disaproved your request for {model.TrainingName}";
                 }
-
-                    await EmailSender.SendEmail(subject, htmlBody, model.Email);
-                    return ;
-                }
+                await EmailSender.SendEmail(subject, htmlBody, model.Email);
+                return ;
+            }
             catch (Exception ex)
             {
                 this._logger.LogError(ex);
@@ -250,35 +256,5 @@ namespace DataLibrary.BusinessLogic
             }
 
         }
-
-
-        public async Task SendTestMail()
-        {
-            string managerEmail = "ashley.kanhye@ceridian.com";
-            string htmlBody = $@"
-                <html>
-                <head>
-                    <title>HTML Email</title>
-                </head>
-                <body>
-                    <p>This is a test mail , please ignore</p>
-                </body>
-                </html>
-            ";
-
-            string subject = "this is a test email";
-            try
-            {
-               bool emailresult  = await EmailSender.SendEmail(subject, htmlBody, managerEmail);
-               return ;
-            }
-            catch (Exception ex) 
-            {
-                this._logger.LogError(ex);
-                return  ;
-            }
-        }
-
-
     }
 }

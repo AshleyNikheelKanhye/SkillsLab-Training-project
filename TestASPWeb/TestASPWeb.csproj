@@ -174,11 +174,9 @@
     <Compile Include="App_Start\UnityMvcActivator.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\CommonController.cs" />
-    <Compile Include="Controllers\DojoController.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\EnrollmentController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManagerController.cs" />
     <Compile Include="Controllers\PrerequisiteController.cs" />
     <Compile Include="Controllers\TrainingController.cs" />
@@ -12171,7 +12169,6 @@
     <Content Include="Scripts\MyScripts\ManagerScripts\ApproveRequest.js" />
     <Content Include="Scripts\MyScripts\ManagerScripts\ManagerView.js" />
     <Content Include="Scripts\MyScripts\NavbarScript.js" />
-    <Content Include="Scripts\MyScripts\pagination.js" />
     <Content Include="Scripts\MyScripts\registerScript.js" />
     <Content Include="Scripts\ServerCallScripts\ServerCall.js" />
     <Content Include="StaticView\LoginWidget.html" />

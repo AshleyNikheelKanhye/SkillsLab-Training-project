@@ -25,22 +25,22 @@ namespace DataLibrary.Repo
 
         public IEnumerable<IPrerequisite> GetPrerequisites(int trainingID)
         {
-            IEnumerable<IPrerequisite> list = new List<IPrerequisite>();
-            string searchQuery = "SELECT p.Details,tp.PrerequisiteID FROM ((Training t INNER JOIN TrainingPrequisite tp ON t.TrainingID = tp.TrainingID) INNER JOIN Prerequisite p ON p.PrerequisiteID = tp.PrerequisiteID) WHERE t.TrainingID=@trainingID";
-            SqlCommand command = new SqlCommand(searchQuery, _dbContext.GetConn());
-            command.Parameters.AddWithValue("@trainingID",trainingID);
-            SqlDataReader reader = command.ExecuteReader();
-
-            if (reader.HasRows)
+            try
             {
-                list = DataBaseHelper.ReturnAllRowsFromDB<Prerequisite>(reader);
+                IEnumerable<IPrerequisite> list = new List<IPrerequisite>();
+                string searchQuery = "SELECT p.Details,tp.PrerequisiteID FROM ((Training t INNER JOIN TrainingPrequisite tp ON t.TrainingID = tp.TrainingID) INNER JOIN Prerequisite p ON p.PrerequisiteID = tp.PrerequisiteID) WHERE t.TrainingID=@trainingID";
+                SqlCommand command = new SqlCommand(searchQuery, _dbContext.GetConn());
+                command.Parameters.AddWithValue("@trainingID",trainingID);
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    list = DataBaseHelper.ReturnAllRowsFromDB<Prerequisite>(reader);
+                }
+                reader.Close();
+                return list;
             }
-                
-            //If there is not prerequisites the list will be empty
-            reader.Close();
-            return list;
+            catch { throw; }
         }
-
 
         public IEnumerable<EmployeeQualificationDetailsViewModel> GetEmployeeQualifications(int userID)
         {
@@ -57,7 +57,6 @@ namespace DataLibrary.Repo
                 {
                     list = DataBaseHelper.ReturnAllRowsFromDB<EmployeeQualificationDetailsViewModel>(reader);
                 }
-                //if reader does not has row, the list return will be empty
                 reader.Close();
                 return list;
             }
@@ -79,13 +78,11 @@ namespace DataLibrary.Repo
                 {
                     list = DataBaseHelper.ReturnAllRowsFromDB<EmployeeQualificationDetailsViewModel>(reader);
                 }
-                //if reader does not has row, the list return will be empty
                 reader.Close();
                 return list;
             }
             catch { throw; }
         }
-
 
         public IEnumerable<EmployeeQualificationDetailsViewModel> GetUserPrerequisiteForEnrollment(int enrollmentID)
         {
@@ -104,14 +101,11 @@ namespace DataLibrary.Repo
                 {
                     list = DataBaseHelper.ReturnAllRowsFromDB<EmployeeQualificationDetailsViewModel>(reader);
                 }
-                //if reader does not has row, the list return will be empty
                 reader.Close();
                 return list;
             }
-            catch(Exception ex) { return null; }
+            catch { throw; }
         }
-
-
 
         public IEnumerable<IPrerequisite> GetPrerequisitesNotInEmployee(int userID)
         {
@@ -132,7 +126,7 @@ namespace DataLibrary.Repo
                 reader.Close();
                 return list;
             }
-            catch (Exception ex) { return null; }
+            catch { throw; }
         }
 
         public IEnumerable<IPrerequisite> GetAllPrerequisites()
@@ -152,8 +146,6 @@ namespace DataLibrary.Repo
             }
             catch { throw; }
         }
-
-
 
         public bool UploadQualification(HttpPostedFileBase file, int prerequisiteID, int userID, string fileName)
         {
@@ -179,12 +171,11 @@ namespace DataLibrary.Repo
                 }
                 else { return false; }
             }
-            catch (Exception ex) 
-            { 
-                return false; 
+            catch 
+            {
+                throw;
             }
         }
-
 
         public EmployeeQualification GetQualification(int userID, int prerequisiteID)
         {
@@ -220,10 +211,7 @@ namespace DataLibrary.Repo
                 reader.Close();
                 return null;
             }
-            catch(Exception ex) { return null; }
+            catch { throw; }
         }
-
-
-
     }
 }

@@ -31,17 +31,31 @@ namespace DataLibrary.BusinessLogic
         }
         public IEnumerable<ITraining> GetAll()
         {
-            var listOfAllTraining = _trainingRepo.GetAll();
-            return listOfAllTraining;
+            try
+            {
+                return _trainingRepo.GetAll(); 
+            }
+            catch(Exception ex)
+            {
+                this._logger.LogError(ex);
+                return null;
+            }
         }
 
         public IEnumerable<ITraining> GetAllElligible(int UserID)
         {
-            var listOfElligibleTrainings = _trainingRepo.GetAllElligible(UserID);
-            return listOfElligibleTrainings;
+            try
+            {
+                return _trainingRepo.GetAllElligible(UserID);
+            }
+            catch(Exception ex)
+            {
+                this._logger.LogError(ex);
+                return null;
+            }
         }
 
-        public IEnumerable<IPrerequisite> GetPrerequisites(int trainingID)  //do not need that , delete this method, to preserve single responsiblity
+        public IEnumerable<IPrerequisite> GetPrerequisites(int trainingID)
         {
             try
             {
@@ -49,25 +63,33 @@ namespace DataLibrary.BusinessLogic
             }
             catch (Exception ex)
             {
-                throw ex;
+                this._logger.LogError(ex);
+                return null;
             }
         }
 
         public IEnumerable<TrainingPrerequisiteDepartmentViewModel> GetAllPrerequisitesAndDepartments()
         {
-            List<TrainingPrerequisiteDepartmentViewModel> list = new List<TrainingPrerequisiteDepartmentViewModel>();
-
-            var listOfAllTraining = _trainingRepo.GetAll();  //returns a list of ITraining
-
-            foreach (var training in listOfAllTraining)
+            try
             {
-                var listOfPrerequisites = _prerequisiteDAL.GetPrerequisites(training.TrainingID).ToList();
-                var listOfDepartments = _departmentDAL.GetDepartmentsForTraining(training.TrainingID).ToList();
+                List<TrainingPrerequisiteDepartmentViewModel> list = new List<TrainingPrerequisiteDepartmentViewModel>();
 
-                list.Add(new TrainingPrerequisiteDepartmentViewModel() { training = training, listOfPrerequisites = listOfPrerequisites, listOfDepartments = listOfDepartments });
+                var listOfAllTraining = _trainingRepo.GetAll();  //returns a list of ITraining
+
+                foreach (var training in listOfAllTraining)
+                {
+                    var listOfPrerequisites = _prerequisiteDAL.GetPrerequisites(training.TrainingID).ToList();
+                    var listOfDepartments = _departmentDAL.GetDepartmentsForTraining(training.TrainingID).ToList();
+
+                    list.Add(new TrainingPrerequisiteDepartmentViewModel() { training = training, listOfPrerequisites = listOfPrerequisites, listOfDepartments = listOfDepartments });
+                }
+                return list;
             }
-
-            return list;
+            catch(Exception ex)
+            {
+                this._logger.LogError(ex);
+                return null;
+            }
         }
 
         public async Task<bool> Add(AddTrainingViewModel addTrainingViewModel)

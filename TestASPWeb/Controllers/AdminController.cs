@@ -19,7 +19,6 @@ namespace TestASPWeb.Controllers
             this._userService = userService;
         }
         
-
         public ActionResult AdminView()
         {
             return View();
@@ -45,16 +44,14 @@ namespace TestASPWeb.Controllers
         {
             return View();  
         }
-
-        //admin only
+  
         [HttpGet]
         public async Task<JsonResult> GetAllUsers()
         {
             var listOfAllUsers = await _userService.GetAll();
             return Json(listOfAllUsers, JsonRequestBehavior.AllowGet);
         }
-
-        //admin only
+        
         [HttpGet]
         public async Task<JsonResult> GetTotalNumberOfUserRecords()
         {
@@ -62,17 +59,11 @@ namespace TestASPWeb.Controllers
             return Json(numberOfUsers, JsonRequestBehavior.AllowGet);   
         }
 
-        //admin only and maybe the user
         [HttpPost]
         public async Task<JsonResult> GetUserDetails(int UserID)
         {
             var UserDetails = await _userService.GetById(UserID);
             return Json(UserDetails, JsonRequestBehavior.AllowGet);
-
         }
-
-
-
-
     }
 }

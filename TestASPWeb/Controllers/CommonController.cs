@@ -8,7 +8,6 @@ namespace TestASPWeb.Controllers
 {
     public class CommonController : Controller
     {
-        // to handle access denied
         public ActionResult Index()
         {
             return View();
@@ -18,7 +17,5 @@ namespace TestASPWeb.Controllers
         {
             return View();
         }
-
-
     }
 }

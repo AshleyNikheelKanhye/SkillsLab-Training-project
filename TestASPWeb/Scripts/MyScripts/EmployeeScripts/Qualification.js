@@ -78,20 +78,24 @@
                 processData: false,
                 contentType: false,
                 success: function (response) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'File Uploaded',
-                        text: 'Press OK to continue',
-                        allowOutsideClick: false,
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location = "/Employee/QualificationsView";
-                        }
-                    });
+                    if (response.result == true) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'File Uploaded',
+                            text: 'Press OK to continue',
+                            allowOutsideClick: false,
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location = "/Employee/QualificationsView";
+                            }
+                        });
+                    } else {
+                        toastr.error("Could not upload pdf");
+                    }
                 },
                 error: function (error) {
                     console.log(error);
-                    alert('an error occured check console');
+                    toastr.error("Error on uploading file");
                 }
             });
         }

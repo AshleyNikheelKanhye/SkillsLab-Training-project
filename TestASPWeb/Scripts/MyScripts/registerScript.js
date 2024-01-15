@@ -38,7 +38,6 @@ function GetListOfManagersFromDb() {
     var serverCall = new ServerCall({url: "/User/GetManagers",callMethod: "GET"});
 
     serverCall.fetchApiCall().then(response => {
-        //alert(JSON.stringify(response));
         const managersDropdown = document.getElementById('managers');
         if (response.listManagers) {
             response.listManagers.forEach(manager => {
@@ -120,7 +119,7 @@ function validateForm() {
 function register(formData) {
     var serverCall = new ServerCall({ url: "/User/Register", parameters: formData, callMethod: "POST" });
     serverCall.fetchApiCall().then(response => {
-        if (response.result) {
+        if (response.result==true) {
             toastr.success("Registered Successfully !");
             window.location = "/Employee/EmployeeView";
         } else {

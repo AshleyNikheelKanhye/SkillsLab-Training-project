@@ -107,7 +107,7 @@ namespace DataLibrary.Repo
                 reader.Close();
                 return list;
             }
-            catch (Exception ex)
+            catch
             {
                 throw;
             }
@@ -134,7 +134,7 @@ namespace DataLibrary.Repo
                 reader.Close(); 
                 return list;
             }
-            catch (Exception ex) { return null; }  
+            catch { throw; }  
         }
 
         public EnrollmentEmailViewModel GetEnrollmentEmailViewModel(int EnrollmentID)
@@ -155,9 +155,9 @@ namespace DataLibrary.Repo
                 reader.Close();
                 return enrollmentEmailViewModel;
             }
-            catch(Exception ex)
+            catch
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -182,24 +182,28 @@ namespace DataLibrary.Repo
                 reader.Close();
                 return listOfEnrollments;
             }
-            catch(Exception ex) { return null; }
+            catch{ throw; }
         }
 
         public IEnumerable<IEnrollment> GetDeclinedEnrollments(int userId)
         {
-            List<Enrollment> listofDeclinedEnrollments = new List<Enrollment>();
-            string selectQuery = @"SELECT EnrollmentID,e.TrainingID,DateRegistered,ApprovalDate,FinalStatus,ManagerStatus,t.TrainingName,t.ClosingDate,t.TrainingStartDate,t.Capacity,d.DepartmentName,t.Duration 
-                                     FROM ((Enrollment e INNER JOIN Training t ON e.TrainingID=t.TrainingID) INNER JOIN Department d ON t.DepartmentID = d.DepartmentID) 
-                                     WHERE (FinalStatus = 'Disapproved' OR ManagerStatus = 'Disapproved' ) AND UserID = @UserID AND e.IsActive = 1 AND t.IsActive = 1";
-            SqlCommand command = new SqlCommand( selectQuery, _dbContext.GetConn());
-            command.Parameters.AddWithValue("@userID", userId);
-            SqlDataReader reader = command.ExecuteReader();
-            if (reader.HasRows)
+            try
             {
-                listofDeclinedEnrollments = DataBaseHelper.ReturnAllRowsFromDB<Enrollment>(reader);
+                List<Enrollment> listofDeclinedEnrollments = new List<Enrollment>();
+                string selectQuery = @"SELECT EnrollmentID,e.TrainingID,DateRegistered,ApprovalDate,FinalStatus,ManagerStatus,t.TrainingName,t.ClosingDate,t.TrainingStartDate,t.Capacity,d.DepartmentName,t.Duration 
+                                         FROM ((Enrollment e INNER JOIN Training t ON e.TrainingID=t.TrainingID) INNER JOIN Department d ON t.DepartmentID = d.DepartmentID) 
+                                         WHERE (FinalStatus = 'Disapproved' OR ManagerStatus = 'Disapproved' ) AND UserID = @UserID AND e.IsActive = 1 AND t.IsActive = 1";
+                SqlCommand command = new SqlCommand( selectQuery, _dbContext.GetConn());
+                command.Parameters.AddWithValue("@userID", userId);
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    listofDeclinedEnrollments = DataBaseHelper.ReturnAllRowsFromDB<Enrollment>(reader);
+                }
+                reader.Close();
+                return listofDeclinedEnrollments;
             }
-            reader.Close();
-            return listofDeclinedEnrollments;
+            catch { throw; }
         }
 
         public async Task<IEnumerable<IEnrollment>> GetUserEnrollments(int userid)
@@ -223,6 +227,4 @@ namespace DataLibrary.Repo
             catch { throw; }
         }
     }
-
-
 }

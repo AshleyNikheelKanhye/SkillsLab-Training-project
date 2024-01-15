@@ -16,11 +16,9 @@ namespace TestASPWeb.Controllers
     public class EnrollmentController : Controller
     {
         private readonly IEnrollmentService _enrollmentService;
-       
         public EnrollmentController(IEnrollmentService enrollmentService)
         {
             this._enrollmentService = enrollmentService;
-        
         }
 
         [CustomAuthorization("Manager")]
@@ -47,7 +45,6 @@ namespace TestASPWeb.Controllers
             bool addEnrollmentStatus = _enrollmentService.AddEnrollment(userID, trainingID);
             if (addEnrollmentStatus)
             {
-                //await to insert notification to the manager of the user that the user has applied for this training.
                 await _enrollmentService.EmployeeSendMailToManagerForApplication(userID, trainingID);
                 return Json(new { result = addEnrollmentStatus}, JsonRequestBehavior.AllowGet); 
             }
@@ -57,20 +54,13 @@ namespace TestASPWeb.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<JsonResult> TestingEmailService(int trainingID) //test function to test if manager gets email.
-        {
-            int userID = GetUserID();
-            await _enrollmentService.SendTestMail();
-            return Json(new {result = "ok"}, JsonRequestBehavior.AllowGet);
-        }
 
         [CustomAuthorization("Employee")]
         [HttpGet]
         public JsonResult GetFinalApprovedTrainings()
         {
-            int userID = GetUserID();
-            var list = _enrollmentService.GetEnrollments(userID, DataLibrary.Enum.Status.Approved, DataLibrary.Enum.Status.Approved);  //(FinalStatus, ManagerStatus)
+            
+            var list = _enrollmentService.GetEnrollments(GetUserID(), DataLibrary.Enum.Status.Approved, DataLibrary.Enum.Status.Approved);  //(FinalStatus, ManagerStatus)
             return Json(list,JsonRequestBehavior.AllowGet);
         }
 
@@ -78,8 +68,7 @@ namespace TestASPWeb.Controllers
         [HttpGet]
         public JsonResult GetManagerApprovedTrainings()
         {
-            int userID = GetUserID();
-            var list = _enrollmentService.GetEnrollments(userID,DataLibrary.Enum.Status.Processing, DataLibrary.Enum.Status.Approved);  //(FinalStatus, ManagerStatus)
+            var list = _enrollmentService.GetEnrollments(GetUserID(), DataLibrary.Enum.Status.Processing, DataLibrary.Enum.Status.Approved);  //(FinalStatus, ManagerStatus)
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 
@@ -88,8 +77,7 @@ namespace TestASPWeb.Controllers
         [HttpGet]
         public JsonResult GetPendingTrainings()
         {
-            int userID = GetUserID();
-            var list = _enrollmentService.GetEnrollments(userID, DataLibrary.Enum.Status.Processing, DataLibrary.Enum.Status.Processing);  //(FinalStatus, ManagerStatus)
+            var list = _enrollmentService.GetEnrollments(GetUserID(), DataLibrary.Enum.Status.Processing, DataLibrary.Enum.Status.Processing);  //(FinalStatus, ManagerStatus)
             return Json(list,JsonRequestBehavior.AllowGet);
         }
 
@@ -97,8 +85,7 @@ namespace TestASPWeb.Controllers
         [HttpGet]
         public JsonResult GetDeclinedTrainings()
         {
-            int userID = GetUserID();
-            var list = _enrollmentService.GetDeclinedEnrollments(userID);  
+            var list = _enrollmentService.GetDeclinedEnrollments(GetUserID());  
             return Json(list,JsonRequestBehavior.AllowGet);
         }
 
@@ -130,17 +117,12 @@ namespace TestASPWeb.Controllers
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 
-
-
         public int GetUserID()
         {
             IUser user = this.Session["CurrentUser"] as User;
             int userID = user.UserID;
             return userID;
         }
-
-
-
 
     }
 }

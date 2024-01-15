@@ -13,7 +13,6 @@ namespace TestASPWeb.Controllers
     public class PrerequisiteController : Controller
     {
         private readonly IPrerequisiteService _prerequisiteService;
-
         public PrerequisiteController(IPrerequisiteService prerequisiteService)
         {
             this._prerequisiteService = prerequisiteService;
@@ -33,8 +32,6 @@ namespace TestASPWeb.Controllers
                 return Json(new {error = "error" });
             }
         }
-
-
 
         [CustomAuthorization("Admin")]
         [HttpGet]

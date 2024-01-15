@@ -83,11 +83,26 @@ namespace DataLibrary.Services
         }
         public IUser Register(RegisterEmployeeViewModel user)
         {
-            
-            string unhashedPassword = user.Password;
-            string hashedPassword = PasswordHasher.GenerateSHA256Hash(unhashedPassword);
-            user.Password= hashedPassword;
-            return _userRepo.Add(user); 
+            try
+            {
+                //check user exist backend
+                CheckUserExistViewModel check = new CheckUserExistViewModel()
+                {
+                    Email = user.Email,
+                    NIC = user.NIC,
+                    PhoneNo = user.PhoneNo,
+                };
+                if (CheckUserExist(check)) { return null; }
+                string unhashedPassword = user.Password;
+                string hashedPassword = PasswordHasher.GenerateSHA256Hash(unhashedPassword);
+                user.Password= hashedPassword;
+                return _userRepo.Add(user); 
+            }
+            catch(Exception ex)
+            {
+                this._logger.LogError(ex);
+                return null;
+            }
         }
 
         public void Delete(int userID)

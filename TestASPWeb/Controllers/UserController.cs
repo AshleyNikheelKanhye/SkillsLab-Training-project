@@ -16,7 +16,6 @@ using TestASPWeb.Enums;
 
 namespace TestASPWeb.Controllers
 {
-    
     public class UserController : Controller
     {
         private readonly IUserService _userService;
@@ -85,7 +84,6 @@ namespace TestASPWeb.Controllers
         public JsonResult RedirectSelectedRole (string selectedRole)
         {
             if (!ModelState.IsValid) return Json(new { result = false });
-
             this.Session["CurrentRole"] = selectedRole;
             if (selectedRole == "Employee") return Json(new { result = true, url = Url.Action("EmployeeView", "Employee") }, JsonRequestBehavior.AllowGet);
             else if (selectedRole == "Manager") return Json(new { result = true, url = Url.Action("ManagerView", "Manager") }, JsonRequestBehavior.AllowGet);
@@ -135,14 +133,14 @@ namespace TestASPWeb.Controllers
         [HttpPost]
         public JsonResult Register(RegisterEmployeeViewModel user)
         {
-            //since only employee can register
+            if (!ModelState.IsValid) {  return Json(new { result = false }); }
             IUser registeredUser = _userService.Register(user);
             if(registeredUser != null)
             {
                 this.Session["CurrentUser"] = registeredUser;
                 this.Session["CurrentRole"] = UserRole.Employee.ToString();
                 this.Session["CurrentUserID"] = registeredUser.UserID;
-                return Json(new { result = registeredUser });
+                return Json(new { result = true });
             }
             else
             {
@@ -150,24 +148,12 @@ namespace TestASPWeb.Controllers
             }
         }
 
-
-        //employee
         [HttpPost]
         public async Task<JsonResult> GetUserNotifications()
         {
             var list = await _userNotificationService.GetUserNotifications((int)this.Session["CurrentUserID"]);
             return Json(list, JsonRequestBehavior.AllowGet);
         }
-
-
-
-        public ActionResult Index()
-        {
-            return View();
-        }
-
-        
-
 
     }
 }

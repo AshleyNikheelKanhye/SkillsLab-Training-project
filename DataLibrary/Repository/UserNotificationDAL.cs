@@ -40,7 +40,7 @@ namespace DataLibrary.Repo
             return list;
         }
 
-        public async Task InsertDummyNotification()
+        public async Task InsertDummyNotification() //testing purposes
         {
             try
             {
@@ -71,8 +71,5 @@ namespace DataLibrary.Repo
                 throw;
             }
         }
-
-
-
     }
 }

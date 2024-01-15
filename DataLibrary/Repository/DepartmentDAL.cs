@@ -36,7 +36,7 @@ namespace DataLibrary.Repo
                 reader.Close();
                 return list;
 
-            }catch (Exception ex) { return null; }
+            }catch { return null; }
         }
 
         public IEnumerable<IDepartment> GetDepartmentsForTraining(int trainingID)
@@ -58,9 +58,7 @@ namespace DataLibrary.Repo
                 reader.Close();
                 return list;
             }
-            catch (Exception ex) { return null; }
+            catch { return null; }
         }
-
-
     }
 }

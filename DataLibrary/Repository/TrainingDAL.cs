@@ -40,7 +40,7 @@ namespace DataLibrary.Repo
                 reader.Close();
                 return returnList;
 
-            }catch (Exception ex) { return null; }
+            }catch { throw; }
         }
 
         public async Task<IEnumerable<ITraining>> getUpcomings()
@@ -164,7 +164,7 @@ namespace DataLibrary.Repo
                 }
                 reader.Close();
                 return returnList;
-            }catch { return null; }   
+            }catch { throw; }   
         }
 
         public IEnumerable<Prerequisite> GetListOfPrerequisites(int trainingID)
@@ -259,18 +259,22 @@ namespace DataLibrary.Repo
 
         public async Task<IEnumerable<int>> GetListOfUnprocessedTrainingsWithPastDeadline()
         {
-            List<int> listOfTrainingIDs = new List<int>();
-            string selectQuery = @"SELECT TrainingID
-                                    FROM Training t 
-                                    WHERE IsAutomaticProcessed=0 AND ClosingDate<=GETDATE()";
-            SqlCommand command = new SqlCommand(selectQuery, _dbContext.GetConn());
-            SqlDataReader reader = await command.ExecuteReaderAsync();
-            while (reader.Read())
+            try
             {
-                listOfTrainingIDs.Add((int)reader["TrainingID"]);
+                List<int> listOfTrainingIDs = new List<int>();
+                string selectQuery = @"SELECT TrainingID
+                                        FROM Training t 
+                                        WHERE IsAutomaticProcessed=0 AND ClosingDate<=GETDATE()";
+                SqlCommand command = new SqlCommand(selectQuery, _dbContext.GetConn());
+                SqlDataReader reader = await command.ExecuteReaderAsync();
+                while (reader.Read())
+                {
+                    listOfTrainingIDs.Add((int)reader["TrainingID"]);
+                }
+                reader.Close();
+                return listOfTrainingIDs;
             }
-            reader.Close();
-            return listOfTrainingIDs;
+            catch { throw; }
         }
 
         public async Task<IEnumerable<ITraining>> GetUnprocessedTrainings()
@@ -385,7 +389,6 @@ namespace DataLibrary.Repo
                 transaction.Rollback();
                 throw;
             }
-
         }
 
         public async Task<bool> UpdateEnrollmentTable(AutomaticProcessingViewModel trainingSelectionResult,SqlTransaction transaction)
@@ -437,7 +440,5 @@ namespace DataLibrary.Repo
             }
             catch { throw; }
         }
-
-
     }
 }

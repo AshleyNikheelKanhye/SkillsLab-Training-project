@@ -79,11 +79,11 @@ function submitFormData() {
         }
     });
 
+
     //send formdatajson to training controller
     var serverCall = new ServerCall({ url: "/Training/AddTraining", parameters: formDataJson, callMethod: "POST" });
     serverCall.fetchApiCall().then((response) => {
         if (response.result == true) {
-            //swal success;
             Swal.fire({
                 icon: 'success',
                 title: 'New Training Inserted',

@@ -22,7 +22,7 @@ namespace DataLibrary.BusinessLogic
         public PrerequisiteService(IPrerequisiteDAL prerequisiteRepo,ILogger logger ) 
         { 
             this._prerequisiteRepo = prerequisiteRepo;
-            _logger = logger;
+            this._logger = logger;
         }
 
         public IEnumerable<EmployeeQualificationDetailsViewModel> GetEmployeeQualifications(int userID)   
@@ -33,10 +33,11 @@ namespace DataLibrary.BusinessLogic
             }
             catch (Exception ex)
             {
-                //log the exception
+                this._logger.LogError(ex);
                 return null;
             }
         }
+
         public IEnumerable<IPrerequisite> GetAllPrerequisites()
         {
             try
@@ -50,7 +51,6 @@ namespace DataLibrary.BusinessLogic
             }
         }
 
-
         public IEnumerable<IPrerequisite> GetPrerequisites(int trainingID)
         {
             try
@@ -59,28 +59,61 @@ namespace DataLibrary.BusinessLogic
             }
             catch (Exception ex)
             {
-                throw ex;
+                this._logger.LogError(ex);
+                return null;
             }
         }
 
         public IEnumerable<IPrerequisite> GetPrerequisitesNotInEmployee(int userID)
         {
-            return _prerequisiteRepo.GetPrerequisitesNotInEmployee(userID);
+            try
+            {
+                return _prerequisiteRepo.GetPrerequisitesNotInEmployee(userID);
+            }
+            catch(Exception ex)
+            {
+                this._logger.LogError(ex);
+                return null;
+            }
         }
 
         public bool UploadQualifications(HttpPostedFileBase file, int prerequisiteID, int userID,string fileName)
         {
-            return _prerequisiteRepo.UploadQualification(file, prerequisiteID, userID, fileName);
+            try
+            {
+                return _prerequisiteRepo.UploadQualification(file, prerequisiteID, userID, fileName);
+            }
+            catch(Exception ex) 
+            {
+                this._logger.LogError(ex);
+                return false;
+            }
         }
 
         public EmployeeQualification DownloadQualification(int userID, int prerequisiteID)
         {
-            return _prerequisiteRepo.GetQualification(userID, prerequisiteID);
+            try
+            {
+                return _prerequisiteRepo.GetQualification(userID, prerequisiteID);
+            }
+            catch(Exception ex)
+            {
+                this._logger.LogError(ex);
+                return null;
+            }
         }
 
         public IEnumerable<EmployeeQualificationDetailsViewModel> GetUserPrerequisiteForEnrollment(int enrollmentID)
         {
-            return _prerequisiteRepo.GetUserPrerequisiteForEnrollment(enrollmentID);
+            try
+            {
+                return _prerequisiteRepo.GetUserPrerequisiteForEnrollment(enrollmentID);
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(ex);
+                return null;
+            }
         }
 
     }

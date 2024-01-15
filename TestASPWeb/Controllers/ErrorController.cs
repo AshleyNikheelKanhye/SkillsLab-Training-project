@@ -8,12 +8,10 @@ namespace TestASPWeb.Controllers
 {
     public class ErrorController : Controller
     {
-        // GET: Error
         public ActionResult Index()
         {
             return View();
         }
-
         public ActionResult Error404()
         {
             return View(); 
@@ -26,6 +24,5 @@ namespace TestASPWeb.Controllers
         {
             return View();
         }
-
     }
 }

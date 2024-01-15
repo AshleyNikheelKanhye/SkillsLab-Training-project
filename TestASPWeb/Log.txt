@@ -778,3 +778,21 @@ Stack Trace:    at System.Web.HttpResponse.set_StatusCode(Int32 value)
    at System.Web.HttpApplication.ExecuteStepImpl(IExecutionStep step)
    at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
 --------------------------------------------------
+--------------------------------------------------
+Timestamp: 1/15/2024 2:30:53 PM
+Exception Type: DataLibrary.BusinessLogic.Logger.Logger
+Message: Violation of UNIQUE KEY constraint 'UQ_TRAINING_TRAININGNAME'. Cannot insert duplicate key in object 'dbo.Training'. The duplicate key value is (Introduction to SQL).
+Inner Exception: 
+Stack Trace:    at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryHasMoreRows(Boolean& moreRows)
+   at System.Data.SqlClient.SqlDataReader.TryReadInternal(Boolean setTimeout, Boolean& more)
+   at System.Data.SqlClient.SqlDataReader.Read()
+   at DataLibrary.Repo.TrainingDAL.<Add>d__11.MoveNext() in C:\Users\P12ADC6\source\repos\TestASPWeb\DataLibrary\Repository\TrainingDAL.cs:line 256
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at DataLibrary.BusinessLogic.TrainingService.<Add>d__11.MoveNext() in C:\Users\P12ADC6\source\repos\TestASPWeb\DataLibrary\BusinessLogic\TrainingService.cs:line 77
+--------------------------------------------------

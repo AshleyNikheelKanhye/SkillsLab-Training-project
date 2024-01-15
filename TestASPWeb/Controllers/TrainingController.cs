@@ -21,13 +21,11 @@ namespace TestASPWeb.Controllers
         private readonly ITrainingService _trainingService;
         private readonly IPrerequisiteService _prerequisiteService;
 
-
         public TrainingController(ITrainingService trainingService, IPrerequisiteService prerequisiteService)
         {
             this._trainingService = trainingService;
             this._prerequisiteService = prerequisiteService;
         }
-
 
         [CustomAuthorization("Employee,Admin")]
         [HttpGet]
@@ -63,16 +61,36 @@ namespace TestASPWeb.Controllers
             return Json(list,JsonRequestBehavior.AllowGet);
         }
 
-
-
         [CustomAuthorization("Admin")]
         [HttpPost]
         public async Task<JsonResult> AddTraining(AddTrainingViewModel addTrainingViewModel)
         {
-            bool insertResult = await _trainingService.Add(addTrainingViewModel);
-            return Json(new { result = insertResult },JsonRequestBehavior.AllowGet);
+            if(ValidateDeadlineAndStartingDate(addTrainingViewModel.DeadlineRegistration, addTrainingViewModel.StartingDate))
+            {
+                bool insertResult = await _trainingService.Add(addTrainingViewModel);
+                return Json(new { result = insertResult },JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(null, JsonRequestBehavior.AllowGet);
+            }
         }
 
+        public bool ValidateDeadlineAndStartingDate(DateTime deadline,DateTime starting) 
+        {
+            if (starting <= deadline)
+            {
+                return false;
+            }
+            else if(starting <= DateTime.Now || deadline <= DateTime.Now)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
 
 
         [CustomAuthorization("Admin")]
@@ -145,8 +163,15 @@ namespace TestASPWeb.Controllers
         [HttpPost]
         public async Task<JsonResult> UpdateTraining(UpdateTrainingViewModel formUpdateResult)
         {
-            bool updateStatus = await _trainingService.Update(formUpdateResult);
-            return Json(new { result = updateStatus }, JsonRequestBehavior.AllowGet);
+            if(ValidateDeadlineAndStartingDate(formUpdateResult.DeadlineRegistration,formUpdateResult.StartingDate))
+            {
+                bool updateStatus = await _trainingService.Update(formUpdateResult);
+                return Json(new { result = updateStatus }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(null, JsonRequestBehavior.AllowGet);
+            }
         }
 
         [CustomAuthorization("Admin")]
@@ -157,16 +182,11 @@ namespace TestASPWeb.Controllers
             return Json(deleteStatus, JsonRequestBehavior.AllowGet);
         }
 
-
-        //can be used by all
         [HttpPost]
         public async Task<JsonResult> GetTrainingDescription(int trainingID)
         {
             var desc = await _trainingService.GetTrainingDescription(trainingID);
             return Json(desc , JsonRequestBehavior.AllowGet);
         }
-
-
-
     }
 }

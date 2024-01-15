@@ -19,20 +19,11 @@ namespace TestASPWeb.Controllers
         private readonly IPrerequisiteService _prerequisiteService;
         private readonly IUserNotificationService _userNotificationService;
 
-
-
         public EmployeeController(IPrerequisiteService prerequisiteService,IUserNotificationService userNotificationService)
         {
             this._prerequisiteService = prerequisiteService;
             this._userNotificationService = userNotificationService;
         }
-
-
-        public ActionResult Index()
-        {
-            return View();
-        }
-
 
         [HttpGet]
         public JsonResult GetUserDetails()
@@ -43,7 +34,6 @@ namespace TestASPWeb.Controllers
         [HttpPost]
         public JsonResult GetEmployeeQualifications() 
         { 
-
             var list = _prerequisiteService.GetEmployeeQualifications((int)this.Session["CurrentUserID"]);
             if(list != null)
             {
@@ -68,15 +58,6 @@ namespace TestASPWeb.Controllers
             }
         }
 
-        public ActionResult GetHomeView()
-        {
-            return PartialView("~/Views/Employee/_homePartialView.cshtml");
-        }
-        public ActionResult GetProfileView()
-        {
-            return PartialView("~/Views/Employee/_profilePartialView.cshtml");
-        }
-
         [HttpPost]
         public ActionResult UploadQualifications(HttpPostedFileBase file ,int prerequisiteID)
         {
@@ -84,44 +65,33 @@ namespace TestASPWeb.Controllers
             {
                 if(file != null && file.ContentLength > 0)
                 {
-                    //add constraints to check if extension is pdf : https://www.compilemode.com/2017/02/uploading-downloading-pdf-files-from-database-in-asp-net-mvc.html
                     int userID = (int)this.Session["CurrentUserID"];
                     string fileName = file.FileName;
-                    
                     bool uploadResult = _prerequisiteService.UploadQualifications(file, prerequisiteID,userID,fileName);
                     if (uploadResult)
                     {
-                        return Json(new { result = "got file in backend" }, JsonRequestBehavior.AllowGet);
+                        return Json(new { result = true }, JsonRequestBehavior.AllowGet);
                     }
                     else
                     {
-                        return Json(new {result="could not upload this file"},JsonRequestBehavior.AllowGet);
+                        return Json(new {result=false},JsonRequestBehavior.AllowGet);
                     }
                 }
                 else
                 {
-                    return Json(new { result = " got the file but it is null" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { result = false}, JsonRequestBehavior.AllowGet);
                 }
-            }catch(Exception ex)
+            }catch
             {
-                return Json(new {result ="error could not get pdf in backend"}, JsonRequestBehavior.AllowGet);
+                return Json(new {result =false}, JsonRequestBehavior.AllowGet);
             }
         }
-
-
-
-
-
 
         public ActionResult EmployeeView()
         {
             return View();
         }
 
-        public ActionResult GetProfile()
-        {
-            return View();
-        }
         public ActionResult GetTrainingView()
         {
             return View();
@@ -131,13 +101,6 @@ namespace TestASPWeb.Controllers
         {
             return View();
         }
-
-        public ActionResult InboxView()
-        {
-            return View();
-        }
-
-
     }
 }
 
