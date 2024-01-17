@@ -64,7 +64,7 @@
                 tableBodyAccepted.empty();
                 tableBodyRejected.empty();
                 $('#trainingsToBeProcessedTableDiv').hide();
-                if (listOfAccepted == null) {
+                if (listOfAccepted.length==0) {
                     //meaning that this training has not received any trainings approved by their managers
                     $('#subpopupHeader').html("<h2>Looks like nobody has applied for " + selectedTrainingName + ".</h2>");
                     $('div#popupListOfAcceptedTableDiv').hide();

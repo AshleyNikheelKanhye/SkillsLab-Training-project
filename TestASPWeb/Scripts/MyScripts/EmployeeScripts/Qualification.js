@@ -3,7 +3,7 @@
     $('#Qualifications').addClass('active');
 
     function getQualifications() {
-        var URL = "/Employee/GetEmployeeQualifications"; //TODO : move that to Prerequisite Controller
+        var URL = "/Employee/GetEmployeeQualifications"; 
         
         
         var table = $("#myQualificationTable tbody");
@@ -17,7 +17,8 @@
                     var row = '<tr>' +
                         '<td>' + qualification.Details + '</td>' +
                         '<td>' + qualification.FileName + '</td>' +
-                        '<td> <a href="/Employee/DownloadQualification?prerequisiteID=' + qualification.PrerequisiteID + '" target="_blank">Download File </a></td>'
+                        '<td> <a href="/Employee/DownloadQualification?prerequisiteID=' + qualification.PrerequisiteID + '" target="_blank">Download File </a></td>' +
+                        '<td> <button id="updateQualification" value="' + qualification.PrerequisiteID + '">Update</button> </td>' +
                         + '</tr>';
                     table.append(row);
                 });
@@ -34,7 +35,7 @@
         var serverCall = new ServerCall({ url: URL, callMethod: "GET" });
         const qualificationsDropdown = document.getElementById('listOfQualifications');
         serverCall.fetchApiCall().then(response => {
-            if (response.listQualifications) { // TODO : cater for when that user has all the qualifications , display accordingly
+            if (response.listQualifications) { 
                 response.listQualifications.forEach(qualification => {
                     const option = document.createElement('option');
                     option.value = qualification.PrerequisiteID;
@@ -69,7 +70,6 @@
             const formData = new FormData();
             formData.append('file', file);
             formData.append('prerequisiteID', prerequisiteID);
-            console.log('uploading file please wait');
 
             $.ajax({
                 url: '/Employee/UploadQualifications',
@@ -103,6 +103,61 @@
             toastr.error("please upload your pdf file");
         }
     });
+
+
+
+    $('#myQualificationTable tbody').on("click", "#updateQualification", function () {
+        $('.content').hide();
+        var row = $(this).closest("tr");
+        var selectedQualificationId = $(this).val();
+        var selectedQualificationName = row.find("td:eq(0)").text();
+        $('h2#updateQualificationName').html("<h2>Update your " + selectedQualificationName + " PDF</h2>");
+        $('button#uploadbtnForUpdate').attr("value", selectedQualificationId);
+        $("#UpdateQualificationDIV").show();
+    });
+
+    $('button#uploadbtnForUpdate').click(function () {
+        var fileInput = document.getElementById('fileInputUpdate');
+        var file = fileInput.files[0];
+        var prerequisiteID = $(this).val();
+        var URL = "/Employee/UpdateQualification";
+        if (file) {
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('prerequisiteID', prerequisiteID);
+
+            $.ajax({
+                url: URL,
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    if (response.result == true) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'File Update',
+                            text: 'Press OK to continue',
+                            allowOutsideClick: false,
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location = "/Employee/QualificationsView";
+                            }
+                        });
+                    } else {
+                        toastr.error("Could not upload pdf");
+                    }
+                },
+                error: function (error) {
+                    console.log(error);
+                    toastr.error("error on updating file");
+                }
+            })
+        } else {
+            toastr.error("please select a pdf file");
+        }
+    });
+
 
     getQualifications();
 });

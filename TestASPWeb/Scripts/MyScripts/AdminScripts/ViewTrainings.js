@@ -72,7 +72,15 @@
                             }
                         },
                     ],
-                    ordering: false
+                    ordering: false,
+                    createdRow: function (row, data, dataIndex) {
+                        var closingDate = new Date(parseInt(data.ClosingDate.substr(6)));
+                        var currentDate = new Date();
+
+                        if (closingDate < currentDate) {
+                            $(row).css('background-color', '#e6ffee');
+                        }
+                    }
                 });
                 $('div#emptyListHeaderDiv').empty().hide();
                 $('div#AllTrainingTableDIV').show();
@@ -368,9 +376,8 @@
                 $('#updatePopupDiv').show();
                 $('#TrainingName').val(response.TrainingName);
                 $('#TrainingCapacity').val(response.Capacity);
-                // Convert and set date values
-                document.getElementById('DeadlineRegistration').value = formatUnixTimestampForInput(response.ClosingDate);
-                document.getElementById('StartingDate').value = formatUnixTimestampForInput(response.TrainingStartDate);
+                document.getElementById('DeadlineRegistration').value = convertTimestampToString(response.ClosingDate);
+                document.getElementById('StartingDate').value = convertTimestampToString(response.TrainingStartDate);
                 $('#TrainingDuration').val(response.Duration);
                 $('#TrainingDescription').val(response.Description);
                 $('#updateBtn').attr("value", selectedTrainingID);
@@ -485,13 +492,10 @@
             return 'PENDING';
         }
     }
-    function formatUnixTimestampForInput(date) {
-        if (date) {
-            var parsedDate = new Date(parseInt(date.substr(6)));
-            return parsedDate.toLocaleDateString() + ' ' + parsedDate.toLocaleTimeString();
-        } else {
-            return 'No date';
-        }
+
+    function convertTimestampToString(timestamp) {
+        let dateTimeObject = new Date(Number((timestamp).match(/\d+/)[0]));
+        return dateTimeObject.toISOString().slice(0, 19).replace("T", " ");
     }
 
 
@@ -580,7 +584,6 @@ function submitFormData() {
     var serverCall = new ServerCall({ url: "/Training/UpdateTraining", parameters: formDataJson, callMethod: "POST" });
     serverCall.fetchApiCall().then((response) => {
         if (response.result == true) {
-            //swal success;
             Swal.fire({
                 icon: 'success',
                 title: 'Training Updated',
@@ -592,11 +595,11 @@ function submitFormData() {
                 }
             });
         } else {
-            toastr.error("could not insert New Training");
+            toastr.error("could not update Training");
         }
     }).catch(error => {
-        console.error("error inserting new training");
-        toastr.error('could not insert New training');
+        console.error("error updating training");
+        toastr.error('could not update training');
     });
 
 }

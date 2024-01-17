@@ -25,7 +25,11 @@ namespace DataLibrary.BusinessLogic.Quartz
             .WithIdentity("trigger", "sqlGroup")
              .StartNow()
             .WithDailyTimeIntervalSchedule(x => x
-                .WithIntervalInSeconds(50)
+                 /*.WithIntervalInHours(24)
+                 .OnEveryDay()
+                 .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(23, 43)))*/
+
+                .WithIntervalInSeconds(60)          // Sets the interval to 30 seconds
                 .OnEveryDay())
             .Build();
 
@@ -54,6 +58,5 @@ namespace DataLibrary.BusinessLogic.Quartz
                 return _container;
             }
         }
-
     }
 }

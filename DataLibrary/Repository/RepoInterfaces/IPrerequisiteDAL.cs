@@ -21,5 +21,6 @@ namespace DataLibrary.Repository.RepoInterfaces
         IEnumerable<EmployeeQualificationDetailsViewModel> GetUserPrerequisiteForEnrollment(int enrollmentID);
         IEnumerable<IPrerequisite> GetAllPrerequisites();
         Task<IEnumerable<EmployeeQualificationDetailsViewModel>> GetEmployeeQualificationsDetails(int userID);
+        bool UpdateQualification(HttpPostedFileBase file, int prerequisiteID, int userID, string fileName);
     }
 }

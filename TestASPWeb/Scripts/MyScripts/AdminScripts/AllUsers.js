@@ -45,7 +45,6 @@
         var serverCall = new ServerCall({ url: URL, parameters: userObj, callMethod: "POST" });
         serverCall.fetchApiCall().then((response) => {
             if (response) {
-                //console.log(response);
                 $('#listOfEmployeesDiv').hide();
                 $('#h2headerDetails').html(selectedEmployeeName + " Information");
 

@@ -87,6 +87,40 @@ namespace TestASPWeb.Controllers
             }
         }
 
+
+        [HttpPost]
+        public ActionResult UpdateQualification(HttpPostedFileBase file, int prerequisiteID)
+        {
+            try
+            {
+                if (file != null && file.ContentLength > 0)
+                {
+                    int userID = (int)this.Session["CurrentUserID"];
+                    string fileName = file.FileName;
+                    bool uploadResult = _prerequisiteService.UpdateQualification(file, prerequisiteID, userID, fileName);
+                    if (uploadResult)
+                    {
+                        return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        return Json(new { result = false }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else
+                {
+                    return Json(new { result = false }, JsonRequestBehavior.AllowGet);
+                }
+
+
+            }
+            catch
+            {
+                return Json(new { result = false }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
         public ActionResult EmployeeView()
         {
             return View();

@@ -29,7 +29,7 @@ namespace DataLibrary.Repo
             {
                 List<Training> returnList = new List<Training>();
                 string query = "SELECT TrainingID,TrainingName,Capacity,ClosingDate,TrainingStartDate,t.DepartmentID,d.DepartmentName,t.IsAutomaticProcessed,t.Duration,t.Description " +
-                                "FROM Training t INNER JOIN Department d ON t.DepartmentID = d.DepartmentID  ORDER BY ClosingDate";
+                                "FROM Training t INNER JOIN Department d ON t.DepartmentID = d.DepartmentID WHERE t.IsActive=1 ORDER BY ClosingDate DESC";
                                 
                 SqlCommand command = new SqlCommand(query,_dbContext.GetConn());
                 SqlDataReader reader = command.ExecuteReader();
@@ -55,7 +55,7 @@ namespace DataLibrary.Repo
                                      WHERE t.IsActive=1  AND t.TrainingStartDate>GETDATE()
                                      GROUP BY 
                                      t.TrainingID,t.TrainingName,t.Capacity,t.ClosingDate,t.TrainingStartDate,t.DepartmentID,d.DepartmentName,t.Duration,t.Description,t.IsAutomaticProcessed
-                                     ORDER BY t.ClosingDate ASC";
+                                     ORDER BY t.ClosingDate DESC";
                 SqlCommand command = new SqlCommand(selectQuery,_dbContext.GetConn());
                 SqlDataReader reader = await command.ExecuteReaderAsync();
                 if (reader.HasRows)
@@ -264,7 +264,7 @@ namespace DataLibrary.Repo
                 List<int> listOfTrainingIDs = new List<int>();
                 string selectQuery = @"SELECT TrainingID
                                         FROM Training t 
-                                        WHERE IsAutomaticProcessed=0 AND ClosingDate<=GETDATE()";
+                                        WHERE IsAutomaticProcessed=0 AND ClosingDate<=GETDATE() AND IsActive=1";
                 SqlCommand command = new SqlCommand(selectQuery, _dbContext.GetConn());
                 SqlDataReader reader = await command.ExecuteReaderAsync();
                 while (reader.Read())
@@ -284,7 +284,7 @@ namespace DataLibrary.Repo
                 List<Training> returnList = new List<Training>();
                 string selectQuery = "SELECT TrainingID,TrainingName,Capacity,ClosingDate,TrainingStartDate,t.DepartmentID,d.DepartmentName " +
                                     "FROM Training t INNER JOIN Department d ON t.DepartmentID = d.DepartmentID " +
-                                    "WHERE IsAutomaticProcessed = 0 AND t.IsActive =1 ";
+                                    "WHERE IsAutomaticProcessed = 0 AND t.IsActive =1 ORDER BY ClosingDate ASC";
 
                 SqlCommand command = new SqlCommand(selectQuery, _dbContext.GetConn());
                 SqlDataReader reader = await command.ExecuteReaderAsync();
@@ -360,7 +360,7 @@ namespace DataLibrary.Repo
                 string selectQuery = "Select ut.FirstName,ut.LastName,ut.UserID,ut.Email,d.DepartmentID,d.DepartmentName,e.EnrollmentID,e.DateRegistered,e.ManagerStatus,e.FinalStatus,t.TrainingName,t.TrainingStartDate " +
                                      "FROM Enrollment e, Training t, UserTable ut,Department d " +
                                      "WHERE e.TrainingID=t.TrainingID AND e.UserID=ut.UserID AND ut.DepartmentID=d.DepartmentID " +
-                                     "AND e.TrainingID = @trainingID AND e.ManagerStatus='Approved' AND e.IsActive=1 AND t.IsAutomaticProcessed=0";
+                                     "AND e.TrainingID = @trainingID AND e.ManagerStatus='Approved' AND e.IsActive=1 AND t.IsAutomaticProcessed=0 AND t.IsActive=1";
                 SqlCommand command = new SqlCommand( selectQuery, _dbContext.GetConn());
                 command.Parameters.AddWithValue("@trainingID", trainingID);
                 SqlDataReader reader = await command.ExecuteReaderAsync();

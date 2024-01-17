@@ -194,7 +194,6 @@
             getAJAXCall(URL).then((response) => {
                 if (response) {
                     if ($.fn.DataTable.isDataTable('#trainingTable')) {
-                        // DataTable is already initialized, destroy it
                         $('#trainingTable').DataTable().clear().destroy();
                     }
                     $('#trainingTable').DataTable({
@@ -224,7 +223,14 @@
                             },
                         ],
                         ordering: false,
-                        autoWidth: true
+                        createdRow: function (row, data, dataIndex) {
+                            var closingDate = new Date(parseInt(data.ClosingDate.substr(6)));
+                            var currentDate = new Date();
+
+                            if (closingDate < currentDate) {
+                                $(row).css('background-color', '#e6ffee');
+                            }
+                        }
                     });
                     resolve();
                 }

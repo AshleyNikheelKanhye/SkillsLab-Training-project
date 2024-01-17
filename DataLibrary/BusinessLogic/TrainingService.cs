@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace DataLibrary.BusinessLogic
 {
@@ -109,7 +110,9 @@ namespace DataLibrary.BusinessLogic
         {
             try
             {
-                return await _trainingRepo.Update(updateTrainingViewModel);
+                bool updateResult = await _trainingRepo.Update(updateTrainingViewModel);
+                await sendNotificationToEmployeeWithManagerApprovalAboutTrainingUpdate(updateTrainingViewModel);
+                return true;
             }
             catch (Exception ex)
             {
@@ -117,6 +120,85 @@ namespace DataLibrary.BusinessLogic
                 return false;
             }
         }
+
+        public async Task sendNotificationToEmployeeWithManagerApprovalAboutTrainingUpdate(UpdateTrainingViewModel updateTrainingViewModel)
+        {
+            try
+            {
+                var listOfManagerApprovedEmployees = await _trainingRepo.GetListofEmployeeApplication(updateTrainingViewModel.TrainingId);
+                
+                if(listOfManagerApprovedEmployees.Any())
+                {
+                    foreach(var employee in listOfManagerApprovedEmployees)
+                    {
+                        //send inbox notifications 
+                         sendInboxToEmployeesAboutTrainingUpdate(employee,updateTrainingViewModel.TrainingName);
+
+                        //send email notifications
+                        await sendEmailToEmployeesAboutTrainingUpdate(employee,updateTrainingViewModel.TrainingName);
+                    }
+                }
+                else
+                {
+                    return;
+                }
+            }
+            catch(Exception ex) 
+            {
+                this._logger.LogError(ex);
+                return;
+            }
+        }
+
+        public void sendInboxToEmployeesAboutTrainingUpdate(EmployeeApplicationViewModel employee,string trainingUpdatedName)
+        {
+            try
+            {
+                UserNotification model = new UserNotification()
+                {
+                    UserID = employee.UserID,
+                    Title = $"Training updated",
+                    MessageBody = $"Please Check My Trainings to see updated Details for training : {trainingUpdatedName}",
+                };
+                _userNotificationDAL.InsertNotification(model);
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(ex);
+                return;
+            }
+        }
+
+        public async Task sendEmailToEmployeesAboutTrainingUpdate(EmployeeApplicationViewModel employee, string trainingUpdatedName)
+        {
+            try
+            {
+                string htmlBody = $@"
+                    <html>
+                    <head>
+                        <title>Training Update </title>
+                    </head>
+                    <body>
+                        <p>Hello {employee.FirstName} {employee.LastName}</p>
+                        <p>The Admin has updated training <strong>{trainingUpdatedName}</strong>.</p>
+                        <br>
+                        <p>Please check the website under <strong>MyTrainings</strong> section to see the updated details</p>
+                        <p>You have received this mail because your Manager has Approved your training request.</p>
+                    </body>
+                    </html>
+                ";
+                string subject = $"{trainingUpdatedName} Updated !";
+                await EmailSender.SendEmail(subject, htmlBody, employee.Email);
+            }
+            catch(Exception ex)
+            {
+                this._logger.LogError(ex);
+                return;
+            }
+        }
+
+
+
         public async Task<bool> Delete(int trainingID)
         {
             try
@@ -267,6 +349,8 @@ namespace DataLibrary.BusinessLogic
                 }
                 else
                 {
+                    automaticProcessing.listOfRejectedEmployees = rejectedList;
+                    automaticProcessing.listOfAcceptedEmployees = acceptedList; //so as to not send a null list
                     return automaticProcessing;
                 }
             }

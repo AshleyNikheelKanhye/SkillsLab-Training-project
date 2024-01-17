@@ -177,6 +177,36 @@ namespace DataLibrary.Repo
             }
         }
 
+        public bool UpdateQualification(HttpPostedFileBase file, int prerequisiteID, int userID, string fileName)
+        {
+            try
+            {
+                byte[] fileContent;
+                using (var binaryReader = new BinaryReader(file.InputStream))
+                {
+                    fileContent = binaryReader.ReadBytes(file.ContentLength);
+                }
+                string UpdateQuery = @"UPDATE EmployeePrerequisites
+                                        SET FileName=@fileName , FileContent = @fileContent
+                                        WHERE UserID=@userID AND PrerequisiteID=@prerequisiteID";
+                SqlCommand command = new SqlCommand(UpdateQuery, _dbContext.GetConn());
+                command.Parameters.AddWithValue("@userID", userID);
+                command.Parameters.AddWithValue("@prerequisiteID", prerequisiteID);
+                command.Parameters.AddWithValue("@fileName", fileName);
+                command.Parameters.AddWithValue("@fileContent", fileContent);
+                int rowsAffected = command.ExecuteNonQuery();
+                if (rowsAffected > 0)
+                {
+                    return true;
+                }
+                else { return false; }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         public EmployeeQualification GetQualification(int userID, int prerequisiteID)
         {
             try

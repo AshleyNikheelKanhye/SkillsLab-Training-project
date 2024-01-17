@@ -90,6 +90,20 @@ namespace DataLibrary.BusinessLogic
             }
         }
 
+        public bool UpdateQualification(HttpPostedFileBase file, int prerequisiteID, int userID, string fileName)
+        {
+            try
+            {
+                return _prerequisiteRepo.UpdateQualification(file,prerequisiteID, userID, fileName);
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(ex);
+                return false;
+            }
+        }
+
+
         public EmployeeQualification DownloadQualification(int userID, int prerequisiteID)
         {
             try
