@@ -46,17 +46,15 @@
     color: #000000;
 }
 
-.requestsTable tbody tr {
-    background-color: #ffffff;
+.requestsTable tbody tr.past {
+    background-color: #e6ffee;
 }
 
-    .requestsTable tbody tr:nth-child(even) {
-        background-color: #ccffff;
-    }
+.requestsTable tbody tr.future{
+    background-color:#ffffff
+}
 
-    .requestsTable tbody tr:nth-child(odd) {
-        background-color: #ffffff;
-    }
+
 
 .spinner-container {
     position: relative;
@@ -96,3 +94,5 @@ button {
         background: rgb(56,130,209);
         color: #fff;
     }
+
+

@@ -28,7 +28,7 @@ namespace DataLibrary.Repo
         {
 
             List<UserNotification> list = new List<UserNotification>();
-            string selectQuery = @"SELECT * FROM UserNotification WHERE UserID=@userid";
+            string selectQuery = @"SELECT * FROM UserNotification WHERE UserID=@userid ORDER BY MessageDate DESC";
             SqlCommand command = new SqlCommand(selectQuery, _dbContext.GetConn());
             command.Parameters.AddWithValue("@userid",userID);
             SqlDataReader reader = await command.ExecuteReaderAsync();

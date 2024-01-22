@@ -66,6 +66,13 @@
         var prerequisiteID = document.getElementById("listOfQualifications").value;
         if (prerequisiteID == "") { toastr.error("Please select a qualification"); return; }
 
+        
+        var fileSizeInMB = (file.size) / (1024 * 1024);
+        if (fileSizeInMB > 10) {
+            toastr.error("please upload a file less than 10 mb");
+            return;
+        }
+
         if (file) {
             const formData = new FormData();
             formData.append('file', file);
@@ -121,6 +128,13 @@
         var file = fileInput.files[0];
         var prerequisiteID = $(this).val();
         var URL = "/Employee/UpdateQualification";
+
+        var fileSizeInMB = (file.size) / (1024 * 1024);
+        if (fileSizeInMB > 10) {
+            toastr.error("please upload a file less than 10 mb");
+            return;
+        }
+
         if (file) {
             const formData = new FormData();
             formData.append('file', file);

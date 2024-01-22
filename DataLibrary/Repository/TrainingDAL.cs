@@ -143,7 +143,7 @@ namespace DataLibrary.Repo
                 List<Training> returnList = new List<Training>();
                 string query = "SELECT t.TrainingID,t.TrainingName,t.Capacity,t.ClosingDate,t.TrainingStartDate,t.DepartmentID,d.DepartmentName,t.Duration,t.Description " +
                                 "FROM Training t INNER JOIN Department d ON t.DepartmentID = d.DepartmentID " +
-                                "WHERE t.IsActive=1 AND t.ClosingDate>GETDATE() AND t.TrainingID IN" +
+                                "WHERE t.IsActive=1 AND t.IsAutomaticProcessed=0 AND t.ClosingDate>GETDATE() AND t.TrainingID IN" +
                                                                                 " ( SELECT tp.TrainingID " +
                                                                                    "FROM TrainingPrequisite tp JOIN EmployeePrerequisites ep ON tp.PrerequisiteID = ep.PrerequisiteID " +
                                                                                    "AND ep.UserID = @UserID " +

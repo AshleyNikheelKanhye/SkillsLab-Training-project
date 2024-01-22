@@ -18,7 +18,7 @@
 }
 
     .registration-container h2 {
-        color: #0074cc; /
+        color: #0074cc; 
     }
 
 .form-group {
@@ -32,7 +32,7 @@ label {
 }
 
 input {
-    width: 100%;
+    width: 80%;
     padding: 8px;
     border: 1px solid #ddd; 
     border-radius: 4px;

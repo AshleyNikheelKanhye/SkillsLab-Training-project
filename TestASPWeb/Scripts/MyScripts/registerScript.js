@@ -13,7 +13,6 @@ function GetListOfDepartmentsFromDb() {
     var serverCall = new ServerCall({url: "/User/GetDepartments",callMethod: "GET"});
 
     serverCall.fetchApiCall().then(response => {
-        //alert(JSON.stringify(response));
         const departmentDropdown = document.getElementById('department');
         if (response.listDepartments) {
             response.listDepartments.forEach(department => {
@@ -28,10 +27,10 @@ function GetListOfDepartmentsFromDb() {
         }
         
     })
-        .catch(error => {
-            console.error('Error fetching departments:', error);
-            toastr.error('could not load Departments list');
-        });
+    .catch(error => {
+        console.error('Error fetching departments:', error);
+        toastr.error('could not load Departments list');
+    });
 }
 
 function GetListOfManagersFromDb() {
@@ -51,12 +50,11 @@ function GetListOfManagersFromDb() {
         if (response.error){
             toastr.error('could not load Managers list');
         }
-
     })
-        .catch(error => {
-            console.error('Error fetching departments:', error);
-            toastr.error('could not load Managers list')
-        });
+    .catch(error => {
+        console.error('Error fetching departments:', error);
+        toastr.error('could not load Managers list')
+    });
 }
 
 function validateForm() {

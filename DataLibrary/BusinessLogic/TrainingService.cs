@@ -325,7 +325,7 @@ namespace DataLibrary.BusinessLogic
                     {
                         acceptedList.AddRange(applicationList);
                         automaticProcessing.listOfAcceptedEmployees = acceptedList;
-                        automaticProcessing.listOfRejectedEmployees = rejectedList; //send empty list
+                        automaticProcessing.listOfRejectedEmployees = rejectedList; 
                         return automaticProcessing;
                     }
                     else
@@ -350,7 +350,7 @@ namespace DataLibrary.BusinessLogic
                 else
                 {
                     automaticProcessing.listOfRejectedEmployees = rejectedList;
-                    automaticProcessing.listOfAcceptedEmployees = acceptedList; //so as to not send a null list
+                    automaticProcessing.listOfAcceptedEmployees = acceptedList; 
                     return automaticProcessing;
                 }
             }

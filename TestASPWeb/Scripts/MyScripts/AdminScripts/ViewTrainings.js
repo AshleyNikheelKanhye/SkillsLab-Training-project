@@ -17,7 +17,7 @@
                 $('div#allTrainingsDIV').show();
             });
         }
-        if (selectionOption == "2") { //upcoming trainings, with a future startingDate //need to color scheme green for those who have been automatic processed
+        if (selectionOption == "2") { //upcoming trainings, with a future startingDate
             populateTableUpcomingTrainings().then(() => {
                 $('div#upcomingTrainingsDIV').show();
             });

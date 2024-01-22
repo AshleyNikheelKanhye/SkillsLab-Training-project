@@ -31,9 +31,9 @@ function signIn() {
             for (var error in response.errors) {
                 toastr.error(response.errors[error][0]);
             }
-        } else if (response.pending) {
+        } else if (response.pending) { //for users which have more than one role
             window.location = response.url;
-        }
+        } 
         else {
             toastr.error("Invalid Credentials");
         }

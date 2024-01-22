@@ -37,7 +37,6 @@ namespace TestASPWeb
             _logger = new Logger("Log.txt");
             _logger.LogError(ex);
 
-            //Server.ClearError();
 
             if (ex is HttpException httpException)
             {

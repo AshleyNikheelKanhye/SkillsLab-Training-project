@@ -2,13 +2,10 @@
     $('nav .nav-container a').removeClass('active');
     $('#Training').addClass('active');
 
-
-
     $('#myTrainings').change(function () {
         $('.content').hide();
         $('div#myTrainingsContent').show();
     });
-
 
     $('#trainingsAvailable').change(function () {
         $('.content').hide();
@@ -16,7 +13,6 @@
             $('div#trainingsAvailableContent').show();
         });
     });
-
 
     $('#allTrainings').change(function () {
         $('.content').hide();
@@ -81,7 +77,7 @@
         });
     }
 
-    //function to populate Table Trainings ellible to apply (this function name is not correct change the function name)
+    //function to populate Table Trainings ellible to apply 
     function populateTableMyTrainings() {
         return new Promise((resolve, reject) => {
             var URL = "/Training/GetAllElligilbe";

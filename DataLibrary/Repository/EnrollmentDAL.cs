@@ -95,7 +95,7 @@ namespace DataLibrary.Repo
                                      "WHERE e.UserID = ut.UserID AND e.TrainingID=t.TrainingID " +
                                      "AND ut.ManagerID=@ManagerID " +
                                      "AND e.ManagerStatus=@Choice " +
-                                     "AND e.IsActive =1 AND ut.IsActive =1 AND t.IsActive =1";
+                                     "AND e.IsActive =1 AND ut.IsActive =1 AND t.IsActive =1 ORDER BY t.ClosingDate DESC";
                 SqlCommand command = new SqlCommand(selectQuery, _dbContext.GetConn());
                 command.Parameters.AddWithValue("@ManagerID", ManagerID);
                 command.Parameters.AddWithValue("@Choice", choice);
@@ -122,8 +122,8 @@ namespace DataLibrary.Repo
                                      "WHERE e.UserID = ut.UserID AND e.TrainingID=t.TrainingID " +
                                      "AND ut.ManagerID=@ManagerID " +
                                      "AND e.ManagerStatus='Processing' " +
-                                     "AND t.ClosingDate > GETDATE() " +
-                                     "AND e.IsActive =1 AND ut.IsActive =1 AND t.IsActive =1";
+                                     "AND t.ClosingDate >= GETDATE() " +
+                                     "AND e.IsActive =1 AND ut.IsActive =1 AND t.IsActive =1 AND t.IsAutomaticProcessed = 0 ORDER BY e.DateRegistered ";
                 SqlCommand command = new SqlCommand( selectQuery, _dbContext.GetConn());
                 command.Parameters.AddWithValue("@ManagerID",ManagerID.ToString());
                 SqlDataReader reader = command.ExecuteReader();

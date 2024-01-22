@@ -52,7 +52,12 @@
                     }
                     else {
                         $.each(response, function (index, enrollment) {
-                            var row = '<tr>' +
+                            if (pastDate(enrollment.ClosingDate) == true) {
+                                var row = '<tr class="past">';
+                            } else {
+                                var row = '<tr class="future">';
+                            }
+                            row= row  +
                                 '<td>' + enrollment.FirstName + ' ' + enrollment.LastName + '</td>' +
                                 '<td>' + enrollment.Email + '</td>' +
                                 '<td>' + enrollment.TrainingName + '</td>' +
@@ -104,7 +109,12 @@
                     }
                     else {
                         $.each(response, function (index, enrollment) {
-                            var row = '<tr>' +
+                            if (pastDate(enrollment.ClosingDate) == true) {
+                                var row = '<tr class="past">';
+                            } else {
+                                var row = '<tr class="future">';
+                            }
+                            row = row + 
                                 '<td>' + enrollment.FirstName + ' ' + enrollment.LastName + '</td>' +
                                 '<td>' + enrollment.Email + '</td>' +
                                 '<td>' + enrollment.TrainingName + '</td>' +
@@ -322,6 +332,19 @@
             return 'No date';
         }
     }
+
+    function pastDate(date) {
+        var closingDate = new Date(parseInt(date.substr(6)));
+        var currentDate = new Date();
+
+        if (closingDate < currentDate) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
     //flow
     $('#mySelect').trigger('change'); //at start to display pending requests
 
